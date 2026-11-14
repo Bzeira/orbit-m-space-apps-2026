@@ -43,3 +43,15 @@ test("invalid, incomplete and insufficient data never pass",()=>{
   assert.throws(()=>addEntry(d,{heartRate:63,sleepHours:7,mood:3.5,temperature:36.6}));
   assert.throws(()=>makeScenario("unknown"));
 });
+test("two check-ins on same mission day retain AM/PM labels without changing preflight baseline",()=>{
+  const d=makeScenario("stable");
+  const baseline=analyze(d).baseline;
+  const morning=addEntry(d,{heartRate:64,sleepHours:7,mood:4,temperature:36.6,missionDay:13,slot:"morning"});
+  const evening=addEntry(morning,{heartRate:66,sleepHours:7,mood:4,temperature:36.6,missionDay:13,slot:"evening"});
+  assert.equal(morning.at(-1).day,13);
+  assert.equal(evening.at(-1).day,13);
+  assert.equal(evening.at(-1).slot,"evening");
+  assert.equal(evening.at(-2).slot,"morning");
+  assert.deepEqual(analyze(evening).baseline,baseline);
+  assert.throws(()=>addEntry(d,{heartRate:64,sleepHours:7,mood:4,temperature:36.6,missionDay:0,slot:"morning"}));
+});
