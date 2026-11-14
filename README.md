@@ -12,10 +12,11 @@ Long-duration spaceflight can affect physical and behavioral health. Astronauts 
 ## The prototype
 A small, offline-first, dependency-free browser application that:
 1. Shows pulse, sleep, mood and temperature for a **fully synthetic** crew member.
-2. Compares a new reading with that member's **first four simulated baseline days**.
-3. Flags illustrative changes using **explicit, reviewable** rules rather than an opaque "medical AI".
+2. Compares new inflight readings with the **median of 14 explicitly labeled synthetic preflight days** (a demonstration design, not a NASA monitoring prescription).
+3. Flags repeated illustrative changes using **explicit, reviewable** rules and offers context-dependent follow-up questions rather than an opaque "medical AI".
 4. Connects risk-explanation cards to **NASA Human Research Program** sources.
-5. Accepts new **demo** readings and stores them only in the local browser.
+5. Accepts new **demo** readings while keeping the simulated preflight baseline unchanged; stores readings only in the local browser.
+6. Includes a private psychological-support conversation prompt as a **concept**, not an actual communication service.
 
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, clinical triage, actual medical advice or secure flight data storage.
 
@@ -37,7 +38,7 @@ The three NASA sources referenced in the interface are:
 - [Risks of Human Spaceflight](https://www.nasa.gov/hrp/risks/)
 - [Ongoing HRP Research in Space](https://www.nasa.gov/hrp/ongoing-hrp-research/)
 
-They inform *what matters* in space health. They **do not establish or validate our numeric prototype thresholds**. See [sources and AI disclosure](docs/REFERENCES_AND_AI.md). See [challenge scope and remaining questions](docs/CHALLENGE_BRIEF.md).
+They inform *what matters* in space health. They **do not establish or validate our numeric prototype thresholds**. See [sources and AI disclosure](docs/REFERENCES_AND_AI.md). See [challenge scope and remaining questions](docs/CHALLENGE_BRIEF.md), [risk coverage matrix](docs/RISK_MATRIX.md), and [baseline/triage design](docs/BASELINE_AND_DECISION_ENGINE.md).
 
 ## Team Members
 
