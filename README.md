@@ -14,14 +14,15 @@ A small, offline-first, dependency-free browser application that:
 1. Shows pulse, sleep, mood and temperature for a **fully synthetic** crew member.
 2. Compares new inflight readings with the **median of 14 explicitly labeled synthetic preflight days** (a demonstration design, not a NASA monitoring prescription).
 3. Flags repeated illustrative changes using **explicit, reviewable** rules and offers context-dependent follow-up questions rather than an opaque "medical AI".
-4. Connects risk-explanation cards to **NASA Human Research Program** sources.
+4. Links concise in-app source notes to primary NASA Human Research Program and medical-standards resources, without lengthy hazard-explanation cards.
 5. Accepts new **demo** readings while keeping the simulated preflight baseline unchanged; stores readings only in the local browser.
-6. Includes a private psychological-support conversation prompt as a **concept**, not an actual communication service.
-7. **Post-EVA Check**: stylized selectable body map and fictional discomfort follow-up timeline, inspired by Maya and Ofir's research and NASA EVA injury evidence.
-8. **Habitat Microbiology**: fictional air/surface/water sample logging, with NASA ISS in-flight bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
-9. **Post-EVA Possible DCS Concern Screen (educational only)**: select a fictional pressure exposure history and NASA-listed symptoms. The UI explains possible decompression-related concern or need for urgent medical review, **never diagnoses or excludes DCS and never reports a risk percentage**. The symptom groupings are from the 2026 NASA OCHMO technical brief; source-based context is not clinical validation.
+6. **Mission configuration and two scheduled fictional check-ins each day** (morning and evening) plus optional extra entries. This schedule is our demonstration design, not NASA's.
+7. **Dedicated Mental Well-being:** mood, stress, anxiety, fatigue, concentration, connection, sleep quality and motivation; voluntary fictional private-support request, no actual messaging. Scheduled physiological readings also update the existing vitals trend.
+8. **Post-EVA Check**: multi-select body regions with independent 1–10 pain ratings, a stylized body map and fictional follow-up timeline, inspired by Maya and Ofir's research and NASA EVA injury evidence.
+9. **Habitat Microbiology**: fictional air/surface/water sample logging, with NASA ISS in-flight bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
+10. **Post-EVA Possible DCS Concern Screen (educational only)**: select a fictional pressure exposure history and NASA-listed symptoms. The UI explains possible decompression-related concern or need for urgent medical review, **never diagnoses or excludes DCS and never reports a risk percentage**. The screen first checks neurological and cardiopulmonary findings, then offers milder symptoms, then optionally links suit-contact discomfort. Pupil symmetry, speech, mental clarity, and limb coordination observations are included. The symptom groupings are from the 2026 NASA OCHMO technical brief; **no questionnaire can rule out Type II DCS**. Doppler/ultrasound appears only as a clinician-considered supplemental assessment, not a definitive test or a treatment order.
 
-This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, clinical triage, actual medical advice or secure flight data storage.
+This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, a clinically validated triage tool, actual medical advice, private psychological messaging or secure medical storage.
 
 ### Run it locally
 No external packages are needed to run the UI.
@@ -41,7 +42,7 @@ The three NASA sources referenced in the interface are:
 - [Risks of Human Spaceflight](https://www.nasa.gov/hrp/risks/)
 - [Ongoing HRP Research in Space](https://www.nasa.gov/hrp/ongoing-hrp-research/)
 
-They inform *what matters* in space health. They **do not establish or validate our numeric prototype thresholds**. See [sources and AI disclosure](docs/REFERENCES_AND_AI.md). See [implemented research modules and scientific limitations](docs/RESEARCH_FEATURES.md), [challenge scope and remaining questions](docs/CHALLENGE_BRIEF.md), [risk coverage matrix](docs/RISK_MATRIX.md), and [baseline/triage design](docs/BASELINE_AND_DECISION_ENGINE.md).
+They inform *what matters* in space health. They **do not establish or validate our numeric prototype thresholds**. See [sources and AI disclosure](docs/REFERENCES_AND_AI.md). See [mission, mental-health and urgent-first EVA workflow](docs/WORKFLOW_UPDATES.md), [implemented research modules and scientific limitations](docs/RESEARCH_FEATURES.md), [challenge scope and remaining questions](docs/CHALLENGE_BRIEF.md), [risk coverage matrix](docs/RISK_MATRIX.md), and [baseline/triage design](docs/BASELINE_AND_DECISION_ENGINE.md).
 
 ## Team Members (5 active participants)
 
@@ -76,4 +77,4 @@ They inform *what matters* in space health. They **do not establish or validate 
 - [ ] Submit final project and public link on official team **Project** tab by **15 Nov, 23:59** (target 22:00)
 
 ## AI disclosure
-The planning documents, README, initial app code and EVA/microbiology/DCS symptom demonstrator modules were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The scientific research document was developed by teammates Maya Dimant and Ofir Nakash. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
+The planning documents, README, initial app code and EVA/microbiology/DCS symptom/mental-health/mission check-in demonstrator modules were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The scientific research document was developed by teammates Maya Dimant and Ofir Nakash. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
