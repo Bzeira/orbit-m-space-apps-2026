@@ -53,3 +53,12 @@
 .reference-strip a{font-size:12px}
 @media(max-width:920px){.mental-grid{grid-template-columns:1fr}.mission-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.mission-summary{grid-template-columns:1fr 1fr}.mission-stat strong{font-size:14px}.mental-grid{grid-template-columns:1fr}.neuro-grid{grid-template-columns:1fr}.mental-divider{align-items:flex-start}.mission-config-form>*{width:100%}.research-form .pain-choice{grid-template-columns:19px minmax(0,1fr) 65px}}
+
+.dcs-urgent-symptoms{border:1px solid #906f63!important;background:#30292d}
+.dcs-urgent-symptoms legend{color:#ffccba!important}
+.dcs-mild-symptoms:disabled{opacity:.55}
+.dcs-mild-symptoms[disabled]{opacity:.55}
+.dcs-next{align-self:start;max-width:100%;text-align:left}
+.dcs-minor-stage{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid #305564;border-radius:12px;background:#102b38}
+.dcs-minor-stage strong{font-size:13px;color:#b4d9d2}
+.dcs-link{margin:0}
