@@ -41,3 +41,8 @@
 .cardio-row .cardio-row-status.urgent{color:#ffabaa}
 @media(max-width:960px){.cardio-layout{grid-template-columns:1fr}}
 @media(max-width:640px){.cardio-equations{grid-template-columns:1fr}.cardio-metrics{grid-template-columns:1fr}.cardio-row{grid-template-columns:1fr 1fr}.cardio-row .cardio-row-status{grid-column:2;text-align:right}.cardio-return-form label,.cardio-return-form button{width:100%}}
+
+.cardio-activity{margin:22px 0;background:#102d39;border:1px solid #37616c;border-radius:14px;padding:17px}
+.cardio-activity h3{margin:9px 0;font-size:16px}
+.cardio-activity p{font-size:12px;color:#b6d3d3;line-height:1.65}
+.cardio-activity a{font-size:12px}
