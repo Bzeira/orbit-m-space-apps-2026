@@ -21,6 +21,7 @@ jobs:
         run: |
           node --check src/app.mjs
           node --check src/research-ui.mjs
+          node --check src/bodymap.mjs
           node --check src/research.mjs
           node --check src/dcs-screen.mjs
           node --check src/mission-mental.mjs
