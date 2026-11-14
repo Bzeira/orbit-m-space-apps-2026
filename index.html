@@ -24,12 +24,12 @@
     </section>
     <div class="safety" role="note"><strong>SIMULATED CREW TELEMETRY.</strong> Values, baseline rules and recommendations shown here are illustrative, not astronaut measurements, medical diagnoses, verified flight thresholds or treatment instructions. Follow authorized mission medical procedures for actual care.</div>
     <section id="monitor" class="workspace" aria-label="Health monitoring dashboard">
-      <div class="section-title"><div><p class="eyebrow">01 / MISSION HEALTH</p><h2>Personal status dashboard</h2><p class="subtle">Sample crew member: Commander A · baseline = first four simulated days</p></div><div class="offline-badge">● NO NETWORK REQUIRED</div></div>
+      <div class="section-title"><div><p class="eyebrow">01 / MISSION HEALTH</p><h2>Personal status dashboard</h2><p class="subtle">Sample crew member: Commander A · 14 synthetic preflight days + inflight trend</p></div><div class="offline-badge">● DEMO WORKS LOCALLY AFTER LOAD</div></div>
       <div class="scenario-strip" role="group" aria-label="Choose a synthetic scenario">
         <span>Explore scenario</span>
         <button type="button" data-scenario="stable" aria-pressed="true">Steady</button>
         <button type="button" data-scenario="fatigue" aria-pressed="false">Sleep + pulse drift</button>
-        <button type="button" data-scenario="temperature" aria-pressed="false">Temperature check</button>
+        <button type="button" data-scenario="temperature" aria-pressed="false">Temperature check</button><button type="button" data-scenario="mood" aria-pressed="false">Private check-in</button>
         <button type="button" id="clearBtn" class="text-button">Reset local entries</button>
       </div>
       <div class="overview">
@@ -42,14 +42,14 @@
         <div class="panel"><p class="mini-label">BODY TEMPERATURE</p><div class="metric"><span id="tempCurrent">—</span><small>°C</small></div><p class="subtle">Baseline: <span id="tempBase">—</span> °C</p></div>
       </div>
       <div class="two-cols">
-        <section class="panel alerts-panel" aria-labelledby="alertsTitle"><p class="eyebrow">02 / REASONED SIGNALS</p><h2 id="alertsTitle">What changed?</h2><div id="alerts" aria-live="polite"></div><p class="footnote">Rules compare against this person's first four demo records; a 15% pulse change, a 1.5-hour sleep difference, two low mood reports and 38°C are illustrative project flags, not NASA-approved cutoffs.</p></section>
+        <section class="panel alerts-panel" aria-labelledby="alertsTitle"><p class="eyebrow">02 / REASONED SIGNALS</p><h2 id="alertsTitle">What changed?</h2><div id="alerts" aria-live="polite"></div><div class="follow-up" id="followUpPanel"><p class="mini-label">FOLLOW-UP QUESTIONS · EXAMPLES ONLY</p><div id="followUpQuestions"></div></div><p class="footnote">Rules compare against a synthetic 14-day preflight median; example thresholds are project-made and not NASA-approved. In-flight shifts may reflect normal adaptation, measurement error or a problem. Only qualified mission medical personnel can assess risk.</p></section>
         <section class="panel" aria-labelledby="entryTitle"><p class="eyebrow">03 / DAILY SELF-CHECK</p><h2 id="entryTitle">Add a simulated reading</h2><form id="readingForm">
           <label>Resting pulse <span>bpm</span><input name="heartRate" type="number" min="30" max="220" step="1" required></label>
           <label>Sleep last night <span>hours</span><input name="sleepHours" type="number" min="0" max="24" step="0.1" required></label>
           <label>Mood <span>1 = low, 5 = good</span><input name="mood" type="number" min="1" max="5" step="1" required></label>
           <label>Body temperature <span>°C</span><input name="temperature" type="number" min="30" max="43" step="0.1" required></label>
           <button type="submit" class="primary">Add demo observation</button><p id="formFeedback" role="status"></p>
-        </form><p class="footnote">Measurements remain in this browser only (localStorage). No uploads, accounts or network requests.</p></section>
+        </form><p class="footnote">Measurements remain in this browser only (localStorage). No uploads, accounts or network requests. This is a prototype, not secure medical storage.</p></section>
       </div>
     </section>
     <section id="evidence" class="evidence"><p class="eyebrow">04 / SCIENTIFIC CONTEXT</p><h2>Spaceflight hazards, clearly explained</h2><p class="subtle">NASA Human Research Program resources inform which issues are worth monitoring. They do not validate the example measurements or our alert rules.</p><div class="evidence-grid">
