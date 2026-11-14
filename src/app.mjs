@@ -5,6 +5,14 @@ const STORE = "orbit-m-synthetic-demo-2026";
 let entries=makeScenario("stable");
 let scenario="stable";
 
+let demoBackup=null;
+function exitGuidedDemo(restore=true){
+  if(!demoBackup)return;
+  if(restore){entries=demoBackup.entries;scenario=demoBackup.scenario;}
+  demoBackup=null;
+  document.dispatchEvent(new Event("orbitm:demo-cancelled"));
+}
+
 try {
   const stored=JSON.parse(localStorage.getItem(STORE));
   if (Array.isArray(stored) && stored.length>=5) {
@@ -80,6 +88,7 @@ function render() {
 }
 for(const button of document.querySelectorAll("[data-scenario]")){
   button.addEventListener("click",()=>{
+    exitGuidedDemo(false);
     scenario=button.dataset.scenario;
     entries=makeScenario(scenario);
     try{localStorage.removeItem(STORE);}catch(_){}
@@ -88,6 +97,7 @@ for(const button of document.querySelectorAll("[data-scenario]")){
   });
 }
 byId("clearBtn").addEventListener("click",()=>{
+  exitGuidedDemo(false);
   scenario="stable";entries=makeScenario("stable");
   try{localStorage.removeItem(STORE);}catch(_){}
   syncInputs(entries.at(-1));
@@ -98,6 +108,7 @@ byId("readingForm").addEventListener("submit",event=>{
   event.preventDefault();
   const form=event.currentTarget;
   try {
+    exitGuidedDemo(true);
     const values=Object.fromEntries(new FormData(form).entries());
     entries=addEntry(entries,values);
     scenario="custom";
@@ -110,6 +121,7 @@ byId("readingForm").addEventListener("submit",event=>{
 });
 document.addEventListener("orbitm:scheduled-checkin",event=>{
   try{
+    exitGuidedDemo(true);
     entries=addEntry(entries,event.detail);
     scenario="custom";
     try{localStorage.setItem(STORE,JSON.stringify(entries));}catch(_){}
@@ -119,5 +131,35 @@ document.addEventListener("orbitm:scheduled-checkin",event=>{
     put("formFeedback","Could not sync scheduled vitals: "+error.message);
   }
 });
+// The judge's guided story temporarily projects fictional entries into the
+// existing vitals dashboard. No scripted data are saved to localStorage.
+document.addEventListener("orbitm:demo-scene",event=>{
+  try{
+    if(event.detail?.synthetic!==true)throw Error("Non-synthetic mission demo rejected.");
+    const scripted=event.detail?.entries;
+    analyze(scripted);
+    if(demoBackup===null)demoBackup={
+      entries:entries.map(x=>({...x})),
+      scenario
+    };
+    entries=scripted.map(row=>({...row}));
+    scenario="custom";
+    syncInputs(entries.at(-1));
+    render();
+    put("formFeedback","Judge demo showing fictional mission day "+event.detail.day+". Nothing has been saved.");
+  }catch(error){
+    put("formFeedback","Demo rejected: "+error.message);
+  }
+});
+document.addEventListener("orbitm:demo-end",()=>{
+  if(demoBackup===null)return;
+  entries=demoBackup.entries;
+  scenario=demoBackup.scenario;
+  demoBackup=null;
+  syncInputs(entries.at(-1));
+  render();
+  put("formFeedback","Judge demo ended; original local data restored.");
+});
+
 syncInputs(entries.at(-1));
 render();

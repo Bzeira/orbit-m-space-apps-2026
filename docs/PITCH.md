@@ -1,5 +1,7 @@
 # Local 4-minute pitch & global short demo
 
+**Priority: open the interactive 60-second demo at https://bzeira.github.io/orbit-m-space-apps-2026/#flightStory.** The scripted four-stage mission narrative is described and scientifically qualified in [JUDGE_WALKTHROUGH.md](JUDGE_WALKTHROUGH.md). Maya and Ofir work together on research-source verification.
+
 ## Local: 4 minutes + 2 minutes Q&A
 - **0:00–0:35** User and concrete problem (Impact)
 - **0:35–1:10** Exact selected NASA challenge and relevance (Relevance)

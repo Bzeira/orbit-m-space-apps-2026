@@ -10,19 +10,20 @@
 Long-duration spaceflight can affect physical and behavioral health. Astronauts need an easy way to **record daily indicators, understand when their own pattern changes, and decide when to request an appropriate check-in**—even without live access to Earth.
 
 ## The prototype
-A small, offline-first, dependency-free browser application that:
+A small, local-first, dependency-free browser application that:
 1. Shows pulse, sleep, mood and temperature for a **fully synthetic** crew member.
-2. Compares new inflight readings with the **median of 14 explicitly labeled synthetic preflight days** (a demonstration design, not a NASA monitoring prescription).
-3. Flags repeated illustrative changes using **explicit, reviewable** rules and offers context-dependent follow-up questions rather than an opaque "medical AI".
-4. Links concise in-app source notes to primary NASA Human Research Program and medical-standards resources, without lengthy hazard-explanation cards.
-5. Accepts new **demo** readings while keeping the simulated preflight baseline unchanged; stores readings only in the local browser.
-6. **Mission configuration and two scheduled fictional check-ins each day** (morning and evening) plus optional extra entries. This schedule is our demonstration design, not NASA's.
-7. **Dedicated Mental Well-being:** mood, stress, anxiety, fatigue, concentration, connection, sleep quality and motivation; voluntary fictional private-support request, no actual messaging. Scheduled physiological readings also update the existing vitals trend.
-8. **Post-EVA Check**: interactive front/back SVG body map with pointer-hover highlights, click/touch and keyboard selection, synchronized multi-select regions with independent 1–10 pain ratings, a stylized body map and fictional follow-up timeline, inspired by Maya and Ofir's research and NASA EVA injury evidence.
-9. **Habitat Microbiology**: fictional air/surface/water sample logging, with NASA ISS in-flight bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
-10. **Post-EVA Possible DCS Concern Screen (educational only)**: select a fictional pressure exposure history and NASA-listed symptoms. The UI explains possible decompression-related concern or need for urgent medical review, **never diagnoses or excludes DCS and never reports a risk percentage**. The screen first checks neurological and cardiopulmonary findings, then offers milder symptoms, then optionally links suit-contact discomfort. Pupil symmetry, speech, mental clarity, and limb coordination observations are included. The symptom groupings are from the 2026 NASA OCHMO technical brief; **no questionnaire can rule out Type II DCS**. Doppler/ultrasound appears only as a clinician-considered supplemental assessment, not a definitive test or a treatment order.
+2. **Guided 60-second judge demo:** four fictional mission days, longitudinal trend and decisions that reuse the existing engine. Starting or ending the walkthrough preserves the user's previous dashboard entries.
+3. Compares new inflight readings with the **median of 14 explicitly labeled synthetic preflight days** (a demonstration design, not a NASA monitoring prescription).
+4. Flags repeated illustrative changes using **explicit, reviewable** rules and offers context-dependent follow-up questions rather than an opaque "medical AI".
+5. Links concise in-app source notes to primary NASA Human Research Program and medical-standards resources, without lengthy hazard-explanation cards.
+6. Accepts new **demo** readings while keeping the simulated preflight baseline unchanged; stores readings only in the local browser.
+7. **Mission configuration and two scheduled fictional check-ins each day** (morning and evening) plus optional extra entries. This schedule is our demonstration design, not NASA's.
+8. **Dedicated Mental Well-being:** mood, stress, anxiety, fatigue, concentration, connection, sleep quality and motivation; voluntary fictional private-support request, no actual messaging. Scheduled physiological readings also update the existing vitals trend.
+9. **Post-EVA Check**: interactive front/back SVG body map with pointer-hover highlights, click/touch and keyboard selection, synchronized multi-select regions with independent 1–10 pain ratings, a stylized body map and fictional follow-up timeline, inspired by Maya and Ofir's research and NASA EVA injury evidence.
+10. **Habitat Microbiology**: fictional air/surface/water sample logging, with NASA ISS in-flight bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
+11. **Post-EVA Possible DCS Concern Screen (educational only)**: select a fictional pressure exposure history and NASA-listed symptoms. The UI explains possible decompression-related concern or need for urgent medical review, **never diagnoses or excludes DCS and never reports a risk percentage**. The screen first checks neurological and cardiopulmonary findings, then offers milder symptoms, then optionally links suit-contact discomfort. Pupil symmetry, speech, mental clarity, and limb coordination observations are included. The symptom groupings are from the 2026 NASA OCHMO technical brief; **no questionnaire can rule out Type II DCS**. Doppler/ultrasound appears only as a clinician-considered supplemental assessment, not a definitive test or a treatment order.
 
-11. **Cardiovascular BP / PP / estimated MAP:** user-entered **fictional** systolic/diastolic readings with mission day and AM/PM/extra slots; conventional PP and MAP estimates, individual synthetic preflight comparison, context labels for habitat/EVA/return to gravity, a gravity-return milestone and transparent trend visualization. This module is based on research contributed by teammate Itay Lipsky and cross-checked against NASA and the American Heart Association. It **does not** directly measure cardiac stroke volume, change the MAP formula to 1/2 during EVA, prescribe exercise or diagnose cardiovascular disease.
+12. **Cardiovascular BP / PP / estimated MAP:** user-entered **fictional** systolic/diastolic readings with mission day and AM/PM/extra slots; conventional PP and MAP estimates, individual synthetic preflight comparison, context labels for habitat/EVA/return to gravity, a gravity-return milestone and transparent trend visualization. This module is based on research contributed by teammate Itay Lipsky and cross-checked against NASA and the American Heart Association. It **does not** directly measure cardiac stroke volume, change the MAP formula to 1/2 during EVA, prescribe exercise or diagnose cardiovascular disease.
 
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, a clinically validated triage tool, actual medical advice, private psychological messaging or secure medical storage.
 
@@ -37,6 +38,9 @@ No external packages are needed to run the UI.
 To run all automated test suites (requires Node.js 20+): `node --test`.
 
 **Important:** Opening `index.html` directly using a `file://` URL may prevent JavaScript modules from loading. Use a local server. GitHub Pages has been enabled by the team for `main` and repository root. Public demo: https://bzeira.github.io/orbit-m-space-apps-2026/ . Source and CI are public; the newest two modules still need manual browser acceptance testing.
+
+
+> **Offline limitation:** The static page processes readings locally after loading. A complete offline re-open/PWA experience is not yet verified; do not claim it works without an initial network connection.
 
 ## Evidence and scientific boundaries
 The three NASA sources referenced in the interface are:
@@ -59,6 +63,7 @@ They inform *what matters* in space health. They **do not establish or validate 
 **Roles are proposals, not confirmed assignments.**
 
 ## Hackathon documentation
+- [Guided one-minute judge walkthrough and 4-minute pitch](docs/JUDGE_WALKTHROUGH.md)
 - [Challenge brief and science questions](docs/CHALLENGE_BRIEF.md)
 - [Team responsibilities and two-day sprint](docs/TEAM_PLAN.md)
 - [Submission checklist — local vs global](docs/SUBMISSION_CHECKLIST.md)
@@ -79,4 +84,4 @@ They inform *what matters* in space health. They **do not establish or validate 
 - [ ] Submit final project and public link on official team **Project** tab by **15 Nov, 23:59** (target 22:00)
 
 ## AI disclosure
-The planning documents, README, initial app code and EVA/microbiology/DCS symptom/mental-health/mission check-in/cardiovascular demonstrator modules were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The EVA and microbial research document was developed by Maya Dimant and Ofir Nakash, and the blood-pressure research outline was prepared by Itay Lipsky. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
+The planning documents, README, initial app code and EVA/microbiology/DCS symptom/mental-health/mission check-in/cardiovascular demonstrator modules and guided mission storyline were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The EVA and microbial research document was developed by Maya Dimant and Ofir Nakash, and the blood-pressure research outline was prepared by Itay Lipsky. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
