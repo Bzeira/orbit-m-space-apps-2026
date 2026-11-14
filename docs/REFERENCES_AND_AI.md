@@ -71,3 +71,21 @@ The newer primary NASA OCHMO-TB-037, *Decompression Sickness Risk Mitigation*, *
 **What is team-authored:** The yes/no/unknown pressure history question, rules mapping the selected symptoms to review/urgent/not-assessed labels, user-interface wording, examples and tests were designed for this hackathon. They are **not clinically validated NASA screening criteria**. There is no individual DCS probability, diagnosis, or treatment advice. Data remain fictional and DCS-form values are not persisted.
 
 **AI disclosure:** ChatGPT (OpenAI) drafted the symptom-review engine, UI, unit tests, and this documentation on Nov 14, 2026. Human clinical review and accurate official disclosure are still required.
+
+
+## 2026-11-14 update: mission-duration, behavioral health and severity-first EVA review
+Based on new team requirements, ChatGPT (OpenAI) assisted with a mission-duration form; scheduled morning/evening fictional crew check-ins and on-demand extras; a dedicated mental well-being self-report module (mood, stress, anxiety, fatigue, focus, social connection, motivation, sleep quality); physiological trend bridge; multi-region 1–10 EVA discomfort reports; and a **serious-signs-first** DCS concern workflow including pupil symmetry, speech, mental clarity and limb coordination.
+No medical diagnostic probabilities, definitive DCS subtype assignments, treatment instructions, or real psychological support messaging are implemented. The questionnaire cannot rule out Type II DCS.
+
+Official NASA context (not a validation of the ORBIT-M questionnaire or schedule):
+- Crew Health and Performance EVA Roadmap (2020): https://www.nasa.gov/wp-content/uploads/2017/02/tp-20205007604.pdf
+- OCHMO-TB-037 DCS Technical Brief, Revision D (2026), including symptom categories and the limitation of ultrasound/Doppler VGE results: https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-037-decompression-sickness.pdf
+- NASA historic Spaceflight DCS Contingency Plan, clinical neurological exam examples: https://ntrs.nasa.gov/api/citations/20070024711/downloads/20070024711.pdf
+- OCHMO-TB-043, longitudinal neurological and ocular health surveillance: https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-043-longitudinal-health-surveillance.pdf
+- OCHMO-TB-016, behavioral health support and cognitive monitoring: https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-016-behavioral-health.pdf
+- NASA Johnson Space Center Behavioral Health and Performance operations: https://www.nasa.gov/reference/jsc-behavioral-health/
+- CDC warning signs of stroke, independent importance of new neurological/speech/coordination abnormalities: https://www.cdc.gov/stroke/signs-symptoms/
+
+What is **team-authored**, not NASA-mandated: morning/evening daily scheduling; 1–5 mental self-ratings; 1–10 pain report inputs; urgency-first interface sequence and conditional mild-stage gate; rule-based symptom concern wording. No secure medical storage or actual medical devices are present. The source research only supplies background and medically relevant phenomena.
+
+See [WORKFLOW_UPDATES.md](WORKFLOW_UPDATES.md) for the full change log, limits and manual QA.
