@@ -1,3 +1,4 @@
+import {mountBodyMap} from "./bodymap.mjs";
 import {screenDcsConcern,DCS_EXAMPLES} from "./dcs-screen.mjs";
 import {
   ISS_INFLIGHT_LIMITS,REGIONS,MAX_RECORDS,checkSample,checkEva,
@@ -51,18 +52,32 @@ function renderEva(){
     target.append(historyRow(row.status==="resolved"?"✓":"+",areas,details,badge,row.status==="ongoing"));
   }
 }
-/* Multiple selectable body areas, each with its own 1–10 rating. */
+/* A single source of truth: the linked form's checkboxes control the
+ * interactive silhouette as well as their independent 1–10 pain ratings. */
+let bodyMapUI=null;
 function renderPainChoices(){
   const root=el("evaPainChoices");root.replaceChildren();
   for(const [area,label] of Object.entries(REGIONS)){
     const row=document.createElement("label");row.className="pain-choice";
-    const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.name="painArea";checkbox.value=area;
+    const checkbox=document.createElement("input");
+    checkbox.type="checkbox";checkbox.name="painArea";checkbox.value=area;
     checkbox.checked=area==="hand";
     const text=make("span","",label);
-    const rating=document.createElement("input");rating.type="number";rating.min=1;rating.max=10;rating.step=1;rating.value=4;
-    rating.className="pain-rating";rating.setAttribute("aria-label",label+" discomfort 1 to 10");
-    rating.disabled=!checkbox.checked;rating.hidden=!checkbox.checked;
-    checkbox.addEventListener("change",()=>{rating.disabled=!checkbox.checked;rating.hidden=!checkbox.checked;syncPainPins();});
+    const rating=document.createElement("input");
+    rating.type="number";rating.min=1;rating.max=10;rating.step=1;rating.value=4;
+    rating.className="pain-rating";
+    rating.setAttribute("aria-label",label+" discomfort 1 to 10");
+    rating.disabled=!checkbox.checked;
+    rating.hidden=!checkbox.checked;
+    checkbox.addEventListener("change",()=>{
+      rating.disabled=!checkbox.checked;
+      rating.hidden=!checkbox.checked;
+      syncPainPins();
+    });
+    row.addEventListener("pointerenter",()=>bodyMapUI?.setHovered(area));
+    row.addEventListener("pointerleave",()=>bodyMapUI?.setHovered(null));
+    row.addEventListener("focusin",()=>bodyMapUI?.setHovered(area));
+    row.addEventListener("focusout",()=>bodyMapUI?.setHovered(null));
     row.append(checkbox,text,rating);
     root.append(row);
   }
@@ -75,19 +90,18 @@ function painSelections(){
   });
 }
 function syncPainPins(){
-  const active=new Set(painSelections().map(x=>x.area));
-  for(const b of document.querySelectorAll("[data-body]")){
-    b.dataset.selected=String(active.has(b.dataset.body));
-    b.setAttribute("aria-pressed",String(active.has(b.dataset.body)));
-  }
+  bodyMapUI?.setSelected(painSelections().map(x=>x.area));
 }
-for(const pin of document.querySelectorAll("[data-body]")){
-  pin.addEventListener("click",()=>{
-    const c=el("evaPainChoices").querySelector('input[name="painArea"][value="'+pin.dataset.body+'"]');
-    c.checked=!c.checked;c.dispatchEvent(new Event("change"));
-  });
+function toggleBodyRegion(area){
+  const checkbox=[...el("evaPainChoices").querySelectorAll('input[name="painArea"]')]
+    .find(x=>x.value===area);
+  if(!checkbox)return;
+  checkbox.checked=!checkbox.checked;
+  checkbox.dispatchEvent(new Event("change",{bubbles:true}));
 }
 renderPainChoices();
+bodyMapUI=mountBodyMap(el("evaBodySvg"),{onToggle:toggleBodyRegion});
+syncPainPins();
 el("evaForm").addEventListener("submit",ev=>{
   ev.preventDefault();
   try{
