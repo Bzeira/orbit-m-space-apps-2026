@@ -101,6 +101,7 @@ function selectStage(next){
   if(!Number.isInteger(next)||next<0||next>=STORY_STEPS.length)return;
   index=next;
   acknowledged=false;
+  resetAcknowledgement();
   if(!active)active=true;
   displayScene();
 }
@@ -144,7 +145,6 @@ function resetAcknowledgement(){
   byId("storyAcknowledge").textContent="Record fictional follow-up reviewed";
   byId("storyAcknowledge").disabled=false;
 }
-const previous=selectStage;
 function setUp(){
   displayScene();
   resetAcknowledgement();
