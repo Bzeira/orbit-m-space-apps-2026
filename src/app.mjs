@@ -108,5 +108,16 @@ byId("readingForm").addEventListener("submit",event=>{
     put("formFeedback",error.message || "Invalid values.");
   }
 });
+document.addEventListener("orbitm:scheduled-checkin",event=>{
+  try{
+    entries=addEntry(entries,event.detail);
+    scenario="custom";
+    try{localStorage.setItem(STORE,JSON.stringify(entries));}catch(_){}
+    syncInputs(entries.at(-1));render();
+    put("formFeedback","Latest fictional scheduled check-in also updated the personal vitals dashboard.");
+  }catch(error){
+    put("formFeedback","Could not sync scheduled vitals: "+error.message);
+  }
+});
 syncInputs(entries.at(-1));
 render();
