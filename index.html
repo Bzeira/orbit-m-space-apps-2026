@@ -8,6 +8,7 @@
   <title>ORBIT-M | Crew Health Companion</title>
   <link rel="stylesheet" href="./assets/app.css">
   <link rel="stylesheet" href="./assets/mission-demo.css">
+  <link rel="stylesheet" href="./assets/cabin.css">
   <link rel="stylesheet" href="./assets/research.css">
   <link rel="stylesheet" href="./assets/bodymap.css">
   <link rel="stylesheet" href="./assets/mission-mental.css">
@@ -16,7 +17,7 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
-    <nav><a href="#mission">Mission</a><a href="#flightStory">Guided demo</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+    <nav><a href="#mission">Mission</a><a href="#flightStory">Guided demo</a><a href="#cabin">Cabin × Crew</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
   </header>
   <main>
     <section id="mission" class="hero">
@@ -86,9 +87,79 @@
           <p class="story-footer">Data: entirely project-generated. Method: preflight median + explicitly team-authored two-reading rules. No NASA-approved thresholds, clinical diagnoses, transmissions or actual medical referrals.
             <a href="https://github.com/Bzeira/orbit-m-space-apps-2026/blob/main/docs/BASELINE_AND_DECISION_ENGINE.md" target="_blank" rel="noopener">Read our method ↗</a>
           </p>
-          <a class="story-dashboard-link" href="#monitor">Inspect the linked vital signs dashboard ↓</a>
+          <a class="story-dashboard-link" href="#monitor">Inspect the linked vital signs dashboard ↓</a> · <a class="story-dashboard-link" href="#cabin">Inspect linked cabin context ↓</a>
         </div>
       </div>
+    </section>
+
+    <section id="cabin" class="cabin-crosscheck" aria-labelledby="cabinHeading">
+      <div class="cabin-heading">
+        <div>
+          <p class="eyebrow">ENVIRONMENT × CREW / CONTEXT EXPLORER</p>
+          <h2 id="cabinHeading">One habitat. Two signals. Better questions.</h2>
+          <p class="subtle">Overlay fictional cabin readings and crew self-reports on the same mission day. Coincidence is not proof of cause.</p>
+        </div>
+        <span class="story-label">SYNTHETIC · NOT LIVE SENSORS</span>
+      </div>
+      <div class="cabin-grid">
+        <div class="cabin-board">
+          <div class="cabin-context-top">
+            <div><span>HABITAT MODULE A / FICTIONAL SNAPSHOT</span><strong id="cabinDay">Mission day 12</strong></div>
+            <span id="cabinMode" class="cabin-mode">GUIDED STORY DATA</span>
+          </div>
+          <div class="cabin-stat-grid" aria-label="Fictional environmental readings">
+            <div class="cabin-stat cabin-stat-main">
+              <span>CO₂ · ONE-HOUR MEAN ppCO₂</span>
+              <div><strong id="cabinCo2">1.8</strong><small>mmHg</small></div>
+              <small>NASA nominal habitat reference: ≤ 3 mmHg (1-hour average)</small>
+            </div>
+            <div class="cabin-stat"><span>AMBIENT OXYGEN ppO₂</span><div><strong id="cabinO2">159</strong><small>mmHg</small></div><small>Not inspired PIO₂</small></div>
+            <div class="cabin-stat"><span>CABIN PRESSURE</span><div><strong id="cabinPressure">101.2</strong><small>kPa</small></div></div>
+            <div class="cabin-stat"><span>TEMPERATURE</span><div><strong id="cabinTemp">22.0</strong><small>°C</small></div></div>
+            <div class="cabin-stat"><span>RELATIVE HUMIDITY</span><div><strong id="cabinHumidity">44</strong><small>%</small></div></div>
+          </div>
+          <div class="cabin-chart-wrap">
+            <div class="cabin-chart-heading"><strong>CO₂ context across demo days</strong><small>Fictional one-hour averages, mmHg</small></div>
+            <div id="cabinTrend" class="cabin-trend" aria-label="Illustrative carbon dioxide values on story days 12, 15, 17 and 19"></div>
+            <p>Dashed line: NASA nominal one-hour habitat reference, not an individual medical danger threshold.</p>
+          </div>
+        </div>
+        <div class="cabin-interpretation">
+          <p class="eyebrow">EXPLAIN THE CO-OCCURRENCE</p>
+          <div id="cabinStatus" class="cabin-status" role="status" aria-live="polite">Fictional context check</div>
+          <h3 id="cabinConclusion">No cause can be inferred.</h3>
+          <p id="cabinContext">Awaiting a fictional cabin measurement.</p>
+          <div class="cabin-detail"><strong>Reported crew observations</strong><p id="cabinSymptoms">No fictional symptoms reported</p></div>
+          <div class="cabin-detail"><strong>What does this mean?</strong><p id="cabinAssociation">Recorded together does not mean caused by the environment.</p></div>
+          <div class="cabin-detail"><strong>What should be checked next?</strong><p id="cabinNext">Verify measurement conditions and follow authorized mission procedures.</p></div>
+          <p class="cabin-caveat">This demonstration does not detect hypoxia, hypercapnia, illness, or causal relationships. No astronaut measurements, live environmental instruments or clinical assessments are connected.</p>
+        </div>
+      </div>
+      <details class="cabin-manual">
+        <summary>Try your own fictional cabin + crew snapshot</summary>
+        <p class="subtle">This form is an in-browser demonstration only. Entries are not sent or saved. CO₂ must be a <strong>one-hour average</strong>, not an instant reading.</p>
+        <form id="cabinForm" class="cabin-form">
+          <label>Mission day<input name="day" type="number" min="1" max="1095" step="1" value="17" required></label>
+          <label>CO₂ one-hour mean ppCO₂ (mmHg)<input name="co2OneHourMmHg" type="number" min="0" max="20" step="0.1" value="3.4" required></label>
+          <label>Ambient cabin ppO₂ (mmHg)<input name="oxygenPartialMmHg" type="number" min="0" max="300" step="0.1" value="158" required></label>
+          <label>Total cabin pressure (kPa)<input name="pressureKPa" type="number" min="0" max="150" step="0.1" value="101.0" required></label>
+          <label>Temperature (°C)<input name="temperatureC" type="number" min="-20" max="65" step="0.1" value="22.5" required></label>
+          <label>Relative humidity (%)<input name="humidityPercent" type="number" min="0" max="100" step="1" value="47" required></label>
+          <fieldset class="cabin-symptoms">
+            <legend>Fictional crew check-in (optional, multi-select)</legend>
+            <label><input type="checkbox" name="cabinSymptom" value="headache" checked> Headache</label>
+            <label><input type="checkbox" name="cabinSymptom" value="focus" checked> Difficulty concentrating</label>
+            <label><input type="checkbox" name="cabinSymptom" value="fatigue"> Fatigue</label>
+            <label><input type="checkbox" name="cabinSymptom" value="sleep"> Trouble sleeping</label>
+          </fieldset>
+          <div class="cabin-form-actions">
+            <button type="submit" class="primary">Evaluate fictional overlap</button>
+            <button type="button" class="story-secondary" id="cabinRestore">Restore guided scenario</button>
+          </div>
+          <p id="cabinFeedback" role="status" class="cabin-feedback"></p>
+        </form>
+      </details>
+      <p class="cabin-source">Primary source: <a href="https://www.nasa.gov/reference/6-0-natural-and-induced-environments-vol-2/" target="_blank" rel="noopener">NASA-STD-3001, Vol 2, V2 6004, 6020 and 6021 ↗</a>. NASA documents a nominal one-hour average ppCO₂ habitat limit of 3 mmHg, but does not validate ORBIT-M's synthetic scenario or symptom-correlation logic. <a href="https://www.nasa.gov/ochmo-tb-004-carbon-dioxide-2/" target="_blank" rel="noopener">NASA OCHMO CO₂ clinical context ↗</a>.</p>
     </section>
 
     <section id="missionSetup" class="research-section mission-setup">
@@ -410,11 +481,13 @@
       <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-037-decompression-sickness.pdf" target="_blank" rel="noopener">NASA DCS Brief (Rev D) ↗</a>
       <a href="https://www.nasa.gov/reference/jsc-behavioral-health/" target="_blank" rel="noopener">NASA Behavioral Health ↗</a>
       <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11409525/" target="_blank" rel="noopener">AHA blood-pressure measurement ↗</a>
+      <a href="https://www.nasa.gov/reference/6-0-natural-and-induced-environments-vol-2/" target="_blank" rel="noopener">NASA cabin atmosphere standard ↗</a>
     </section>
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
   <script type="module" src="./src/app.mjs"></script>
   <script type="module" src="./src/mission-demo-ui.mjs"></script>
+  <script type="module" src="./src/cabin-ui.mjs"></script>
   <script type="module" src="./src/offline-ui.mjs"></script>
   <script type="module" src="./src/research-ui.mjs"></script>
   <script type="module" src="./src/mission-mental-ui.mjs"></script>
