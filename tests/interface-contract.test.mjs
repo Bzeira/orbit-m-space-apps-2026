@@ -9,17 +9,17 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 const known=new Set(ids);
 
 test("every script-target DOM id in both new browser interfaces exists",()=>{
-  for(const path of ["src/research-ui.mjs","src/mission-mental-ui.mjs","src/cardiovascular-ui.mjs"]){
+  for(const path of ["src/research-ui.mjs","src/mission-mental-ui.mjs","src/cardiovascular-ui.mjs","src/mission-demo-ui.mjs"]){
     const code=readFileSync(resolve(base,path),"utf8");
-    for(const m of code.matchAll(/\bel\("([^"]+)"\)/g)){
+    for(const m of code.matchAll(/\b(?:el|byId)\("([^"]+)"\)/g)){
       assert.ok(known.has(m[1]),path+" references missing element #"+m[1]);
     }
   }
 });
 test("no duplicate DOM ids and all app modules/styles are linked",()=>{
   assert.equal(known.size,ids.length,"Duplicate element id");
-  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs",
-    "./assets/app.css","./assets/research.css","./assets/mission-mental.css","./assets/cardiovascular.css"]){
+  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs","./src/mission-demo-ui.mjs",
+    "./assets/app.css","./assets/research.css","./assets/mission-mental.css","./assets/cardiovascular.css","./assets/mission-demo.css"]){
     assert.ok(html.includes(source),source+" missing in page");
     assert.ok(existsSync(resolve(base,source)),"Missing linked file "+source);
   }
@@ -50,4 +50,22 @@ test("blood pressure section exposes readings, PP/MAP, NASA sources and independ
   assert.ok(html.indexOf('id="cardio"')<html.indexOf('id="mental"'));
   assert.match(html,/DBP \+ \(PP ÷ 3\)/);
   assert.match(html,/not a validated medical threshold/);
+});
+
+test("guided judge demo is prominent, navigable, synthetic and linked to the real dashboard",()=>{
+  for(const id of ["flightStory","storySteps","storyStart","storyNext","storyPrev",
+     "storyEnd","storyFlag","storyWhyTitle","storyRules","storyQuestions",
+     "storySleepPolyline","storyBaselineLine","storyFeedback","storyAcknowledge"]){
+    assert.ok(known.has(id),id+" missing from guided demo");
+  }
+  assert.ok(html.indexOf('id="flightStory"')<html.indexOf('id="monitor"'));
+  assert.match(html,/100% SYNTHETIC/);
+  assert.match(html,/Existing saved demo data will be preserved/);
+  const app=readFileSync(resolve(base,"src/app.mjs"),"utf8");
+  const storyUI=readFileSync(resolve(base,"src/mission-demo-ui.mjs"),"utf8");
+  assert.match(app,/orbitm:demo-scene/);
+  assert.match(app,/orbitm:demo-end/);
+  assert.match(storyUI,/orbitm:demo-cancelled/);
+  assert.match(storyUI,/orbitm:demo-scene/);
+  assert.match(app,/if\(demoBackup===null\)demoBackup/);
 });
