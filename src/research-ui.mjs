@@ -1,3 +1,4 @@
+import {screenDcsConcern,DCS_EXAMPLES} from "./dcs-screen.mjs";
 import {
   ISS_INFLIGHT_LIMITS,REGIONS,MAX_RECORDS,checkSample,checkEva,
   makeDemoSamples,makeDemoEva,sampleOptions
@@ -134,3 +135,46 @@ setArea("hand");
 syncOrganisms();
 renderEva();
 renderSample();
+
+
+/* Fictional symptom concern only: no diagnoses, numerical risk or persistence. */
+function dcsInputs(){
+  const form=el("dcsForm");
+  return {exposure:form.elements.namedItem("exposure").value,
+    symptoms:[...form.querySelectorAll('input[name="symptoms"]:checked')].map(x=>x.value)};
+}
+function renderDcsScreen(report){
+  const target=el("dcsResult");
+  target.className="dcs-result"+(report.kind==="urgent"?" is-urgent":report.kind==="review"?" is-review":"");
+  target.replaceChildren();
+  target.append(make("strong","",report.title));
+  target.append(make("p","",report.reason));
+  if(report.labels.length){
+    target.append(make("p","", "Fictional symptoms selected: "+report.labels.join("; ")+"."));
+  }
+  target.append(make("p","",report.nextStep));
+  target.append(make("p","dcs-source",report.disclaimer));
+  const row=make("p","dcs-source");
+  const anchor=make("a","","NASA symptom reference (Oct 2026), page 3 ↗");
+  anchor.href=report.sources[1];anchor.target="_blank";anchor.rel="noopener";
+  row.append(anchor);
+  target.append(row);
+}
+function loadDcsExample(name){
+  const sample=DCS_EXAMPLES[name];
+  if(!sample)return;
+  const form=el("dcsForm");
+  form.elements.namedItem("exposure").value=sample.exposure;
+  for(const input of form.querySelectorAll('input[name="symptoms"]')){
+    input.checked=sample.symptoms.includes(input.value);
+  }
+  renderDcsScreen(screenDcsConcern(sample));
+}
+for(const button of document.querySelectorAll("[data-dcs-example]")){
+  button.addEventListener("click",()=>loadDcsExample(button.dataset.dcsExample));
+}
+el("dcsForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  try{renderDcsScreen(screenDcsConcern(dcsInputs()));}
+  catch(error){const target=el("dcsResult");target.className="dcs-result is-review";target.replaceChildren(make("p","",error.message));}
+});
