@@ -106,6 +106,14 @@
           </form>
         </div>
       </div>
+      <details class="research-roadmap"><summary>Explore other EVA monitoring ideas from the team research <span>Research roadmap, not implemented</span></summary>
+        <div class="roadmap-grid">
+          <article><h3>During EVA</h3><p>Possible future inputs: suit pressure and environment telemetry, workload and contact-pressure reports. These require certified sensors, operational context and review of approved mission procedures.</p></article>
+          <article><h3>Immediately after EVA</h3><p>Track fit feedback, skin contact symptoms and discomfort onset. Possible DCS or hypoxia symptoms must be assessed under authorized medical protocols, not by our demonstration scoring.</p></article>
+          <article><h3>Recovery and follow-up</h3><p>Explore hydration, physical function, sleep and fatigue trends. Standardized clinical, cognitive and performance tests must be chosen and interpreted by qualified experts.</p></article>
+        </div>
+        <p class="footnote">This is an annotated scope map inspired by the research document and NASA's <a href="https://ntrs.nasa.gov/citations/20220004017" target="_blank" rel="noopener">EVA injury evidence</a>; it is not NASA's official test checklist. Numeric treatment or DCS thresholds from unverified citations were intentionally excluded.</p>
+      </details>
       <div class="panel research-history">
         <div class="section-title mini-title"><div><p class="panel-subtitle">03 — SYMPTOM FOLLOW-UP</p><h3>Recovery timeline</h3></div>
           <button type="button" class="secondary-action" id="evaReset">Reset example records</button></div>
@@ -137,6 +145,7 @@
             <label>Microorganism group <select name="organism" id="sampleOrganism"><option value="bacteria">Bacteria</option><option value="fungi">Fungi</option></select></label>
             <label>Sampling location <input name="location" value="Habitat module A" maxlength="80" required></label>
             <label>Colony count <input name="value" type="number" min="0" max="100000000" step="1" value="620" required></label>
+            <label id="coliformRow" class="full" hidden>Water coliform test <select name="coliform" id="coliformSelect"><option value="not_tested">Not tested / unknown</option><option value="not_detected">Not detected</option><option value="detected">Detected</option></select></label>
             <p id="sampleUnitHint" class="sample-unit full">Reference: 1,000 CFU/m³ (ISS inflight, bacteria)</p>
             <button type="submit" class="primary full">Add synthetic sample</button>
             <p class="form-note full" id="sampleFeedback" role="status"></p>
