@@ -51,10 +51,11 @@ NASA background supports studying crew health over mission phases, including ind
 - “Is this a medical AI?” No. Transparent rule-based prototype. No learned model, diagnosis, validated risk score or replacement for a flight surgeon.
 - “Why your thresholds?” Illustrative design values explicitly identified as unvalidated. The purpose is to demonstrate the explainable interface and data flow.
 - “What about privacy?” The demo uses synthetic browser-local records. localStorage is **not suitable for actual confidential medical data**.
-- “What works offline?” The JS processes locally after the site loads, but the current static site is **not yet verified to load when the device is fully offline**. Do not falsely claim full PWA offline capability.
+- “What works offline?” A scoped service worker now pre-caches static HTML/CSS/JS after the first successful online visit. All synthetic processing stays local. The team must **manually demonstrate an actual offline reload** before claiming offline availability. External NASA links still require a network.
 
 ## Final QA before presentation
 - [ ] Visit public site without login, refresh, and make sure the new "Guided demo" navigation entry is visible.
+- [ ] On the public HTTPS URL wait for the Offline badge to report ready; disconnect and reload to verify cached UI actually works.
 - [ ] Test the four scripted days and confirm the two flags first appear at day 17.
 - [ ] Click the Dashboard link and compare pulse/sleep with the scripted day.
 - [ ] End the walkthrough and confirm original dashboard scenario is restored.
