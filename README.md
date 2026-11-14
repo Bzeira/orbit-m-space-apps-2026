@@ -25,6 +25,8 @@ A small, local-first, dependency-free browser application that:
 
 12. **Cardiovascular BP / PP / estimated MAP:** user-entered **fictional** systolic/diastolic readings with mission day and AM/PM/extra slots; conventional PP and MAP estimates, individual synthetic preflight comparison, context labels for habitat/EVA/return to gravity, a gravity-return milestone and transparent trend visualization. This module is based on research contributed by teammate Itay Lipsky and cross-checked against NASA and the American Heart Association. It **does not** directly measure cardiac stroke volume, change the MAP formula to 1/2 during EVA, prescribe exercise or diagnose cardiovascular disease.
 
+13. **Cabin × Crew Context Explorer:** a single fictional mission timeline cross-checks habitat pressure, relative humidity, temperature, ambient ppO₂ and **one-hour mean ppCO₂** with optional crew self-reports. NASA-STD-3001 V2 6004 specifies **≤ 3 mmHg for the one-hour mean habitat ppCO₂**; ORBIT-M compares that one specifically defined data field. It **does not diagnose hypoxia, claim that CO₂ caused symptoms, or connect to spacecraft instruments**. Manually entered examples are never saved. [Full implementation and scientific limitations](docs/CABIN_CREW_CONTEXT.md).
+
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, a clinically validated triage tool, actual medical advice, private psychological messaging or secure medical storage.
 
 ### Run it locally
