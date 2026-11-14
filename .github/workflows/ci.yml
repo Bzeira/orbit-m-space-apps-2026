@@ -17,5 +17,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run rule-engine unit tests
+      - name: Check browser module syntax
+        run: |
+          node --check src/app.mjs
+          node --check src/research-ui.mjs
+          node --check src/research.mjs
+      - name: Run all unit tests
         run: node --test
