@@ -181,23 +181,8 @@
               <option value="no">No known pressure reduction reported</option>
             </select>
           </label>
-          <label class="dcs-link"><input type="checkbox" id="dcsLinkPain"><span>Include the latest fictional post-EVA pain report in this review</span></label>
-          <p id="dcsLinkPainHint" class="sample-breadcrumb">Optional: submit a multi-region EVA report above, then enable this option.</p>
-          <fieldset class="dcs-symptoms">
-            <legend>Select fictional symptoms (select all that apply)</legend>
-            <div class="dcs-checks">
-              <label><input type="checkbox" name="symptoms" value="musculoskeletal"><span>New joint or muscle pain</span></label>
-              <label><input type="checkbox" name="symptoms" value="itching"><span>Unusual itching</span></label>
-              <label><input type="checkbox" name="symptoms" value="mildRash"><span>New mild rash</span></label>
-              <label><input type="checkbox" name="symptoms" value="numbness"><span>New numbness or weakness</span></label>
-              <label><input type="checkbox" name="symptoms" value="cognition"><span>New confusion or cognitive difficulty</span></label>
-              <label><input type="checkbox" name="symptoms" value="balance"><span>New dizziness, hearing or balance problem</span></label>
-              <label><input type="checkbox" name="symptoms" value="breathing"><span>Breathing difficulty or chest symptoms</span></label>
-              <label><input type="checkbox" name="symptoms" value="mottledRash"><span>New mottled / marbled skin pattern</span></label>
-            </div>
-          </fieldset>
           <fieldset class="dcs-symptoms neuro-observations">
-            <legend>Neurological observations — review FIRST</legend>
+            <legend>STEP 1A — neurological observations (urgent signs)</legend>
             <p class="footnote">Use for hypothetical observations only. Abnormal or uncertain responses merit urgent clinical review. These are simplified team-designed fields, not a certified exam.</p>
             <div class="neuro-grid">
               <label>Pupil symmetry<select name="pupils" id="neuroPupils"><option value="not_checked">Not checked</option><option value="symmetric">Symmetric</option><option value="uncertain">Uncertain</option><option value="asymmetric">Asymmetric</option></select></label>
@@ -206,6 +191,32 @@
               <label>Limb coordination<select name="coordination" id="neuroCoordination"><option value="not_checked">Not checked</option><option value="good">Good</option><option value="moderate">Moderate</option><option value="poor">Poor</option></select></label>
             </div>
           </fieldset>
+          <fieldset class="dcs-symptoms dcs-urgent-symptoms">
+            <legend>STEP 1B — serious symptoms (check before milder complaints)</legend>
+            <div class="dcs-checks">
+              <label><input type="checkbox" name="symptoms" value="numbness"><span>New numbness or weakness</span></label>
+              <label><input type="checkbox" name="symptoms" value="cognition"><span>New confusion or cognitive difficulty</span></label>
+              <label><input type="checkbox" name="symptoms" value="balance"><span>New dizziness, hearing or balance problem</span></label>
+              <label><input type="checkbox" name="symptoms" value="breathing"><span>Breathing difficulty or chest symptoms</span></label>
+              <label><input type="checkbox" name="symptoms" value="mottledRash"><span>New mottled / marbled skin pattern</span></label>
+            </div>
+          </fieldset>
+          <button type="button" id="dcsContinueMild" class="secondary-action dcs-next">Continue to less urgent symptoms (does NOT rule out Type II DCS)</button>
+          <p id="dcsStageHint" class="sample-breadcrumb">If severe findings are reported, prioritize urgent medical review; do not proceed as if cleared.</p>
+          <fieldset class="dcs-symptoms dcs-mild-symptoms" id="dcsMildSymptoms" disabled>
+            <legend>STEP 2 — milder DCS-associated symptoms</legend>
+            <div class="dcs-checks">
+              <label><input type="checkbox" name="symptoms" value="musculoskeletal"><span>New joint or muscle pain</span></label>
+              <label><input type="checkbox" name="symptoms" value="itching"><span>Unusual itching</span></label>
+              <label><input type="checkbox" name="symptoms" value="mildRash"><span>New mild rash</span></label>
+            </div>
+          </fieldset>
+          <div class="dcs-minor-stage">
+            <strong>STEP 3 — localized suit discomfort</strong>
+                      <label class="dcs-link"><input type="checkbox" id="dcsLinkPain"><span>Include the latest fictional post-EVA pain report in this review</span></label>
+          <p id="dcsLinkPainHint" class="sample-breadcrumb">Optional: submit a multi-region EVA report above, then enable this option.</p>
+
+          </div>
           <button class="primary dcs-submit" type="submit">Review fictional symptoms &amp; next assessments</button>
         </form>
         <div id="dcsResult" class="dcs-result" role="status" aria-live="polite">
