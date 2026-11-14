@@ -22,14 +22,14 @@ This is **not** real astronaut telemetry, a diagnosis, validated risk score, tre
 ### Run it locally
 No external packages are needed to run the UI.
 
-1. Clone: \`git clone https://github.com/Bzeira/orbit-m-space-apps-2026.git\`
-2. Enter: \`cd orbit-m-space-apps-2026\`
-3. Run: \`python -m http.server 8000\` (or \`py -m http.server 8000\` on Windows)
-4. Open \`http://localhost:8000\` in a browser.
+1. Clone: `git clone https://github.com/Bzeira/orbit-m-space-apps-2026.git`
+2. Enter: `cd orbit-m-space-apps-2026`
+3. Run: `python -m http.server 8000` (or `py -m http.server 8000` on Windows)
+4. Open `http://localhost:8000` in a browser.
 
-To run the committed engine tests (requires Node.js 20+): \`node --test tests/engine.test.mjs\`.
+To run the committed engine tests (requires Node.js 20+): `node --test tests/engine.test.mjs`.
 
-**Important:** Opening \`index.html\` directly using a \`file://\` URL may prevent JavaScript modules from loading. Use a local server. For an online public demo, enable GitHub Pages for the \`main\` branch and root folder in repository Settings → Pages (not enabled by this update).
+**Important:** Opening `index.html` directly using a `file://` URL may prevent JavaScript modules from loading. Use a local server. For an online public demo, enable GitHub Pages for the `main` branch and root folder in repository Settings → Pages (not enabled by this update).
 
 ## Evidence and scientific boundaries
 The three NASA sources referenced in the interface are:
