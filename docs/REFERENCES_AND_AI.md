@@ -20,8 +20,8 @@
 - [NASA Space Apps Connect discussion on missing unified health dataset](https://github.com/nasa/spaceapps/discussions/2025) — community guidance, not an official data grant or medical standard.
 
 ## Evidence and limitations
-- The first four **simulated** daily records are used as a toy baseline. Four samples are not sufficient for a medically validated personal baseline.
-- The engine in src/engine.mjs contains project-authored change thresholds (15% pulse deviation, sleep shift of 1.5 hours, two low mood scores, demo temperature flag at 38°C).
+- The engine uses the **median of 14 project-authored synthetic preflight days** as a toy personal baseline. Neither this sample duration nor the results are clinically validated.
+- The engine in src/engine.mjs contains project-authored change thresholds (20% pulse deviation across two repeated simulated readings, sleep shift exceeding 1.5 hours on two readings, two low mood scores, and a demo temperature flag at 38°C).
 - **These thresholds are illustrative, not derived from, endorsed by, or certified against NASA medical standards**. No diagnosis, treatment or recommendation to change medications is made.
 - The software stores new demo data locally in browser storage. It is **not** a secure health record and must not receive real astronaut or patient data.
 
@@ -100,3 +100,15 @@ Official/scientific sources:
 - Peer-reviewed spaceflight exercise-capacity research: https://pubmed.ncbi.nlm.nih.gov/24970852/
 
 Only a manually-entered, fictional, local-storage BP tracker has been added. The invented 20 mmHg change marker and synthetic preflight median are **NOT validated NASA alert thresholds or population norms**. The standard formula MAP ≈ DBP + PP/3 is a resting-heart-rate estimate, not direct perfusion measurement. The specific document claim to use PP/2 during EVA, to predict a universal PP rise and decline, and to prescribe exercise from PP/MAP were not adopted without sufficient verification. See CARDIOVASCULAR_RESEARCH.md.
+
+## November 14: Cabin × Crew context synchronization
+
+Maya Dimant and Ofir Nakash's ongoing research motivated integrating environmental context with crew observations. The team created fully fictional habitat readings for mission days 12, 15, 17 and 19.
+
+**Verified primary source:** NASA-STD-3001, Volume 2, [V2 6004] specifies **one-hour average habitat ppCO2 no more than 3 mmHg**, and [V2 6020 / 6021] cover pressure, humidity, temperature, ppO2 and ppCO2 recording/display: https://www.nasa.gov/reference/6-0-natural-and-induced-environments-vol-2/
+
+**Supporting background:** NASA OCHMO carbon dioxide technical brief discusses observed associations with headaches while acknowledging confounders: https://www.nasa.gov/ochmo-tb-004-carbon-dioxide-2/
+
+**Team-created, unvalidated:** all cabin/crew measurements, story values, correlation display and physiological thresholds. The app identifies **co-occurrence, never a causal diagnosis**, and treats ambient ppO2 as context, not a direct hypoxia screen. There is no live instrumentation, no medical decision support validation and no environmental safety clearance.
+
+**AI assistance:** ChatGPT helped implement the module, tests and documentation. See [CABIN_CREW_CONTEXT.md](CABIN_CREW_CONTEXT.md). Human review remains required.

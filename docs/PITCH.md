@@ -2,11 +2,15 @@
 
 **Priority: open the interactive 60-second demo at https://bzeira.github.io/orbit-m-space-apps-2026/#flightStory.** The scripted four-stage mission narrative is described and scientifically qualified in [JUDGE_WALKTHROUGH.md](JUDGE_WALKTHROUGH.md). Maya and Ofir work together on research-source verification.
 
+## 15-second differentiator for judging
+
+At day 17, the **same fictional mission** produces a repeated change in sleep/pulse and a hypothetical cabin CO2 one-hour average of 3.4 mmHg. Official NASA-STD-3001 Vol 2 V2 6004 sets 3 mmHg as a **nominal habitat one-hour average** requirement; our team did not invent that figure. ORBIT-M **does not diagnose, prove causality, or replace authorized mission procedures**. The new cross-check is documented in [CABIN_CREW_CONTEXT.md](CABIN_CREW_CONTEXT.md).
+
 ## Local: 4 minutes + 2 minutes Q&A
 - **0:00–0:35** User and concrete problem (Impact)
 - **0:35–1:10** Exact selected NASA challenge and relevance (Relevance)
-- **1:10–2:30** Working product demonstration; include offline recording fallback (Presentation)
-- **2:30–3:10** Real NASA data, technical validation, limitations (Validity)
+- **1:10–2:30** Interactive mission demo: day 12 → day 17, show the physiological flags, then Cabin × Crew co-occurrence; include offline recording fallback (Presentation)
+- **2:30–3:10** Official NASA standard reference vs entirely fictional measurements, CI tests, limits of inference (Validity)
 - **3:10–3:40** Distinctive approach and practical benefit (Creativity/Impact)
 - **3:40–4:00** Honest what-works-now statement and next step
 
