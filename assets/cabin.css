@@ -60,3 +60,7 @@
 @media(max-width:640px){.cabin-form{grid-template-columns:repeat(2,minmax(0,1fr))}.cabin-heading h2{font-size:25px}.cabin-stat strong{font-size:27px}}
 @media(max-width:420px){.cabin-form{grid-template-columns:1fr}.cabin-stat-grid{grid-template-columns:1fr}.cabin-stat-main{grid-column:span 1}.cabin-trend{gap:7px}}
 @media(prefers-reduced-motion:reduce){.cabin-trend-fill{transition:none}}
+
+/* 3 mmHg guide across the 0–5 mmHg demo-bar scale. */
+.cabin-trend-bar-box{position:relative}
+.cabin-trend-bar-box::after{content:"";position:absolute;left:0;right:0;bottom:60%;border-top:1px dashed #e9dfae;pointer-events:none}
