@@ -93,7 +93,14 @@ export function makeScenario(type="stable") {
 }
 export function addEntry(entries,form) {
   const nextDay=entries.filter(e=>e.phase==="inflight").length+1;
-  const values={phase:"inflight",day:nextDay};
+  const providedDay=form?.missionDay;
+  const missionDay=providedDay===undefined?nextDay:Number(providedDay);
+  if(!Number.isInteger(missionDay)||missionDay<1||missionDay>1095)
+    throw new Error("Invalid synthetic mission day.");
+  const slot=form?.slot;
+  if(slot!==undefined&&!["morning","evening","extra"].includes(slot))
+    throw new Error("Invalid check-in slot.");
+  const values={phase:"inflight",day:missionDay,...(slot?{slot}:{})};
   for(const key of Object.keys(METRICS)) {
     if(form[key]===undefined||form[key]===null||String(form[key]).trim()==="")
       throw new Error("Every demo reading must have a numeric value.");
