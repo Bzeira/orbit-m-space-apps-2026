@@ -23,5 +23,7 @@ jobs:
           node --check src/research-ui.mjs
           node --check src/research.mjs
           node --check src/dcs-screen.mjs
+          node --check src/mission-mental.mjs
+          node --check src/mission-mental-ui.mjs
       - name: Run all unit tests
         run: node --test
