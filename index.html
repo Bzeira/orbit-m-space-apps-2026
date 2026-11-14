@@ -7,6 +7,7 @@
   <meta name="description" content="ORBIT-M: offline-first, explainable astronaut health-monitoring concept for NASA Space Apps 2026. Synthetic demonstration data.">
   <title>ORBIT-M | Crew Health Companion</title>
   <link rel="stylesheet" href="./assets/app.css">
+  <link rel="stylesheet" href="./assets/mission-demo.css">
   <link rel="stylesheet" href="./assets/research.css">
   <link rel="stylesheet" href="./assets/bodymap.css">
   <link rel="stylesheet" href="./assets/mission-mental.css">
@@ -15,7 +16,7 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
-    <nav><a href="#mission">Mission</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+    <nav><a href="#mission">Mission</a><a href="#flightStory">Guided demo</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
   </header>
   <main>
     <section id="mission" class="hero">
@@ -27,6 +28,66 @@
       <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring orbit-outer"></div><div class="orbit-ring orbit-inner"></div><div class="orbit-center">M</div><div class="orbit-dot"></div></div>
     </section>
     <div class="safety" role="note"><strong>SIMULATED CREW TELEMETRY.</strong> Values, baseline rules and recommendations shown here are illustrative, not astronaut measurements, medical diagnoses, verified flight thresholds or treatment instructions. Follow authorized mission medical procedures for actual care.</div>
+
+    <section id="flightStory" class="mission-story" aria-labelledby="storyHeading">
+      <div class="story-header">
+        <div>
+          <p class="eyebrow">JUDGE DEMO / GUIDED MISSION</p>
+          <h2 id="storyHeading">One crew member. One mission. An explainable change.</h2>
+          <p class="subtle">Follow Commander A across a fictional 180-day mission. Every change is calculated by the same transparent engine that powers the dashboard.</p>
+        </div>
+        <span class="story-label">100% SYNTHETIC · NO MEDICAL DIAGNOSIS</span>
+      </div>
+      <div class="story-shell">
+        <div class="story-mission-panel">
+          <div class="story-dayline"><span>COMMANDER A / MISSION CLOCK</span><strong id="storyCurrentDay">Day 12 / 180</strong></div>
+          <div id="storySteps" class="story-steps" role="group" aria-label="Explore mission scenes"></div>
+          <div class="story-current" aria-live="polite">
+            <p class="story-scene-label" id="storySceneLabel">01 / Routine</p>
+            <h3 id="storySceneTitle">A stable personal pattern</h3>
+            <p id="storySceneNarrative">A scripted, fictional medical self-check walkthrough for the judges.</p>
+          </div>
+          <div class="story-metrics" aria-label="Current synthetic metrics compared with preflight">
+            <div><span>RESTING PULSE</span><strong id="storyHr">—</strong><small id="storyHrDelta">—</small></div>
+            <div><span>SLEEP DURATION</span><strong id="storySleep">—</strong><small id="storySleepDelta">—</small></div>
+            <div><span>SELF-REPORTED MOOD</span><strong id="storyMood">—</strong><small id="storyMoodDelta">—</small></div>
+            <div><span>BODY TEMPERATURE</span><strong id="storyTemp">—</strong><small id="storyTempDelta">—</small></div>
+          </div>
+          <div class="story-chart-head"><strong>Sleep over mission days</strong><span>Baseline and synthetic trend · hours</span></div>
+          <svg id="storyChart" viewBox="0 0 680 208" class="story-chart" role="img" aria-label="Fictional daily sleep trend against a 14-day synthetic preflight median">
+            <line x1="45" y1="172" x2="655" y2="172" stroke="#315766"></line>
+            <line id="storyBaselineLine" x1="45" x2="655" y1="74" y2="74" stroke="#9dc9cb" stroke-dasharray="5 6" stroke-width="1.6"></line>
+            <polyline id="storySleepPolyline" points="" fill="none" stroke="#6ee0cb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <circle id="storyLastPoint" cx="45" cy="74" r="5" fill="#e7c281" stroke="#081d2b" stroke-width="2"></circle>
+            <text id="storyBaselineText" x="49" y="59" fill="#b0d1d4" font-size="15">Baseline</text>
+            <text x="45" y="195" fill="#99b5bc" font-size="13">Mission day 10</text>
+            <text id="storyChartEnd" x="655" y="195" text-anchor="end" fill="#99b5bc" font-size="13">Day 12</text>
+          </svg>
+          <div class="story-actions">
+            <button type="button" class="primary" id="storyStart">Start judge demo</button>
+            <button type="button" class="story-secondary" id="storyPrev" disabled>Previous</button>
+            <button type="button" class="story-secondary" id="storyNext" disabled>Advance mission</button>
+            <button type="button" class="story-tertiary" id="storyEnd" hidden>End demo &amp; restore my dashboard</button>
+          </div>
+          <p class="story-feedback" id="storyFeedback" role="status" aria-live="polite">Start the guided story to project each synthetic stage into the live dashboard below. Existing saved demo data will be preserved.</p>
+        </div>
+        <div class="story-explanation">
+          <p class="eyebrow">WHY DID ORBIT-M NOTICE THIS?</p>
+          <div id="storyFlag" class="story-flag" aria-live="polite">SYNTHETIC WALKTHROUGH</div>
+          <h3 id="storyWhyTitle">Not every change is an alert.</h3>
+          <p id="storyWhy">Our engine compares the latest fictional readings with a 14-day synthetic personal preflight median and checks repeated changes, not just one isolated number.</p>
+          <div class="story-detail"><strong>What we cannot infer</strong><p id="storyUncertainty">The same numbers could arise from normal adaptation, a device issue or a problem requiring qualified review.</p></div>
+          <div class="story-detail"><strong>Reasonable next check</strong><p id="storyNextAction">Verify a measurement and ask an appropriate follow-up question, according to authorized mission procedures.</p></div>
+          <div class="story-detail"><strong>Triggered demonstration rules</strong><div id="storyRules"><p class="subtle">No flagged rules at this stage.</p></div></div>
+          <div id="storyQuestions" class="story-questions"></div>
+          <button type="button" id="storyAcknowledge" class="story-secondary" hidden>Record fictional follow-up reviewed</button>
+          <p class="story-footer">Data: entirely project-generated. Method: preflight median + explicitly team-authored two-reading rules. No NASA-approved thresholds, clinical diagnoses, transmissions or actual medical referrals.
+            <a href="https://github.com/Bzeira/orbit-m-space-apps-2026/blob/main/docs/BASELINE_AND_DECISION_ENGINE.md" target="_blank" rel="noopener">Read our method ↗</a>
+          </p>
+          <a class="story-dashboard-link" href="#monitor">Inspect the linked vital signs dashboard ↓</a>
+        </div>
+      </div>
+    </section>
 
     <section id="missionSetup" class="research-section mission-setup">
       <div class="section-title"><div><p class="eyebrow">01 / MISSION PROFILE</p><h2>Mission duration &amp; check-in cadence</h2><p class="subtle">Plan the fictional mission and keep two scheduled check-ins per day, plus optional extras.</p></div><span class="research-pill">TEAM-DESIGNED SCHEDULE</span></div>
@@ -351,6 +412,7 @@
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
   <script type="module" src="./src/app.mjs"></script>
+  <script type="module" src="./src/mission-demo-ui.mjs"></script>
   <script type="module" src="./src/research-ui.mjs"></script>
   <script type="module" src="./src/mission-mental-ui.mjs"></script>
   <script type="module" src="./src/cardiovascular-ui.mjs"></script>
