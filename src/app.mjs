@@ -30,7 +30,7 @@ function paintHeartChart(rows) {
     return x.toFixed(1)+","+y.toFixed(1);
   }).join(" ");
   byId("hrPolyline").setAttribute("points",points);
-  byId("hrChart").setAttribute("aria-label","Resting pulse trend over "+values.length+" simulated days. Most recent "+values.at(-1)+" beats per minute.");
+  byId("hrChart").setAttribute("aria-label","Resting pulse trend showing "+values.length+" preflight and inflight synthetic observations. Most recent "+values.at(-1)+" beats per minute.");
 }
 
 function showSignals(flags) {
@@ -41,6 +41,8 @@ function showSignals(flags) {
     item.className="clear-alert";
     item.textContent="No change flags under our illustrative rules. This does NOT confirm that an astronaut is medically healthy.";
     parent.append(item);
+    byId("followUpQuestions").replaceChildren();
+    byId("followUpPanel").hidden=true;
     return;
   }
   for(const flag of flags){
@@ -51,6 +53,11 @@ function showSignals(flags) {
     a.href=flag.source;a.target="_blank";a.rel="noopener";
     article.append(strong,p,a);parent.append(article);
   }
+  const questionContainer=byId("followUpQuestions");
+  questionContainer.replaceChildren();
+  const uniqueQuestions=[...new Set(flags.flatMap(f=>f.questions||[]))];
+  for(const question of uniqueQuestions){const el=document.createElement("p");el.className="follow-question";el.textContent="• "+question;questionContainer.append(el);}
+  byId("followUpPanel").hidden=uniqueQuestions.length===0;
   const note=document.createElement("p");
   note.className="subtle";
   note.textContent="Suggested non-clinical next step: verify measurements, note any symptoms, and consult the appropriate mission medical officer according to established procedures.";
@@ -63,7 +70,7 @@ function render() {
   put("statusText",result.status);
   byId("statusText").className="big-status "+(needsReview?"review":"normal");
   put("statusDescription",needsReview?result.flags.length+" illustrative change signal(s). Verify readings; escalate according to mission procedures.":"No flags in this demo rule set. Continue routine checks.");
-  put("observations",result.counts.observations+" synthetic daily records");
+  put("observations",result.counts.preflight+" synthetic preflight + "+result.counts.inflight+" inflight records");
   put("hrCurrent",c.heartRate);put("hrBase",b.heartRate);
   put("sleepCurrent",c.sleepHours);put("sleepBase",b.sleepHours);
   put("moodCurrent",c.mood);put("moodBase",b.mood);
@@ -95,7 +102,7 @@ byId("readingForm").addEventListener("submit",event=>{
     entries=addEntry(entries,values);
     scenario="custom";
     try{localStorage.setItem(STORE,JSON.stringify(entries));}catch(_){}
-    put("formFeedback","Added synthetic day "+entries.length+". Stored locally only.");
+    put("formFeedback","Added synthetic inflight day "+entries.at(-1).day+". Stored locally only.");
     syncInputs(entries.at(-1));render();
   } catch(error) {
     put("formFeedback",error.message || "Invalid values.");
