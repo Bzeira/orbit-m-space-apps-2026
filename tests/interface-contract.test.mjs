@@ -18,7 +18,7 @@ test("every script-target DOM id in both new browser interfaces exists",()=>{
 });
 test("no duplicate DOM ids and all app modules/styles are linked",()=>{
   assert.equal(known.size,ids.length,"Duplicate element id");
-  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs","./src/mission-demo-ui.mjs",
+  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs","./src/mission-demo-ui.mjs","./src/offline-ui.mjs",
     "./assets/app.css","./assets/research.css","./assets/mission-mental.css","./assets/cardiovascular.css","./assets/mission-demo.css"]){
     assert.ok(html.includes(source),source+" missing in page");
     assert.ok(existsSync(resolve(base,source)),"Missing linked file "+source);
@@ -68,4 +68,11 @@ test("guided judge demo is prominent, navigable, synthetic and linked to the rea
   assert.match(storyUI,/orbitm:demo-cancelled/);
   assert.match(storyUI,/orbitm:demo-scene/);
   assert.match(app,/if\(demoBackup===null\)demoBackup/);
+});
+
+test("offline status is explicit and worker registration is local to this app",()=>{
+  assert.ok(known.has("offlineSupport"));
+  const module=readFileSync(resolve(base,"src/offline-ui.mjs"),"utf8");
+  assert.match(module,/serviceWorker\.register\("\.\/sw\.js"/);
+  assert.match(module,/NASA reference links still need internet/);
 });

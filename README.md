@@ -40,7 +40,13 @@ To run all automated test suites (requires Node.js 20+): `node --test`.
 **Important:** Opening `index.html` directly using a `file://` URL may prevent JavaScript modules from loading. Use a local server. GitHub Pages has been enabled by the team for `main` and repository root. Public demo: https://bzeira.github.io/orbit-m-space-apps-2026/ . Source and CI are public; the newest two modules still need manual browser acceptance testing.
 
 
-> **Offline limitation:** The static page processes readings locally after loading. A complete offline re-open/PWA experience is not yet verified; do not claim it works without an initial network connection.
+> **Offline support:** A scoped service worker pre-caches the static UI on a successful first online visit, so a later offline re-open can use locally cached files. This has automated offline-cache tests, but still requires manual browser QA on the published HTTPS URL. External NASA research links still require the internet. No actual private medical records should be entered.
+
+### Open the app offline after first visit
+1. Open the public HTTPS site while connected. Confirm that the small Offline notice says that the static app shell is ready.
+2. Disconnect from the network, close that tab and revisit the same link.
+3. The interface and code should load from the browser cache; the external NASA research links cannot be opened without connectivity.
+4. If it fails, check browser service-worker/storage settings. Do not present offline availability as guaranteed until the team performs a real offline browser test.
 
 ## Evidence and scientific boundaries
 The three NASA sources referenced in the interface are:
