@@ -12,7 +12,7 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
-    <nav><a href="#mission">Mission</a><a href="#monitor">Monitor</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#evidence">Evidence</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+    <nav><a href="#mission">Mission</a><a href="#monitor">Vitals</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
   </header>
   <main>
     <section id="mission" class="hero">
@@ -24,8 +24,22 @@
       <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring orbit-outer"></div><div class="orbit-ring orbit-inner"></div><div class="orbit-center">M</div><div class="orbit-dot"></div></div>
     </section>
     <div class="safety" role="note"><strong>SIMULATED CREW TELEMETRY.</strong> Values, baseline rules and recommendations shown here are illustrative, not astronaut measurements, medical diagnoses, verified flight thresholds or treatment instructions. Follow authorized mission medical procedures for actual care.</div>
+
+    <section id="missionSetup" class="research-section mission-setup">
+      <div class="section-title"><div><p class="eyebrow">01 / MISSION PROFILE</p><h2>Mission duration &amp; check-in cadence</h2><p class="subtle">Plan the fictional mission and keep two scheduled check-ins per day, plus optional extras.</p></div><span class="research-pill">TEAM-DESIGNED SCHEDULE</span></div>
+      <div class="panel">
+        <form id="missionForm" class="mission-config-form">
+          <label>Mission length <span>days</span><input name="durationDays" type="number" min="1" max="1095" step="1" value="180" required></label>
+          <label>Current mission day <span>1 through mission length</span><input name="missionDay" type="number" min="1" max="1095" step="1" value="12" required></label>
+          <button type="submit" class="primary">Save synthetic mission plan</button>
+        </form>
+        <p id="missionFeedback" class="form-note" role="status"></p>
+        <div id="missionSummary" class="mission-summary" aria-live="polite"></div>
+        <p class="footnote">Morning + evening are ORBIT-M demonstration defaults, not a NASA-prescribed schedule.</p>
+      </div>
+    </section>
     <section id="monitor" class="workspace" aria-label="Health monitoring dashboard">
-      <div class="section-title"><div><p class="eyebrow">01 / MISSION HEALTH</p><h2>Personal status dashboard</h2><p class="subtle">Sample crew member: Commander A · 14 synthetic preflight days + inflight trend</p></div><div class="offline-badge">● DEMO WORKS LOCALLY AFTER LOAD</div></div>
+      <div class="section-title"><div><p class="eyebrow">02 / MISSION HEALTH</p><h2>Personal status dashboard</h2><p class="subtle">Sample crew member: Commander A · 14 synthetic preflight days + inflight trend</p></div><div class="offline-badge">● DEMO WORKS LOCALLY AFTER LOAD</div></div>
       <div class="scenario-strip" role="group" aria-label="Choose a synthetic scenario">
         <span>Explore scenario</span>
         <button type="button" data-scenario="stable" aria-pressed="true">Steady</button>
@@ -43,8 +57,8 @@
         <div class="panel"><p class="mini-label">BODY TEMPERATURE</p><div class="metric"><span id="tempCurrent">—</span><small>°C</small></div><p class="subtle">Baseline: <span id="tempBase">—</span> °C</p></div>
       </div>
       <div class="two-cols">
-        <section class="panel alerts-panel" aria-labelledby="alertsTitle"><p class="eyebrow">02 / REASONED SIGNALS</p><h2 id="alertsTitle">What changed?</h2><div id="alerts" aria-live="polite"></div><div class="follow-up" id="followUpPanel"><p class="mini-label">FOLLOW-UP QUESTIONS · EXAMPLES ONLY</p><div id="followUpQuestions"></div></div><p class="footnote">Rules compare against a synthetic 14-day preflight median; example thresholds are project-made and not NASA-approved. In-flight shifts may reflect normal adaptation, measurement error or a problem. Only qualified mission medical personnel can assess risk.</p></section>
-        <section class="panel" aria-labelledby="entryTitle"><p class="eyebrow">03 / DAILY SELF-CHECK</p><h2 id="entryTitle">Add a simulated reading</h2><form id="readingForm">
+        <section class="panel alerts-panel" aria-labelledby="alertsTitle"><p class="eyebrow">02A / REASONED SIGNALS</p><h2 id="alertsTitle">What changed?</h2><div id="alerts" aria-live="polite"></div><div class="follow-up" id="followUpPanel"><p class="mini-label">FOLLOW-UP QUESTIONS · EXAMPLES ONLY</p><div id="followUpQuestions"></div></div><p class="footnote">Rules compare against a synthetic 14-day preflight median; example thresholds are project-made and not NASA-approved. In-flight shifts may reflect normal adaptation, measurement error or a problem. Only qualified mission medical personnel can assess risk.</p></section>
+        <section class="panel" aria-labelledby="entryTitle"><p class="eyebrow">02B / EXTRA TELEMETRY ENTRY</p><h2 id="entryTitle">Add an extra simulated reading</h2><form id="readingForm">
           <label>Resting pulse <span>bpm</span><input name="heartRate" type="number" min="30" max="220" step="1" required></label>
           <label>Sleep last night <span>hours</span><input name="sleepHours" type="number" min="0" max="24" step="0.1" required></label>
           <label>Mood <span>1 = low, 5 = good</span><input name="mood" type="number" min="1" max="5" step="1" required></label>
@@ -53,15 +67,54 @@
         </form><p class="footnote">Measurements remain in this browser only (localStorage). No uploads, accounts or network requests. This is a prototype, not secure medical storage.</p></section>
       </div>
     </section>
-    <section id="evidence" class="evidence"><p class="eyebrow">04 / SCIENTIFIC CONTEXT</p><h2>Spaceflight hazards, clearly explained</h2><p class="subtle">NASA Human Research Program resources inform which issues are worth monitoring. They do not validate the example measurements or our alert rules.</p><div class="evidence-grid">
-      <article><span class="num">01</span><h3>Isolation &amp; confinement</h3><p>Behavioral well-being and sleep can be affected by demanding, isolated missions. Our voluntary mood and sleep check-ins help surface changes for discussion.</p><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA hazards ↗</a></article>
-      <article><span class="num">02</span><h3>Altered gravity</h3><p>Long-duration flight can change cardiovascular and musculoskeletal fitness. The prototype monitors resting pulse trends, not bone density or clinical cardiovascular risk.</p><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">NASA risks ↗</a></article>
-      <article><span class="num">03</span><h3>Distance from Earth</h3><p>Communication delays make clear, independent self-observation useful. The software works locally; clinical decisions remain subject to approved crew procedures.</p><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA hazards ↗</a></article>
-    </div></section>
 
+    <section id="mental" class="research-section" aria-labelledby="mentalTitle">
+      <div class="section-title"><div>
+        <p class="eyebrow">03 / BEHAVIORAL HEALTH</p><h2 id="mentalTitle">Mental well-being &amp; crew check-ins</h2>
+        <p class="subtle">Mood, stress, tension, fatigue, attention, connection, motivation and sleep quality — separately tracked, never combined into a diagnostic score.</p>
+      </div><span class="research-pill">VOLUNTARY · FICTIONAL DATA</span></div>
+      <div class="mental-grid">
+        <div class="panel">
+          <p class="panel-subtitle">CHECK-IN PLAN</p><h3>Twice daily, with extra check-ins when needed</h3>
+          <div class="scheduled-slots" id="mentalSchedule" aria-live="polite"></div>
+          <p class="footnote">Choose Morning or Evening once per mission day. Additional entries are available whenever the crew member chooses. These are demo scheduling rules, not mission medical requirements.</p>
+          <div class="private-support"><strong>Private support option</strong><p>A fictional crew member may request a private psychological conversation. This interface does not contact anyone, and browser storage is not secure medical storage.</p>
+            <a href="https://www.nasa.gov/reference/jsc-behavioral-health/" target="_blank" rel="noopener">NASA Behavioral Health Operations ↗</a>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">NEW SELF-CHECK</p><h3>Record a fictional crew check-in</h3>
+          <form id="mentalForm" class="research-form">
+            <label>Mission day<input name="day" id="mentalDay" type="number" min="1" max="1095" value="12" required></label>
+            <label>Check-in time<select name="slot" id="mentalSlot"><option value="morning">Morning</option><option value="evening">Evening</option><option value="extra">Additional</option></select></label>
+            <div class="mental-divider full"><strong>Behavioral self-ratings</strong><span>1–5; educational prompts only</span></div>
+            <label>Mood <span>1 low · 5 positive</span><input name="mood" type="number" min="1" max="5" step="1" value="4" required></label>
+            <label>Stress <span>1 low · 5 high</span><input name="stress" type="number" min="1" max="5" step="1" value="2" required></label>
+            <label>Anxiety / tension <span>1 low · 5 high</span><input name="anxiety" type="number" min="1" max="5" step="1" value="2" required></label>
+            <label>Mental fatigue <span>1 low · 5 high</span><input name="fatigue" type="number" min="1" max="5" step="1" value="2" required></label>
+            <label>Concentration <span>1 difficult · 5 clear</span><input name="focus" type="number" min="1" max="5" step="1" value="4" required></label>
+            <label>Social connection <span>1 isolated · 5 connected</span><input name="connection" type="number" min="1" max="5" step="1" value="4" required></label>
+            <label>Sleep quality <span>1 poor · 5 good</span><input name="sleepQuality" type="number" min="1" max="5" step="1" value="4" required></label>
+            <label>Motivation <span>1 low · 5 high</span><input name="motivation" type="number" min="1" max="5" step="1" value="4" required></label>
+            <div class="mental-divider full"><strong>Physiological readings</strong><span>Feeds the existing synthetic vitals trend</span></div>
+            <label>Resting pulse <span>bpm</span><input name="heartRate" type="number" min="30" max="220" step="1" value="64" required></label>
+            <label>Sleep duration <span>hours</span><input name="sleepHours" type="number" min="0" max="24" step="0.1" value="7.2" required></label>
+            <label>Temperature <span>°C</span><input name="temperature" type="number" min="30" max="43" step="0.1" value="36.6" required></label>
+            <label>Request private psychological support?<select name="support"><option value="no">Not requested</option><option value="yes">Yes — simulated request only</option></select></label>
+            <button type="submit" class="primary full">Save fictional check-in</button>
+            <p class="form-note full" id="mentalFeedback" role="status"></p>
+          </form>
+        </div>
+      </div>
+      <div class="panel research-history">
+        <div class="section-title mini-title"><div><p class="panel-subtitle">TRACKING &amp; SUPPORT</p><h3>Behavioral check-in timeline</h3></div><button type="button" class="secondary-action" id="mentalReset">Reset example check-ins</button></div>
+        <div id="mentalHistory" aria-live="polite"></div>
+        <p class="footnote">The 1–5 scales, check-in frequency and follow-up prompts are team-created demo choices. NASA describes behavioral support and cognitive monitoring but does not validate these questionnaire cutoffs. Only fictional values should be entered. <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-016-behavioral-health.pdf" target="_blank" rel="noopener">NASA OCHMO-TB-016 ↗</a></p>
+      </div>
+    </section>
     <section id="eva" class="research-section" aria-labelledby="evaTitle">
       <div class="section-title"><div>
-        <p class="eyebrow">05 / EXTRAVEHICULAR ACTIVITY</p>
+        <p class="eyebrow">04 / EXTRAVEHICULAR ACTIVITY</p>
         <h2 id="evaTitle">Post-EVA health check</h2>
         <p class="subtle">From Maya &amp; Ofir's research: capture suit-contact discomfort and follow-up history after an EVA.</p>
       </div><span class="research-pill">SYNTHETIC RECORDS ONLY</span></div>
@@ -69,15 +122,15 @@
       <div class="research-layout">
         <div class="panel body-card">
           <div class="panel-subtitle">01 — SELECT BODY REGION</div>
-          <p class="subtle">Select the region in the diagram or using the list in the form.</p>
+          <p class="subtle">Select any combination of regions. Each selected area gets its own 1–10 discomfort score.</p>
           <div class="bodymap" aria-label="Body-area selection diagram">
             <div class="body-silhouette" aria-hidden="true">
               <span class="body-head"></span><span class="body-neck"></span><span class="body-torso"></span>
               <span class="body-arm left"></span><span class="body-arm right"></span>
               <span class="body-leg left"></span><span class="body-leg right"></span>
             </div>
-            <button type="button" data-body="shoulder" class="body-pin pin-shoulder" aria-label="Select shoulders">Shoulder</button>
-            <button type="button" data-body="hand" class="body-pin pin-hand" aria-label="Select hands and fingers">Hands</button>
+            <button type="button" data-body="shoulder" class="body-pin pin-shoulder" aria-label="Toggle shoulders">Shoulder</button>
+            <button type="button" data-body="hand" class="body-pin pin-hand" aria-label="Toggle hands and fingers">Hands</button>
             <button type="button" data-body="torso" class="body-pin pin-torso" aria-label="Select torso">Torso</button>
             <button type="button" data-body="back" class="body-pin pin-back" aria-label="Select back">Back</button>
             <button type="button" data-body="hip" class="body-pin pin-hip" aria-label="Select hips">Hips</button>
@@ -90,12 +143,11 @@
           <p class="panel-subtitle">02 — SYNTHETIC CHECK-IN</p>
           <h3>Record discomfort after EVA</h3>
           <form id="evaForm" class="research-form">
-            <label>EVA identifier <input name="event" maxlength="50" value="EVA-004" placeholder="EVA-004" required></label>
-            <label>Body region <select name="area" id="evaArea" required>
-              <option value="hand">Hands &amp; fingers</option><option value="shoulder">Shoulders</option><option value="torso">Torso / chest</option><option value="back">Spine &amp; back</option><option value="hip">Hips</option><option value="knee">Knees</option><option value="foot">Feet &amp; ankles</option>
-            </select></label>
-            <label>Side <select name="side"><option value="right">Right</option><option value="left">Left</option><option value="both">Both</option><option value="central">Central / not applicable</option></select></label>
-            <label>Discomfort 0–10 <input name="severity" type="number" min="0" max="10" step="1" value="4" required></label>
+            <label class="full">EVA event ID <span>Identifier for one spacewalk, e.g. EVA-004; not an astronaut's personal ID</span><input name="event" maxlength="50" value="EVA-004" placeholder="EVA-004" required></label>
+            <fieldset class="full pain-fieldset"><legend>Choose multiple body regions and rate each 1–10</legend>
+              <div id="evaPainChoices" class="pain-choices" aria-live="polite"></div>
+            </fieldset>
+            <label>Most relevant side <select name="side"><option value="right">Right</option><option value="left">Left</option><option value="both">Both</option><option value="central">Central / not applicable</option></select></label>
             <label>What was noticed? <select name="kind"><option value="pressure">Suit pressure / friction</option><option value="strain">Muscle or joint strain</option><option value="skin">Skin irritation / blister</option><option value="fatigue">Subjective fatigue</option><option value="other">Other discomfort</option></select></label>
             <label>Onset <select name="onset"><option value="during">During EVA</option><option value="after">Immediately after</option><option value="later">Later follow-up</option></select></label>
             <label>Suit fit feedback <select name="suitFit"><option value="normal">No issue reported</option><option value="contact">Pressure / contact point</option><option value="restricted">Restricted movement</option><option value="unsure">Not sure</option></select></label>
@@ -119,6 +171,7 @@
           <button type="button" data-dcs-example="urgent" class="secondary-action">Neurological / breathing concern</button>
           <button type="button" data-dcs-example="unknown" class="secondary-action">No symptoms selected</button>
         </div>
+        <p class="urgency-principle"><strong>Review order:</strong> 1. Serious neurological / breathing findings → 2. Milder DCS-like symptoms → 3. Local suit-contact discomfort. A questionnaire cannot rule out Type II DCS.</p>
         <form id="dcsForm" class="dcs-form">
           <label class="dcs-pressure">Known cabin/suit pressure transition before symptom onset?
             <select id="dcsExposure" name="exposure" required>
@@ -140,13 +193,23 @@
               <label><input type="checkbox" name="symptoms" value="mottledRash"><span>New mottled / marbled skin pattern</span></label>
             </div>
           </fieldset>
-          <button class="primary dcs-submit" type="submit">Review fictional symptoms</button>
+          <fieldset class="dcs-symptoms neuro-observations">
+            <legend>Neurological observations — review FIRST</legend>
+            <p class="footnote">Use for hypothetical observations only. Abnormal or uncertain responses merit urgent clinical review. These are simplified team-designed fields, not a certified exam.</p>
+            <div class="neuro-grid">
+              <label>Pupil symmetry<select name="pupils" id="neuroPupils"><option value="not_checked">Not checked</option><option value="symmetric">Symmetric</option><option value="uncertain">Uncertain</option><option value="asymmetric">Asymmetric</option></select></label>
+              <label>Speech clarity<select name="speech" id="neuroSpeech"><option value="not_checked">Not checked</option><option value="clear">Clear</option><option value="moderate">Moderately altered</option><option value="slurred">Slurred / unclear</option></select></label>
+              <label>Mental clarity<select name="clarity" id="neuroClarity"><option value="not_checked">Not checked</option><option value="clear">Clear</option><option value="moderate">Moderately altered</option><option value="altered">Markedly altered</option></select></label>
+              <label>Limb coordination<select name="coordination" id="neuroCoordination"><option value="not_checked">Not checked</option><option value="good">Good</option><option value="moderate">Moderate</option><option value="poor">Poor</option></select></label>
+            </div>
+          </fieldset>
+          <button class="primary dcs-submit" type="submit">Review fictional symptoms &amp; next assessments</button>
         </form>
         <div id="dcsResult" class="dcs-result" role="status" aria-live="polite">
           <strong>No screening result yet</strong>
           <p>Select a fictional scenario or symptoms above. No information from this form is sent to a server or saved.</p>
         </div>
-        <p class="footnote">Serious neurological, balance or cardiopulmonary symptoms require prompt evaluation under approved mission emergency procedures, regardless of the chosen exposure answer. This prototype must never replace the flight surgeon or the spacecraft medical response protocol. No risk percentage, diagnosis, Type I/II classification of a person or "all clear" is generated.</p>
+        <p class="footnote">Serious neurological, balance or cardiopulmonary symptoms require prompt evaluation under approved mission emergency procedures, regardless of the chosen exposure answer. This prototype must never replace the flight surgeon or the spacecraft medical response protocol. No risk percentage, diagnosis, Type I/II classification of a person or "all clear" is generated. Doppler/ultrasound for gas bubbles can be a clinician-considered adjunct, not a rule-out test.</p>
       </section>
       <details class="research-roadmap"><summary>Explore other EVA monitoring ideas from the team research <span>Research roadmap, not implemented</span></summary>
         <div class="roadmap-grid">
@@ -165,7 +228,7 @@
     </section>
     <section id="habitat" class="research-section" aria-labelledby="habitatTitle">
       <div class="section-title"><div>
-        <p class="eyebrow">06 / HABITAT MICROBIOLOGY</p><h2 id="habitatTitle">Environmental sample monitor</h2>
+        <p class="eyebrow">05 / HABITAT MICROBIOLOGY</p><h2 id="habitatTitle">Environmental sample monitor</h2>
         <p class="subtle">Compare fictional air, surface and water colony counts with the correct NASA ISS in-flight reference values.</p>
       </div><span class="research-pill">NASA-REFERENCED DEMO</span></div>
       <p class="research-context">This module tracks <strong>microbes in the habitat</strong>, not an astronaut's gut microbiome or immune system. NASA's <a href="https://www.nasa.gov/wp-content/uploads/2025/05/ochmo-tb-046-microbiology-rev-a.pdf" target="_blank" rel="noopener">OCHMO-TB-046, Rev A (2025), p. 10 ↗</a> provides the ISS in-flight figures below. Comparisons are for educational demonstration only, not universal spacecraft limits or instructions to disinfect or treat anyone.</p>
@@ -200,9 +263,15 @@
         <p class="footnote">Values above a cited ISS reference warrant professional interpretation. Results are sensitive to sampling methods, location and mission context. Crew illness alone is not a verified instruction to automatically repeat sampling. <a href="https://www.nasa.gov/reference/jsc-microbiology/" target="_blank" rel="noopener">NASA JSC Microbiology Laboratory ↗</a></p>
       </div>
     </section>
+    <section id="references" class="reference-strip"><p class="eyebrow">SOURCE NOTES</p>
+      <a href="https://www.nasa.gov/wp-content/uploads/2017/02/tp-20205007604.pdf" target="_blank" rel="noopener">NASA EVA Roadmap (2020) ↗</a>
+      <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-037-decompression-sickness.pdf" target="_blank" rel="noopener">NASA DCS Brief (Rev D) ↗</a>
+      <a href="https://www.nasa.gov/reference/jsc-behavioral-health/" target="_blank" rel="noopener">NASA Behavioral Health ↗</a>
+    </section>
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
   <script type="module" src="./src/app.mjs"></script>
   <script type="module" src="./src/research-ui.mjs"></script>
+  <script type="module" src="./src/mission-mental-ui.mjs"></script>
 </body>
 </html>
