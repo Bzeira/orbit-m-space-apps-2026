@@ -7,6 +7,7 @@ export const MICRO_SOURCE="https://www.nasa.gov/wp-content/uploads/2025/05/ochmo
 export const EVA_SOURCE="https://ntrs.nasa.gov/citations/20220004017";
 export const EVA_TRACKING_SOURCE="https://ntrs.nasa.gov/citations/20230015608";
 export const REGIONS=Object.freeze({
+  head:"Head & neck",
   hand:"Hands & fingers",shoulder:"Shoulders",torso:"Torso / chest",
   back:"Spine & back",hip:"Hips",knee:"Knees",foot:"Feet & ankles"
 });
