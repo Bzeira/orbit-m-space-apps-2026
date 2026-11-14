@@ -45,3 +45,36 @@ test("unknown symptom codes, repeated symptoms, missing exposure are rejected",(
   assert.throws(()=>screenDcsConcern({exposure:"yes",symptoms:"itching"}));
   assert.equal(Object.keys(DCS_SYMPTOMS).length,8);
 });
+test("pupil asymmetry triggers urgent review before mild DCS-like symptoms",()=>{
+  const r=screenDcsConcern({exposure:"yes",symptoms:["itching"],neuro:{pupils:"asymmetric"}});
+  assert.equal(r.status,"URGENT_REVIEW");
+  assert.equal(r.priority,1);
+  assert.ok(r.neuroConcerns.some(x=>x.includes("Pupil")));
+});
+test("slurred speech, altered clarity and poor coordination are prioritized regardless of pressure history",()=>{
+  const cases=[{speech:"slurred"},{clarity:"altered"},{coordination:"poor"},{coordination:"moderate"}];
+  for(const neuro of cases){
+    const r=screenDcsConcern({exposure:"unknown",symptoms:[],neuro});
+    assert.equal(r.status,"URGENT_REVIEW");
+    assert.match(r.furtherAssessment,/neurological examination/);
+  }
+});
+test("milder symptom suspicion includes clinician-only Doppler caveat",()=>{
+  const r=screenDcsConcern({exposure:"yes",symptoms:["musculoskeletal"]});
+  assert.equal(r.priority,2);
+  assert.match(r.furtherAssessment,/Doppler\/ultrasound/);
+  assert.match(r.furtherAssessment,/no bubbles do not exclude/);
+});
+test("localized pain alone is reported after both higher priority groups",()=>{
+  const r=screenDcsConcern({exposure:"unknown",symptoms:[],
+     painAreas:[{area:"hand",severity:6},{area:"knee",severity:2}]});
+  assert.equal(r.status,"LOCAL_CONTACT_CONCERN");
+  assert.equal(r.priority,3);
+  assert.equal(r.painAreas.length,2);
+  assert.ok(!r.title.includes("diagnosis"));
+});
+test("invalid neurological or pain entries cannot produce reassurance",()=>{
+  assert.throws(()=>screenDcsConcern({exposure:"yes",symptoms:[],neuro:{coordination:"excellent"}}));
+  assert.throws(()=>screenDcsConcern({exposure:"yes",symptoms:[],painAreas:[{area:"hip",severity:11}]}));
+  assert.throws(()=>screenDcsConcern({exposure:"yes",symptoms:[],painAreas:[{area:"foot",severity:2},{area:"foot",severity:4}]}));
+});
