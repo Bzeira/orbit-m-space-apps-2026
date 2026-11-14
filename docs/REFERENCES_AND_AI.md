@@ -43,3 +43,18 @@ Additional contributions using AI should be added here, including images, text, 
 - [ ] Project uses an actual public NASA numerical dataset or makes a scientifically substantive and clearly cited use of official challenge resources.
 - [ ] Final demo and project links verified in an incognito browser.
 - [ ] AI disclosures and licensing included on official submission.
+
+## November 14: additional research implementation
+Maya Dimant and Ofir Nakash produced a research document covering EVA symptoms and habitat microbial monitoring. The team retained original exploratory claims with incomplete numeric references as unverified. ChatGPT assisted with integrating **research-backed, synthetic demonstrations** into the public site: a Post-EVA self-report timeline and ISS environmental sampling log.
+
+Official references actually used for those modules:
+- NASA OCHMO-TB-046, *Microbiology in Spaceflight Overview*, Rev A, May 19 2025, **p. 10** for ISS in-flight CFU limits (air: bacteria 1,000 and fungi 100 CFU/m³; surfaces: bacteria 10,000 and fungi 100 CFU/100 cm²; water: bacteria 50 CFU/mL and no detectable coliforms). https://www.nasa.gov/wp-content/uploads/2025/05/ochmo-tb-046-microbiology-rev-a.pdf
+- NASA JSC Microbiology Lab: monitoring environmental air, water, surfaces and hardware, distinct from gut microbiome research. https://www.nasa.gov/reference/jsc-microbiology/
+- NASA 2022 EVA Injury Evidence Report: spacesuit and EVA operations may cause contact and musculoskeletal injuries. https://ntrs.nasa.gov/citations/20220004017
+- NASA EVA Suited Incidence Tracking (2023 submission): tracking suited exposure, reported injuries and locations. https://ntrs.nasa.gov/citations/20230015608
+
+Project code only logs **fictional** EVA reports and environmental sample counts. No real personal or ISS samples were used. NASA source figures inform the ISS reference-comparison display but do not validate clinical conclusions, medical/safety actions, general spacecraft thresholds or any unverified DCS numbers.
+
+See [RESEARCH_FEATURES.md](RESEARCH_FEATURES.md) for the feature-by-feature evidence map and unimplemented claims.
+
+**AI disclosure update:** ChatGPT (OpenAI), Nov 14 2026: drafted the EVA/habitat prototype HTML, CSS, validation logic, JS interactions, source annotations, unit tests and implementation documentation. Members must verify before submitting; no NASA endorsement is implied.
