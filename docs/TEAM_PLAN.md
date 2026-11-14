@@ -10,7 +10,6 @@ These are **research areas, not software features promised for completion**. Rec
 | **Ofir** | Decompression sickness, microbiome, EVA injuries with Maya | Evidence/source table with NASA links and explicit non-monitored domains |
 | **Itay** | Cardiovascular, muscle fitness, post-landing injuries; MATLAB, SolidWorks and sensor knowledge | Sensor and data acquisition diagram + validation checks for pulse and potential BP |
 | **Inbar** | Neurological/ocular issues, sleep, space radiation | Sleep/circadian evidence summary, risk-language review and pitch science notes |
-| **Eyal** | No specific research area confirmed | Proposed: test browser demo, track all deadlines and record short video |
 
 **Unassigned areas:** altered immune responses, vestibular/sensorimotor, hypoxia, nutrition, bone density, psychological health, team dynamics and spacecraft systems. Treat them as research backlog unless a person explicitly accepts them. Do not imply NASA source validation where none exists.
 
@@ -24,9 +23,8 @@ These are **research areas, not software features promised for completion**. Rec
 | Itay | Mechanical/sensor feasibility **only if relevant** | Sensor comparison/CAD diagram/MATLAB check, including limits; don't assume real hardware |
 | Ofir | Suggested: NASA resource finding and citation audit | Verified official dataset, link, license, actual fields used (skills to confirm) |
 | Inbar | Suggested: user story, pitch writing, slides | Four-minute local pitch and concise visuals (skills to confirm) |
-| Eyal | Suggested: QA, demo recording, deadline monitoring | Test cases, 30s global video or up-to-7-slide deck, public-link checks (skills to confirm) |
 
-Choose one **submission owner** and one deputy immediately. The sole programmer must not also own every non-coding deliverable.
+Assign a **QA/demo recording owner**, plus one **submission owner** and one deputy, from the five active members immediately. The sole programmer must not also own every non-coding deliverable.
 
 ## Saturday, 14 November
 | Time | Gate / deliverable |
