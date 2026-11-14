@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07131d">
+  <meta name="description" content="ORBIT-M: offline-first, explainable astronaut health-monitoring concept for NASA Space Apps 2026. Synthetic demonstration data.">
+  <title>ORBIT-M | Crew Health Companion</title>
+  <link rel="stylesheet" href="./assets/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
+    <nav><a href="#mission">Mission</a><a href="#monitor">Monitor</a><a href="#evidence">Evidence</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+  </header>
+  <main>
+    <section id="mission" class="hero">
+      <div><p class="eyebrow"><span class="pulse-dot"></span> NASA SPACE APPS 2026 · DEMONSTRATOR</p>
+        <h1>Notice the change.<br><span>Know what to check.</span></h1>
+        <p class="lead">A transparent, offline-first crew self-check concept. Understand personal trends in physiological and behavioral indicators instead of relying on one-size-fits-all numbers.</p>
+        <div class="hero-tags"><span>LOCAL-FIRST</span><span>EXPLAINABLE SIGNALS</span><span>CREW-CENTERED</span></div>
+      </div>
+      <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring orbit-outer"></div><div class="orbit-ring orbit-inner"></div><div class="orbit-center">M</div><div class="orbit-dot"></div></div>
+    </section>
+    <div class="safety" role="note"><strong>SIMULATED CREW TELEMETRY.</strong> Values, baseline rules and recommendations shown here are illustrative, not astronaut measurements, medical diagnoses, verified flight thresholds or treatment instructions. Follow authorized mission medical procedures for actual care.</div>
+    <section id="monitor" class="workspace" aria-label="Health monitoring dashboard">
+      <div class="section-title"><div><p class="eyebrow">01 / MISSION HEALTH</p><h2>Personal status dashboard</h2><p class="subtle">Sample crew member: Commander A · baseline = first four simulated days</p></div><div class="offline-badge">● NO NETWORK REQUIRED</div></div>
+      <div class="scenario-strip" role="group" aria-label="Choose a synthetic scenario">
+        <span>Explore scenario</span>
+        <button type="button" data-scenario="stable" aria-pressed="true">Steady</button>
+        <button type="button" data-scenario="fatigue" aria-pressed="false">Sleep + pulse drift</button>
+        <button type="button" data-scenario="temperature" aria-pressed="false">Temperature check</button>
+        <button type="button" id="clearBtn" class="text-button">Reset local entries</button>
+      </div>
+      <div class="overview">
+        <div class="panel state-panel"><p class="mini-label">CURRENT PATTERN</p><div id="statusText" class="big-status" aria-live="polite">—</div><div id="statusDescription" class="subtle">—</div><div class="divider"></div><p class="mini-label">DEMO OBSERVATIONS</p><div id="observations" class="observations">—</div></div>
+        <div class="panel"><p class="mini-label">RESTING HEART RATE</p><div class="metric"><span id="hrCurrent">—</span><small>bpm</small></div><p class="subtle">Personal demo baseline: <span id="hrBase">—</span> bpm</p><svg id="hrChart" class="chart" viewBox="0 0 680 160" role="img" aria-label="Seven-day heart rate trend chart"><line x1="0" y1="136" x2="680" y2="136" stroke="#26404f" stroke-width="1"></line><polyline id="hrPolyline" fill="none" stroke="#63e2ca" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></div>
+      </div>
+      <div class="measure-grid">
+        <div class="panel"><p class="mini-label">SLEEP LAST NIGHT</p><div class="metric"><span id="sleepCurrent">—</span><small>hours</small></div><p class="subtle">Baseline: <span id="sleepBase">—</span> hours</p></div>
+        <div class="panel"><p class="mini-label">SELF-REPORTED MOOD</p><div class="metric"><span id="moodCurrent">—</span><small>/ 5</small></div><p class="subtle">Baseline: <span id="moodBase">—</span> / 5</p></div>
+        <div class="panel"><p class="mini-label">BODY TEMPERATURE</p><div class="metric"><span id="tempCurrent">—</span><small>°C</small></div><p class="subtle">Baseline: <span id="tempBase">—</span> °C</p></div>
+      </div>
+      <div class="two-cols">
+        <section class="panel alerts-panel" aria-labelledby="alertsTitle"><p class="eyebrow">02 / REASONED SIGNALS</p><h2 id="alertsTitle">What changed?</h2><div id="alerts" aria-live="polite"></div><p class="footnote">Rules compare against this person's first four demo records; a 15% pulse change, a 1.5-hour sleep difference, two low mood reports and 38°C are illustrative project flags, not NASA-approved cutoffs.</p></section>
+        <section class="panel" aria-labelledby="entryTitle"><p class="eyebrow">03 / DAILY SELF-CHECK</p><h2 id="entryTitle">Add a simulated reading</h2><form id="readingForm">
+          <label>Resting pulse <span>bpm</span><input name="heartRate" type="number" min="30" max="220" step="1" required></label>
+          <label>Sleep last night <span>hours</span><input name="sleepHours" type="number" min="0" max="24" step="0.1" required></label>
+          <label>Mood <span>1 = low, 5 = good</span><input name="mood" type="number" min="1" max="5" step="1" required></label>
+          <label>Body temperature <span>°C</span><input name="temperature" type="number" min="30" max="43" step="0.1" required></label>
+          <button type="submit" class="primary">Add demo observation</button><p id="formFeedback" role="status"></p>
+        </form><p class="footnote">Measurements remain in this browser only (localStorage). No uploads, accounts or network requests.</p></section>
+      </div>
+    </section>
+    <section id="evidence" class="evidence"><p class="eyebrow">04 / SCIENTIFIC CONTEXT</p><h2>Spaceflight hazards, clearly explained</h2><p class="subtle">NASA Human Research Program resources inform which issues are worth monitoring. They do not validate the example measurements or our alert rules.</p><div class="evidence-grid">
+      <article><span class="num">01</span><h3>Isolation &amp; confinement</h3><p>Behavioral well-being and sleep can be affected by demanding, isolated missions. Our voluntary mood and sleep check-ins help surface changes for discussion.</p><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA hazards ↗</a></article>
+      <article><span class="num">02</span><h3>Altered gravity</h3><p>Long-duration flight can change cardiovascular and musculoskeletal fitness. The prototype monitors resting pulse trends, not bone density or clinical cardiovascular risk.</p><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">NASA risks ↗</a></article>
+      <article><span class="num">03</span><h3>Distance from Earth</h3><p>Communication delays make clear, independent self-observation useful. The software works locally; clinical decisions remain subject to approved crew procedures.</p><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA hazards ↗</a></article>
+    </div></section>
+  </main>
+  <footer><strong>ORBIT–M</strong><span>Team of six · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
+  <script type="module" src="./src/app.mjs"></script>
+</body>
+</html>
