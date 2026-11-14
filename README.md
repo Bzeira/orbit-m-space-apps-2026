@@ -40,7 +40,7 @@ The three NASA sources referenced in the interface are:
 
 They inform *what matters* in space health. They **do not establish or validate our numeric prototype thresholds**. See [sources and AI disclosure](docs/REFERENCES_AND_AI.md). See [challenge scope and remaining questions](docs/CHALLENGE_BRIEF.md), [risk coverage matrix](docs/RISK_MATRIX.md), and [baseline/triage design](docs/BASELINE_AND_DECISION_ENGINE.md).
 
-## Team Members
+## Team Members (5 active participants)
 
 | Name | Known skills and proposed contribution |
 | --- | --- |
@@ -49,7 +49,6 @@ They inform *what matters* in space health. They **do not establish or validate 
 | **Ofir Nakash** | Proposed: research, NASA reference audit; skills to confirm |
 | **Inbar** | Proposed: user research, pitch and story; skills to confirm |
 | **Itay Lipsky** | Mechanical engineering, MATLAB, SolidWorks, sensors, CAD; Arduino learning if relevant |
-| **Eyal Danino** | Proposed: QA, demo capture and submission; skills to confirm |
 
 **Roles are proposals, not confirmed assignments.**
 
