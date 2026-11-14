@@ -28,5 +28,7 @@ jobs:
           node --check src/mission-mental-ui.mjs
           node --check src/cardiovascular.mjs
           node --check src/cardiovascular-ui.mjs
+          node --check src/mission-demo.mjs
+          node --check src/mission-demo-ui.mjs
       - name: Run all unit tests
         run: node --test
