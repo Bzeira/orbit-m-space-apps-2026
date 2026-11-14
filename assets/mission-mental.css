@@ -1,0 +1,55 @@
+/* Mission profile, mental health tracking and safety-first EVA enhancements */
+.mission-setup{margin-top:14px;padding-top:20px}
+.mission-config-form{display:flex;align-items:end;gap:14px;flex-wrap:wrap}
+.mission-config-form label{display:flex;flex-direction:column;color:#d0e6e6;font-size:13px;gap:6px;min-width:180px;flex:1}
+.mission-config-form label span{font-size:11px;color:#9dbbbf}
+.mission-config-form input{width:100%;background:#071c27;border:1px solid #2b5362;border-radius:9px;padding:10px 12px;color:#effaf8}
+.mission-config-form .primary{padding:11px 18px;min-height:44px}
+.mission-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.mission-stat{background:#102f3d;border:1px solid #2c515d;border-radius:13px;padding:14px;display:flex;flex-direction:column;gap:5px}
+.mission-stat span{font-size:10px;color:#83cabe;letter-spacing:1px;font-weight:750}
+.mission-stat strong{font-size:17px;color:#effaf8;line-height:1.35}
+.mental-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:18px}
+.scheduled-slots{display:grid;gap:10px;margin:18px 0}
+.scheduled-slot{display:flex;align-items:center;justify-content:space-between;padding:17px;border:1px solid #305564;background:#102c3a;border-radius:12px;gap:15px}
+.scheduled-slot span{color:#d8eeec;font-weight:700}
+.scheduled-slot strong{font-size:12px}
+.slot-done{color:#75e1c6}.slot-pending{color:#f2cd85}
+.private-support{margin-top:25px;padding:18px;background:#0b3440;border:1px solid #366579;border-radius:14px}
+.private-support strong{font-size:15px;color:#d8f3ed}
+.private-support p{color:#bbd1d0;font-size:13px;line-height:1.7;margin:9px 0}
+.private-support a{font-size:12px}
+.mental-divider{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #305663;padding-top:14px;margin-top:5px}
+.mental-divider strong{color:#e6f5f2;font-size:13px}
+.mental-divider span{color:#9fbfc6;font-size:11px}
+.mental-history-item{padding:17px 0;border-bottom:1px solid #2a505f}
+.mental-history-item:first-child{padding-top:0}
+.mental-history-item:last-child{border-bottom:0}
+.mental-history-item p{color:#bcd6d6;font-size:12px;line-height:1.7;margin:6px 0}
+.mental-history-item .mental-explanation{color:#e0eeee}
+.mental-history-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mental-history-head strong{color:#e6f4ee}
+.mental-state{font-size:10px;letter-spacing:.4px;color:#8bdcc8;border:1px solid #2d7161;background:#143d3b;border-radius:20px;padding:5px 9px}
+.mental-state.needs-review{color:#ffe0a8;border-color:#7d613c;background:#3a2e20}
+.pain-fieldset{border:1px solid #32606b;border-radius:12px;margin:0;padding:12px;min-width:0}
+.pain-fieldset legend{color:#bde9e1;padding:0 8px;font-size:12px;font-weight:700}
+.pain-choices{display:grid;grid-template-columns:1fr;gap:8px}
+.research-form .pain-choice{display:grid;grid-template-columns:19px minmax(0,1fr) 76px;gap:10px;align-items:center;padding:8px 9px;border:1px solid #2b505e;border-radius:9px;background:#0a2633;min-height:45px;cursor:pointer}
+.pain-choice>input[type=checkbox]{width:17px;height:17px;accent-color:#68e1ce;margin:0}
+.research-form .pain-choice .pain-rating{padding:7px 8px;width:100%;min-width:0;text-align:center}
+.research-form .pain-choice .pain-rating[hidden]{display:none}
+.pain-choice span{font-size:12px}
+.neuro-observations{border-color:#ad8068!important;background:#2f2929!important}
+.neuro-observations legend{color:#ffe0bb!important}
+.neuro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.neuro-grid label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#e6eeeb}
+.neuro-grid select{width:100%;min-width:0;background:#091d27;border:1px solid #76624c;color:#effaf8;border-radius:8px;padding:10px}
+.urgency-principle{margin:15px 0;padding:15px;background:#322b23;border:1px solid #846d45;border-radius:10px;color:#f4dfb6;font-size:12px;line-height:1.65}
+.dcs-link{display:flex;gap:11px;align-items:center;font-size:13px;color:#d8e5e0}
+.dcs-link input{width:17px;height:17px;accent-color:#68e1ce}
+.dcs-follow-up{background:#103642;border-left:2px solid #66d4c0;padding:11px 14px}
+.reference-strip{display:flex;flex-wrap:wrap;gap:15px;align-items:center;border-top:1px solid #315564;padding:22px 0;margin:20px 0 10px}
+.reference-strip .eyebrow{margin:0 10px 0 0}
+.reference-strip a{font-size:12px}
+@media(max-width:920px){.mental-grid{grid-template-columns:1fr}.mission-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.mission-summary{grid-template-columns:1fr 1fr}.mission-stat strong{font-size:14px}.mental-grid{grid-template-columns:1fr}.neuro-grid{grid-template-columns:1fr}.mental-divider{align-items:flex-start}.mission-config-form>*{width:100%}.research-form .pain-choice{grid-template-columns:19px minmax(0,1fr) 65px}}
