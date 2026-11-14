@@ -1,0 +1,43 @@
+/* Cardiovascular research demonstrator */
+.cardio-section{scroll-margin-top:20px}
+.cardio-equations{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:18px 0}
+.cardio-formula{display:flex;flex-direction:column;gap:5px;background:#102d3c;border:1px solid #315b6a;border-radius:15px;padding:19px 22px}
+.cardio-formula span{font-weight:780;font-size:11px;letter-spacing:1px;color:#86d7ce}
+.cardio-formula strong{font-size:clamp(23px,3vw,35px);letter-spacing:-.6px;color:#f0fbf8}
+.cardio-formula small{font-size:12px;color:#afc9ce}
+.cardio-science-note{font-size:13px;line-height:1.8;color:#accdd1;border-left:3px solid #54bcae;background:#0d2837;border-radius:8px;padding:13px 16px;margin-bottom:20px}
+.cardio-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:17px}
+.cardio-metrics .panel{padding:21px 23px}
+.cardio-large{font-size:clamp(26px,3.6vw,44px);font-weight:810;letter-spacing:-1px;color:#eff9f5;margin:6px 0 2px}
+.cardio-large small{font-size:13px;color:#99bec5;font-weight:400;letter-spacing:0;margin-left:8px}
+.cardio-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:19px}
+.cardio-layout .panel{min-width:0}
+.cardio-return{border-top:1px solid #2d535d;margin-top:22px;padding-top:20px}
+.cardio-return-form{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:14px 0}
+.cardio-return-form label{font-size:12px;flex:1;min-width:180px;display:flex;gap:7px;flex-direction:column;color:#d4eae7}
+.cardio-return-form input{background:#071c27;color:#effaf8;border:1px solid #38616d;border-radius:9px;padding:10px}
+.cardio-return-form button{padding:11px 16px}
+.cardio-interpretation{padding:17px 18px;margin:17px 0 22px;background:#10343e;border:1px solid #315c65;border-radius:12px;min-height:132px}
+.cardio-interpretation strong{font-size:17px;color:#c3eee6}
+.cardio-interpretation p{font-size:12px;line-height:1.65;color:#c2d8dc;margin:8px 0}
+.cardio-interpretation.is-review{background:#3c321f;border-color:#99804d}
+.cardio-interpretation.is-review strong{color:#ffdd98}
+.cardio-interpretation.is-urgent{background:#412a30;border-color:#bd7a7c}
+.cardio-interpretation.is-urgent strong{color:#ffbcbb}
+.cardio-chart{width:100%;height:auto;max-height:230px;margin:13px 0}
+.cardio-plot-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}
+.cardio-plot-head span{font-size:11px;color:#9fbfc6}
+.cardio-legend{display:flex;gap:17px;font-size:11px;color:#bed6d5;margin-bottom:20px}
+.cardio-legend span{display:flex;align-items:center;gap:7px}
+.cardio-legend i{display:inline-block;width:18px;height:4px;border-radius:3px}
+.cardio-legend-pp{background:#69dfca}
+.cardio-legend-map{background:#eac487}
+.cardio-row{border-top:1px solid #28515d;padding:14px 0;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.cardio-row:first-child{border-top:0}
+.cardio-row strong{font-size:13px;color:#e6f2ed}
+.cardio-row span{color:#b5ced0;font-size:12px}
+.cardio-row .cardio-row-status{color:#82dcc6;font-size:11px;text-align:right}
+.cardio-row .cardio-row-status.review{color:#fad29a}
+.cardio-row .cardio-row-status.urgent{color:#ffabaa}
+@media(max-width:960px){.cardio-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.cardio-equations{grid-template-columns:1fr}.cardio-metrics{grid-template-columns:1fr}.cardio-row{grid-template-columns:1fr 1fr}.cardio-row .cardio-row-status{grid-column:2;text-align:right}.cardio-return-form label,.cardio-return-form button{width:100%}}
