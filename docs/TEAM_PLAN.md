@@ -1,5 +1,21 @@
 # ORBIT-M Team Plan | November 14–15, 2026 (Israel time)
 
+## Research assignments reported by team (Nov 14)
+These are **research areas, not software features promised for completion**. Reconfirm deliverables during the team call.
+
+| Member | Areas named in the team message | Suggested tangible deliverable today |
+|---|---|---|
+| **Barak** | Only programmer; implementation and integration | Working synthetic preflight/inflight trend demo; testing and public link |
+| **Maya** | Decompression sickness, microbiome, EVA injuries with Ofir; biology, chemistry, math, visual design | One referenced science brief + screen/design review, not an unvalidated medical formula |
+| **Ofir** | Decompression sickness, microbiome, EVA injuries with Maya | Evidence/source table with NASA links and explicit non-monitored domains |
+| **Itay** | Cardiovascular, muscle fitness, post-landing injuries; MATLAB, SolidWorks and sensor knowledge | Sensor and data acquisition diagram + validation checks for pulse and potential BP |
+| **Inbar** | Neurological/ocular issues, sleep, space radiation | Sleep/circadian evidence summary, risk-language review and pitch science notes |
+| **Eyal** | No specific research area confirmed | Proposed: test browser demo, track all deadlines and record short video |
+
+**Unassigned areas:** altered immune responses, vestibular/sensorimotor, hypoxia, nutrition, bone density, psychological health, team dynamics and spacecraft systems. Treat them as research backlog unless a person explicitly accepts them. Do not imply NASA source validation where none exists.
+
+**Priority before any new feature:** review the medical boundary in [Baseline and Decision Engine](BASELINE_AND_DECISION_ENGINE.md) and scope in [17 Risks](RISK_MATRIX.md). Psychology is confidential; space-suit pressure/oxygen/radiation safety must never be reduced to a personal baseline score.
+
 ## Responsibilities — proposal; confirm with everyone
 | Member | Suggested work | Tangible output |
 |---|---|---|
