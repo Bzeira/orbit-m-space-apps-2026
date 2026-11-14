@@ -58,6 +58,10 @@ function element(tag,attributes={}){
   }
   return node;
 }
+export function selectableRegions(view){
+  if(!views.includes(view))throw Error("Unknown body map view");
+  return [...new Set(parts.filter(part=>!part.view||part.view===view).map(part=>part.area))];
+}
 export function mountBodyMap(svg,{onToggle}){
   if(!svg||typeof onToggle!=="function")throw Error("Interactive body map target and toggle callback required.");
   svg.replaceChildren();
