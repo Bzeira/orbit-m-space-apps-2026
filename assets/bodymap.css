@@ -1,0 +1,116 @@
+/* ORBIT-M interactive anatomical region map, fictional EVA reports only */
+.interactive-bodymap{
+  height:442px;
+  padding:14px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  gap:3px;
+  background:radial-gradient(circle at 50% 45%,#1a4352 0%,#102f3d 45%,#071e2b 100%);
+}
+.interactive-bodymap:before{display:none}
+.bodymap-toolbar{
+  z-index:3;
+  display:flex;
+  gap:4px;
+  border:1px solid #326370;
+  background:#092a38;
+  border-radius:14px;
+  padding:4px;
+}
+.bodymap-toolbar button{
+  border:0;
+  padding:7px 18px;
+  min-width:84px;
+  background:transparent;
+  color:#b7d5d9;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:650;
+  transition:background .16s ease,color .16s ease;
+}
+.bodymap-toolbar button[aria-pressed="true"]{
+  background:#67dfcd;
+  color:#082b36;
+  font-weight:800;
+}
+.bodymap-toolbar button:focus-visible{
+  outline:2px solid #e9fefa;
+  outline-offset:2px;
+}
+.eva-body-svg{
+  display:block;
+  width:min(100%,286px);
+  height:min(100%,344px);
+  flex:1 1 auto;
+  overflow:visible;
+  filter:drop-shadow(0 0 22px #438c9225);
+}
+.eva-map-view[hidden]{display:none}
+.eva-region{cursor:pointer;outline:none}
+.eva-map-part{
+  fill:#396e7e;
+  stroke:#163948;
+  stroke-width:2.6;
+  stroke-linejoin:round;
+  transition:fill .16s ease,stroke .16s ease,filter .16s ease;
+}
+.eva-region[data-hovered="true"] .eva-map-part,
+.eva-region:hover .eva-map-part,
+.eva-region:focus-visible .eva-map-part{
+  fill:#9ef2df;
+  stroke:#e3fff6;
+  stroke-width:3.2;
+  filter:drop-shadow(0 0 7px #69e5c8aa);
+}
+.eva-region[data-selected="true"] .eva-map-part{
+  fill:#50cbb9;
+  stroke:#b7ffeb;
+  stroke-width:3;
+}
+.eva-region[data-selected="true"][data-hovered="true"] .eva-map-part,
+.eva-region[data-selected="true"]:hover .eva-map-part,
+.eva-region[data-selected="true"]:focus-visible .eva-map-part{
+  fill:#aafbe8;
+  stroke:white;
+}
+.eva-region:focus-visible .eva-map-part{
+  stroke-dasharray:5 2;
+  stroke-width:4;
+}
+.eva-surface-line{
+  pointer-events:none;
+  fill:none;
+  stroke:#092734;
+  stroke-width:2.2;
+  opacity:.44;
+}
+.bodymap-hint{
+  width:100%;
+  padding:9px 11px;
+  border:1px solid #2c5d67;
+  background:#0b2b39db;
+  border-radius:9px;
+  min-height:40px;
+  text-align:center;
+  font-size:12px;
+  color:#c1e1df;
+  line-height:1.5;
+}
+.research-form .pain-choice:has(input[type="checkbox"]:checked){
+  border-color:#59cdbb;
+  background:#0c3540;
+}
+.research-form .pain-choice:has(input[type="checkbox"]:focus-visible){
+  outline:2px solid #8feedd;
+  outline-offset:2px;
+}
+@media (max-width:560px){
+  .interactive-bodymap{height:410px}
+  .eva-body-svg{height:306px;max-width:250px}
+  .bodymap-hint{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  .eva-map-part,.bodymap-toolbar button{transition:none}
+}
