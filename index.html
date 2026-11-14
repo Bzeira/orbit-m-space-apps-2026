@@ -9,11 +9,12 @@
   <link rel="stylesheet" href="./assets/app.css">
   <link rel="stylesheet" href="./assets/research.css">
   <link rel="stylesheet" href="./assets/mission-mental.css">
+  <link rel="stylesheet" href="./assets/cardiovascular.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
-    <nav><a href="#mission">Mission</a><a href="#monitor">Vitals</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+    <nav><a href="#mission">Mission</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
   </header>
   <main>
     <section id="mission" class="hero">
@@ -69,9 +70,71 @@
       </div>
     </section>
 
+    
+    <section id="cardio" class="research-section cardio-section" aria-labelledby="cardioTitle">
+      <div class="section-title"><div>
+        <p class="eyebrow">03 / CARDIOVASCULAR MONITORING</p>
+        <h2 id="cardioTitle">Blood pressure &amp; cardiovascular trends</h2>
+        <p class="subtle">Based on Itay Lipsky's team research. Manual, synthetic blood-pressure readings, pulse pressure, estimated MAP and mission-context trends.</p>
+      </div><span class="research-pill">FICTIONAL MEASUREMENTS</span></div>
+      <div class="cardio-equations">
+        <div class="cardio-formula"><span>PULSE PRESSURE (PP)</span><strong>SBP − DBP</strong><small>Arterial pressure difference, mmHg</small></div>
+        <div class="cardio-formula"><span>ESTIMATED MEAN ARTERIAL PRESSURE (MAP)</span><strong>DBP + (PP ÷ 3)</strong><small>Resting-heart-rate approximation, mmHg. Not a direct measurement</small></div>
+      </div>
+      <p class="cardio-science-note">NASA documents fluid redistribution during microgravity and changes in cardiovascular regulation, including orthostatic intolerance after landing. These effects do not justify predicting a fixed PP curve for every astronaut. <a href="https://www.nasa.gov/humans-in-space/cardiovascular-health-in-microgravity/" target="_blank" rel="noopener">NASA cardiovascular research ↗</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11409525/" target="_blank" rel="noopener">AHA measurement statement ↗</a></p>
+      <div class="cardio-metrics" aria-live="polite">
+        <div class="panel"><p class="mini-label">LATEST BP / SYNTHETIC</p><div id="cardioBp" class="cardio-large">—</div><p class="subtle">Systolic / diastolic, mmHg</p></div>
+        <div class="panel"><p class="mini-label">PULSE PRESSURE</p><div class="cardio-large"><span id="cardioPp">—</span><small>mmHg</small></div><p class="subtle" id="cardioPpChange">Compared with fictional preflight median</p></div>
+        <div class="panel"><p class="mini-label">ESTIMATED MAP</p><div class="cardio-large"><span id="cardioMap">—</span><small>mmHg</small></div><p class="subtle" id="cardioMapChange">Approximation only</p></div>
+      </div>
+      <div class="cardio-layout">
+        <div class="panel">
+          <p class="panel-subtitle">01 / FICTIONAL MANUAL MEASUREMENT</p><h3>Add a blood-pressure reading</h3>
+          <form id="cardioForm" class="research-form">
+            <label>Mission day<input id="cardioDay" name="day" type="number" min="1" max="1095" value="13" required></label>
+            <label>Check-in<select name="slot"><option value="morning">Morning</option><option value="evening">Evening</option><option value="extra">Additional reading</option></select></label>
+            <label>Systolic BP (SBP)<span>mmHg</span><input name="systolic" type="number" min="60" max="260" step="1" value="118" required></label>
+            <label>Diastolic BP (DBP)<span>mmHg</span><input name="diastolic" type="number" min="30" max="170" step="1" value="76" required></label>
+            <label>Measurement context<select name="context"><option value="habitat">Inside spacecraft / habitat</option><option value="eva">EVA / spacewalk</option><option value="gravity-return">After return to gravity</option></select></label>
+            <label>Fictional symptom reported<select name="symptom"><option value="none">None recorded</option><option value="lightheaded">Lightheadedness</option><option value="fainting">Fainting</option><option value="chest">Chest symptoms</option><option value="breathing">Difficulty breathing</option></select></label>
+            <button class="primary full" type="submit">Record fictional blood pressure</button>
+            <p class="form-note full" id="cardioFeedback" role="status"></p>
+          </form>
+          <div class="cardio-return">
+            <p class="panel-subtitle">02 / GRAVITY-RETURN CONTEXT</p>
+            <form id="cardioReturnForm" class="cardio-return-form">
+              <label>Planned return-to-gravity mission day (optional)
+                <input id="cardioReturnDay" name="returnDay" type="number" min="1" max="1095" step="1" placeholder="e.g. 160"></label>
+              <button type="submit" class="secondary-action">Save milestone</button>
+            </form>
+            <p class="subtle" id="cardioReturnMessage" aria-live="polite">No gravity-return milestone entered.</p>
+            <p class="footnote">A milestone helps contextualize the data. The app does not create an exercise prescription or certify readiness for return to gravity.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">03 / INTERPRETABLE CHANGES</p><h3>What changed relative to preflight?</h3>
+          <div id="cardioInterpretation" class="cardio-interpretation" role="status" aria-live="polite"></div>
+          <div class="cardio-plot-head"><strong>Fictional pressure trends</strong><span id="cardioChartCaption">PP and MAP (mmHg)</span></div>
+          <svg class="cardio-chart" id="cardioChart" viewBox="0 0 600 220" role="img" aria-label="Fictional pulse pressure and estimated mean arterial pressure trends">
+            <line x1="32" x2="570" y1="185" y2="185" stroke="#305464"></line>
+            <polyline id="cardioPpLine" fill="none" stroke="#69dfca" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <polyline id="cardioMapLine" fill="none" stroke="#eac487" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+          </svg>
+          <div class="cardio-legend"><span><i class="cardio-legend-pp"></i>PP</span><span><i class="cardio-legend-map"></i>MAP estimate</span></div>
+          <p class="footnote">Comparison baseline: three fictional preflight cuff samples (median 118/76 mmHg). Example 20 mmHg change marker is an ORBIT-M display rule, <strong>not a validated medical threshold</strong>.</p>
+        </div>
+      </div>
+      <div class="panel research-history">
+        <div class="section-title mini-title"><div><p class="panel-subtitle">04 / REVIEWABLE RECORD</p><h3>Blood-pressure check-in history</h3></div>
+          <button type="button" id="cardioReset" class="secondary-action">Reset fictional readings</button>
+        </div>
+        <div id="cardioHistory" aria-live="polite"></div>
+        <p class="footnote">No live blood-pressure sensor is connected. Estimates are based on manually entered fictional values; no continuous monitoring or clinical clearance is provided. In EVA, the formula's coefficient is <em>not</em> automatically changed to 1/2 without evidence. Individual exercise choices require approved mission protocols. <a href="https://humanresearchroadmap.nasa.gov/risks/risk.aspx?i=179" target="_blank" rel="noopener">NASA cardiovascular risk ↗</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/24970852/" target="_blank" rel="noopener">Spaceflight exercise research ↗</a></p>
+      </div>
+    </section>
     <section id="mental" class="research-section" aria-labelledby="mentalTitle">
       <div class="section-title"><div>
-        <p class="eyebrow">03 / BEHAVIORAL HEALTH</p><h2 id="mentalTitle">Mental well-being &amp; crew check-ins</h2>
+        <p class="eyebrow">04 / BEHAVIORAL HEALTH</p><h2 id="mentalTitle">Mental well-being &amp; crew check-ins</h2>
         <p class="subtle">Mood, stress, tension, fatigue, attention, connection, motivation and sleep quality — separately tracked, never combined into a diagnostic score.</p>
       </div><span class="research-pill">VOLUNTARY · FICTIONAL DATA</span></div>
       <div class="mental-grid">
@@ -115,7 +178,7 @@
     </section>
     <section id="eva" class="research-section" aria-labelledby="evaTitle">
       <div class="section-title"><div>
-        <p class="eyebrow">04 / EXTRAVEHICULAR ACTIVITY</p>
+        <p class="eyebrow">05 / EXTRAVEHICULAR ACTIVITY</p>
         <h2 id="evaTitle">Post-EVA health check</h2>
         <p class="subtle">From Maya &amp; Ofir's research: capture suit-contact discomfort and follow-up history after an EVA.</p>
       </div><span class="research-pill">SYNTHETIC RECORDS ONLY</span></div>
@@ -242,7 +305,7 @@
     </section>
     <section id="habitat" class="research-section" aria-labelledby="habitatTitle">
       <div class="section-title"><div>
-        <p class="eyebrow">05 / HABITAT MICROBIOLOGY</p><h2 id="habitatTitle">Environmental sample monitor</h2>
+        <p class="eyebrow">06 / HABITAT MICROBIOLOGY</p><h2 id="habitatTitle">Environmental sample monitor</h2>
         <p class="subtle">Compare fictional air, surface and water colony counts with the correct NASA ISS in-flight reference values.</p>
       </div><span class="research-pill">NASA-REFERENCED DEMO</span></div>
       <p class="research-context">This module tracks <strong>microbes in the habitat</strong>, not an astronaut's gut microbiome or immune system. NASA's <a href="https://www.nasa.gov/wp-content/uploads/2025/05/ochmo-tb-046-microbiology-rev-a.pdf" target="_blank" rel="noopener">OCHMO-TB-046, Rev A (2025), p. 10 ↗</a> provides the ISS in-flight figures below. Comparisons are for educational demonstration only, not universal spacecraft limits or instructions to disinfect or treat anyone.</p>
@@ -281,11 +344,13 @@
       <a href="https://www.nasa.gov/wp-content/uploads/2017/02/tp-20205007604.pdf" target="_blank" rel="noopener">NASA EVA Roadmap (2020) ↗</a>
       <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-037-decompression-sickness.pdf" target="_blank" rel="noopener">NASA DCS Brief (Rev D) ↗</a>
       <a href="https://www.nasa.gov/reference/jsc-behavioral-health/" target="_blank" rel="noopener">NASA Behavioral Health ↗</a>
+      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11409525/" target="_blank" rel="noopener">AHA blood-pressure measurement ↗</a>
     </section>
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
   <script type="module" src="./src/app.mjs"></script>
   <script type="module" src="./src/research-ui.mjs"></script>
   <script type="module" src="./src/mission-mental-ui.mjs"></script>
+  <script type="module" src="./src/cardiovascular-ui.mjs"></script>
 </body>
 </html>
