@@ -82,14 +82,16 @@ function renderSample(){
   for(const row of [...sampleRows].reverse().slice(0,10)){
     const check=checkSample(row);
     const delta=row.value/check.reference;
-    const compare=check.comparison==="ABOVE REFERENCE";
+    const compare=check.comparison==="ABOVE REFERENCE"||check.comparison==="COLIFORM DETECTED";
     const label=row.kind.toUpperCase()+" · "+row.organism+" · "+row.location;
     const details=[
       row.value.toLocaleString("en-US")+" "+check.unit+" / NASA ISS inflight reference "+check.reference.toLocaleString("en-US")+" "+check.unit,
+      check.comparison==="COLIFORM DETECTED"?"Fictional coliform detection: NASA's ISS in-flight table specifies no detectable coliforms. Professional review is needed.":
+      check.comparison==="INCOMPLETE WATER CHECK"?"Coliform testing was not recorded. An at-or-below colony count alone cannot establish acceptability.":
       compare?"Numerically above the cited reference (x"+delta.toFixed(2)+"). Requires expert interpretation, not automatic action.":"At or below the cited reference. This does not prove microbiological safety.",
       row.recorded||"Synthetic demonstration sample"
     ];
-    log.append(historyRow("◈",label,details,compare?"ABOVE REFERENCE":"IN RANGE*",compare));
+    log.append(historyRow("◈",label,details,check.comparison==="COLIFORM DETECTED"?"COLIFORM CHECK":check.comparison==="INCOMPLETE WATER CHECK"?"TEST INCOMPLETE":compare?"ABOVE REFERENCE":"WITHIN REFERENCE*",compare||check.comparison==="INCOMPLETE WATER CHECK"));
   }
 }
 function syncOrganisms(){
@@ -101,6 +103,7 @@ function syncOrganisms(){
     option.value=name;select.append(option);
   }
   if(choices.includes(previous))select.value=previous;
+  el("coliformRow").hidden=kind!=="water";
   renderUnit();
 }
 function renderUnit(){
