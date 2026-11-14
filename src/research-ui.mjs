@@ -40,9 +40,9 @@ function renderEva(){
   target.replaceChildren();
   if(!evaRows.length){target.append(make("p","subtle","No synthetic EVA check-ins. Add one using the form."));return;}
   for(const row of [...evaRows].reverse().slice(0,10)){
-    const areas=REGIONS[row.area]||"Body region";
+    const areas=(row.painAreas||[{area:row.area,severity:row.severity}]).map(x=>(REGIONS[x.area]||x.area)+" "+x.severity+"/10").join(" · ");
     const details=[
-      row.event+" · "+areas+" · "+row.side+" · Discomfort "+row.severity+"/10",
+      row.event+" · "+row.side+" · "+areas,
       "Reported: "+row.kind+" · Started "+row.onset+" EVA · Suit fit: "+row.suitFit,
       row.note||"No additional fictional note.",
       row.recorded||"Synthetic demo check"
@@ -51,24 +51,54 @@ function renderEva(){
     target.append(historyRow(row.status==="resolved"?"✓":"+",areas,details,badge,row.status==="ongoing"));
   }
 }
-function setArea(area){
-  el("evaArea").value=area;
-  for(const b of document.querySelectorAll("[data-body]"))
-    b.dataset.selected=String(b.dataset.body===area);
+/* Multiple selectable body areas, each with its own 1–10 rating. */
+function renderPainChoices(){
+  const root=el("evaPainChoices");root.replaceChildren();
+  for(const [area,label] of Object.entries(REGIONS)){
+    const row=document.createElement("label");row.className="pain-choice";
+    const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.name="painArea";checkbox.value=area;
+    checkbox.checked=area==="hand";
+    const text=make("span","",label);
+    const rating=document.createElement("input");rating.type="number";rating.min=1;rating.max=10;rating.step=1;rating.value=4;
+    rating.className="pain-rating";rating.setAttribute("aria-label",label+" discomfort 1 to 10");
+    rating.disabled=!checkbox.checked;rating.hidden=!checkbox.checked;
+    checkbox.addEventListener("change",()=>{rating.disabled=!checkbox.checked;rating.hidden=!checkbox.checked;syncPainPins();});
+    row.append(checkbox,text,rating);
+    root.append(row);
+  }
+  syncPainPins();
 }
-for(const b of document.querySelectorAll("[data-body]")){
-  b.addEventListener("click",()=>setArea(b.dataset.body));
+function painSelections(){
+  return [...el("evaPainChoices").querySelectorAll('input[name="painArea"]:checked')].map(box=>{
+    const rating=box.closest(".pain-choice").querySelector(".pain-rating");
+    return {area:box.value,severity:rating.value};
+  });
 }
-el("evaArea").addEventListener("change",e=>setArea(e.currentTarget.value));
+function syncPainPins(){
+  const active=new Set(painSelections().map(x=>x.area));
+  for(const b of document.querySelectorAll("[data-body]")){
+    b.dataset.selected=String(active.has(b.dataset.body));
+    b.setAttribute("aria-pressed",String(active.has(b.dataset.body)));
+  }
+}
+for(const pin of document.querySelectorAll("[data-body]")){
+  pin.addEventListener("click",()=>{
+    const c=el("evaPainChoices").querySelector('input[name="painArea"][value="'+pin.dataset.body+'"]');
+    c.checked=!c.checked;c.dispatchEvent(new Event("change"));
+  });
+}
+renderPainChoices();
 el("evaForm").addEventListener("submit",ev=>{
   ev.preventDefault();
   try{
     const data=Object.fromEntries(new FormData(ev.currentTarget));
+    data.painAreas=painSelections();
     const checked=checkEva(data);
     const added={...checked,id:Date.now(),recorded:"Synthetic entry: "+new Date().toLocaleString("en-GB")};
     evaRows=[...evaRows,added].slice(-MAX_RECORDS);
     persist("eva",evaRows);
-    el("evaFeedback").textContent="Example EVA follow-up added to local browser history.";
+    el("evaFeedback").textContent="Multi-region fictional EVA report saved. To assess possible concerns, enable the link checkbox in the DCS screen below.";
+    el("dcsLinkPainHint").textContent="Latest fictional EVA report: "+checked.event+" · "+checked.painAreas.length+" body area(s).";
     renderEva();
   }catch(e){el("evaFeedback").textContent=e.message;}
 });
@@ -140,8 +170,12 @@ renderSample();
 /* Fictional symptom concern only: no diagnoses, numerical risk or persistence. */
 function dcsInputs(){
   const form=el("dcsForm");
+  const neuro={};for(const k of ["pupils","speech","clarity","coordination"])
+    neuro[k]=form.elements.namedItem(k).value;
+  const pain=el("dcsLinkPain").checked?evaRows.at(-1)?.painAreas||[]:[];
   return {exposure:form.elements.namedItem("exposure").value,
-    symptoms:[...form.querySelectorAll('input[name="symptoms"]:checked')].map(x=>x.value)};
+    symptoms:[...form.querySelectorAll('input[name="symptoms"]:checked')].map(x=>x.value),
+    neuro,painAreas:pain};
 }
 function renderDcsScreen(report){
   const target=el("dcsResult");
@@ -152,7 +186,10 @@ function renderDcsScreen(report){
   if(report.labels.length){
     target.append(make("p","", "Fictional symptoms selected: "+report.labels.join("; ")+"."));
   }
+  if(report.neuroConcerns.length)target.append(make("p","","Neurological observations needing review: "+report.neuroConcerns.join("; ")));
+  if(report.painAreas.length)target.append(make("p","","Linked fictional pain: "+report.painAreas.map(x=>(REGIONS[x.area]||x.area)+" "+x.severity+"/10").join("; ")));
   target.append(make("p","",report.nextStep));
+  target.append(make("p","dcs-follow-up","Further assessment (qualified mission clinicians only): "+report.furtherAssessment));
   target.append(make("p","dcs-source",report.disclaimer));
   const row=make("p","dcs-source");
   const anchor=make("a","","NASA symptom reference (Oct 2026), page 3 ↗");
@@ -165,6 +202,9 @@ function loadDcsExample(name){
   if(!sample)return;
   const form=el("dcsForm");
   form.elements.namedItem("exposure").value=sample.exposure;
+  el("dcsLinkPain").checked=false;
+  for(const k of ["pupils","speech","clarity","coordination"])
+    form.elements.namedItem(k).value=sample.neuro?.[k]||"not_checked";
   for(const input of form.querySelectorAll('input[name="symptoms"]')){
     input.checked=sample.symptoms.includes(input.value);
   }
