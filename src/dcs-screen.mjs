@@ -25,7 +25,7 @@ export const NEURO_FIELDS=Object.freeze({
   clarity:{label:"Mental clarity",values:["not_checked","clear","moderate","altered"]},
   coordination:{label:"Limb coordination",values:["not_checked","good","moderate","poor"]}
 });
-export const PAIN_REGIONS=Object.freeze(["hand","shoulder","torso","back","hip","knee","foot"]);
+export const PAIN_REGIONS=Object.freeze(["head","hand","shoulder","torso","back","hip","knee","foot"]);
 function parsePainAreas(data){
   const raw=data?.painAreas??[];
   if(!Array.isArray(raw)||raw.length>PAIN_REGIONS.length)throw Error("Invalid body pain selections.");
