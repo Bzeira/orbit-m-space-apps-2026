@@ -203,6 +203,8 @@ function loadDcsExample(name){
   const form=el("dcsForm");
   form.elements.namedItem("exposure").value=sample.exposure;
   el("dcsLinkPain").checked=false;
+  el("dcsMildSymptoms").disabled=name!=="possible";
+  el("dcsStageHint").textContent=name==="urgent"?"Urgent example: do not continue to the minor symptom step until a qualified medical review.":name==="possible"?"No serious finding selected here, but Type II DCS cannot be excluded by this form.":"No symptoms selected. The screen cannot exclude DCS.";
   for(const k of ["pupils","speech","clarity","coordination"])
     form.elements.namedItem(k).value=sample.neuro?.[k]||"not_checked";
   for(const input of form.querySelectorAll('input[name="symptoms"]')){
@@ -213,6 +215,30 @@ function loadDcsExample(name){
 for(const button of document.querySelectorAll("[data-dcs-example]")){
   button.addEventListener("click",()=>loadDcsExample(button.dataset.dcsExample));
 }
+function syncSeriousStage(){
+  const report=screenDcsConcern({...dcsInputs(),painAreas:[]});
+  if(report.kind==="urgent"){
+    el("dcsMildSymptoms").disabled=true;
+    el("dcsStageHint").textContent="Serious or uncertain findings reported: seek immediate authorized medical review. Mild screening is not a substitute.";
+    renderDcsScreen(report);
+  }
+}
+for(const field of el("dcsForm").querySelectorAll(".neuro-observations select, .dcs-urgent-symptoms input")){
+  field.addEventListener("change",syncSeriousStage);
+}
+el("dcsContinueMild").addEventListener("click",()=>{
+  const input=dcsInputs();
+  const serious=screenDcsConcern({...input,painAreas:[],
+    symptoms:input.symptoms.filter(code=>["numbness","cognition","balance","breathing","mottledRash"].includes(code))});
+  if(serious.kind==="urgent"){
+    el("dcsMildSymptoms").disabled=true;
+    renderDcsScreen(serious);
+    el("dcsStageHint").textContent="Serious findings reported: immediate medical review takes priority.";
+    return;
+  }
+  el("dcsMildSymptoms").disabled=false;
+  el("dcsStageHint").textContent="Milder symptoms are now available. This does NOT rule out serious DCS or other emergencies.";
+});
 el("dcsForm").addEventListener("submit",event=>{
   event.preventDefault();
   try{renderDcsScreen(screenDcsConcern(dcsInputs()));}
