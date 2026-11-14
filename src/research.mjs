@@ -63,7 +63,7 @@ export function checkEva(data){
     const area=String(entry?.area||"");
     const raw=String(entry?.severity??"").trim(),severity=Number(raw);
     if(!REGIONS[area]||used.has(area)||!raw||!Number.isInteger(severity)||
-      severity< (hasMulti?1:0)||severity>10)
+      (severity<1&&!(severity===0&&data?.demo===true&&data?.status==="resolved"&&rawAreas.length===1))||severity>10)
       throw Error("Every selected region needs a separate 1–10 discomfort rating.");
     used.add(area);return {area,severity};
   });
