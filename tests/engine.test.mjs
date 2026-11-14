@@ -1,26 +1,45 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {analyze,makeScenario,addEntry} from "../src/engine.mjs";
+import {analyze,makeScenario,addEntry,BASELINE_DAYS} from "../src/engine.mjs";
 
-test("stable synthetic telemetry has no review flags",()=>{
-  const r=analyze(makeScenario("stable"));
-  assert.equal(r.status,"WITHIN PERSONAL PATTERN");
+test("baseline uses 14 labeled preflight synthetic days",()=>{
+  const d=makeScenario("stable");
+  assert.equal(d.filter(x=>x.phase==="preflight").length,BASELINE_DAYS);
+  assert.equal(d.filter(x=>x.phase==="inflight").length,3);
+  const r=analyze(d);
+  assert.equal(r.status,"NO DEMO FLAGS");
   assert.equal(r.flags.length,0);
+  assert.equal(r.counts.preflight,14);
 });
-test("fatigue changes trigger explainable flags",()=>{
+test("repeat fatigue changes produce explainable independent alerts",()=>{
   const r=analyze(makeScenario("fatigue"));
-  assert.equal(r.flags.some(f=>f.metric==="heartRate"),true);
-  assert.equal(r.flags.some(f=>f.metric==="sleepHours"),true);
-  assert.equal(r.flags.some(f=>f.metric==="mood"),true);
+  assert.ok(r.flags.some(f=>f.metric==="heartRate"));
+  assert.ok(r.flags.some(f=>f.metric==="sleepHours"));
+  assert.ok(r.flags.some(f=>f.metric==="mood"));
+  assert.ok(r.flags.every(f=>f.questions.length>=2));
 });
-test("high simulated temperature triggers review",()=>{
+test("temperature sample prompts recheck, not diagnosis",()=>{
   const r=analyze(makeScenario("temperature"));
-  assert.equal(r.flags.some(f=>f.metric==="temperature"),true);
+  assert.ok(r.flags.some(f=>f.metric==="temperature"));
+  assert.ok(!r.flags.some(f=>/diagnos(es|is)/i.test(f.title)));
 });
-test("day is advanced and invalid values rejected",()=>{
-  const rows=makeScenario("stable");
-  const next=addEntry(rows,{heartRate:62,sleepHours:7,mood:4,temperature:36.5});
-  assert.equal(next.length,8);
-  assert.equal(next[7].day,8);
-  assert.throws(()=>addEntry(rows,{heartRate:0,sleepHours:7,mood:4,temperature:36.5}));
+test("private check-in scenario has mood prompt",()=>{
+  const r=analyze(makeScenario("mood"));
+  assert.ok(r.flags.some(f=>f.metric==="mood"));
+});
+test("added entries are inflight and do not change preflight baseline",()=>{
+  const d=makeScenario("stable");
+  const b=analyze(d).baseline;
+  const next=addEntry(d,{heartRate:63,sleepHours:7.1,mood:4,temperature:36.5});
+  assert.equal(next.at(-1).phase,"inflight");
+  assert.equal(next.at(-1).day,4);
+  assert.deepEqual(analyze(next).baseline,b);
+});
+test("invalid, incomplete and insufficient data never pass",()=>{
+  const d=makeScenario("stable");
+  assert.throws(()=>analyze(d.filter(e=>e.phase==="inflight")));
+  assert.throws(()=>addEntry(d,{heartRate:"",sleepHours:7,mood:4,temperature:36.6}));
+  assert.throws(()=>addEntry(d,{heartRate:0,sleepHours:7,mood:4,temperature:36.6}));
+  assert.throws(()=>addEntry(d,{heartRate:63,sleepHours:7,mood:3.5,temperature:36.6}));
+  assert.throws(()=>makeScenario("unknown"));
 });
