@@ -54,3 +54,14 @@
 .research-section .footnote a{color:#8bdfd4}
 @media(max-width:940px){.research-layout{grid-template-columns:1fr}.bodymap{max-width:540px;align-self:center}.research-section .section-title{flex-direction:column;align-items:flex-start}}
 @media(max-width:560px){.research-section{padding-top:35px}.research-form{grid-template-columns:1fr}.history-row{grid-template-columns:36px 1fr;gap:9px}.history-tag{grid-column:2;justify-self:start}.bodymap{height:330px}.body-silhouette{transform:translateX(-50%) scale(.88);transform-origin:top center}.body-pin{font-size:10px;padding:5px 7px}.research-pill{font-size:9px}}
+
+/* Clear separation between planned research and implemented functionality */
+#coliformRow[hidden]{display:none}
+.research-roadmap{margin:18px 0;border:1px solid #2d5462;border-radius:15px;padding:0 20px;background:#0d2936}
+.research-roadmap summary{cursor:pointer;padding:17px 0;color:#c7f0e9;font-weight:700;font-size:14px}
+.research-roadmap summary span{font-size:11px;font-weight:400;color:#93b6bd;margin-left:8px}
+.roadmap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.roadmap-grid article{background:#0c2230;border:1px solid #254551;padding:15px;border-radius:12px}
+.roadmap-grid h3{font-size:14px;margin:0 0 8px}
+.roadmap-grid p{font-size:12px;color:#a6c3cb;line-height:1.7}
+@media(max-width:720px){.roadmap-grid{grid-template-columns:1fr}}
