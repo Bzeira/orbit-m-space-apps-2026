@@ -18,7 +18,8 @@ A small, offline-first, dependency-free browser application that:
 5. Accepts new **demo** readings while keeping the simulated preflight baseline unchanged; stores readings only in the local browser.
 6. Includes a private psychological-support conversation prompt as a **concept**, not an actual communication service.
 7. **Post-EVA Check**: stylized selectable body map and fictional discomfort follow-up timeline, inspired by Maya and Ofir's research and NASA EVA injury evidence.
-8. **Habitat Microbiology**: fictional air/surface/water sample logging, with the correct **NASA ISS in-flight** bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
+8. **Habitat Microbiology**: fictional air/surface/water sample logging, with NASA ISS in-flight bacterial/fungal CFU reference values, water coliform status, units and citations. Environmental microbes are not the crew's gut microbiome.
+9. **Post-EVA Possible DCS Concern Screen (educational only)**: select a fictional pressure exposure history and NASA-listed symptoms. The UI explains possible decompression-related concern or need for urgent medical review, **never diagnoses or excludes DCS and never reports a risk percentage**. The symptom groupings are from the 2026 NASA OCHMO technical brief; source-based context is not clinical validation.
 
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, clinical triage, actual medical advice or secure flight data storage.
 
@@ -30,7 +31,7 @@ No external packages are needed to run the UI.
 3. Run: `python -m http.server 8000` (or `py -m http.server 8000` on Windows)
 4. Open `http://localhost:8000` in a browser.
 
-To run **both** test suites (requires Node.js 20+): `node --test`.
+To run all automated test suites (requires Node.js 20+): `node --test`.
 
 **Important:** Opening `index.html` directly using a `file://` URL may prevent JavaScript modules from loading. Use a local server. GitHub Pages has been enabled by the team for `main` and repository root. Public demo: https://bzeira.github.io/orbit-m-space-apps-2026/ . Source and CI are public; the newest two modules still need manual browser acceptance testing.
 
@@ -65,7 +66,7 @@ They inform *what matters* in space health. They **do not establish or validate 
 ## Delivery gates
 - [x] Public GitHub repository created after Saturday, 14 Nov 2026 09:00 Israel time
 - [x] Initial demo source and synthetic scenarios added
-- [x] Run Node engine + research unit tests in GitHub Actions (14/14 passed on 14 Nov 2026)
+- [x] Add automated tests and syntax checks (see GitHub Actions for latest results)
 - [ ] Visually QA **new** research modules on desktop/mobile
 - [ ] Confirm official team challenge and review assumptions with science lead
 - [x] GitHub Pages deployed from main (the team reports public access; recheck new features in an incognito window)
@@ -75,4 +76,4 @@ They inform *what matters* in space health. They **do not establish or validate 
 - [ ] Submit final project and public link on official team **Project** tab by **15 Nov, 23:59** (target 22:00)
 
 ## AI disclosure
-The planning documents, README, initial app code and new EVA/microbiology demonstrator modules were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The scientific research document was developed by teammates Maya Dimant and Ofir Nakash. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
+The planning documents, README, initial app code and EVA/microbiology/DCS symptom demonstrator modules were drafted with assistance from **ChatGPT (OpenAI)** during the hackathon on November 14, 2026. The scientific research document was developed by teammates Maya Dimant and Ofir Nakash. Team review, scientific validation, testing and disclosure in the official submission are required. No NASA affiliation or endorsement is implied.
