@@ -9,7 +9,7 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 const known=new Set(ids);
 
 test("every script-target DOM id in both new browser interfaces exists",()=>{
-  for(const path of ["src/research-ui.mjs","src/mission-mental-ui.mjs","src/cardiovascular-ui.mjs","src/mission-demo-ui.mjs"]){
+  for(const path of ["src/research-ui.mjs","src/mission-mental-ui.mjs","src/cardiovascular-ui.mjs","src/mission-demo-ui.mjs","src/cabin-ui.mjs"]){
     const code=readFileSync(resolve(base,path),"utf8");
     for(const m of code.matchAll(/\b(?:el|byId)\("([^"]+)"\)/g)){
       assert.ok(known.has(m[1]),path+" references missing element #"+m[1]);
@@ -18,8 +18,8 @@ test("every script-target DOM id in both new browser interfaces exists",()=>{
 });
 test("no duplicate DOM ids and all app modules/styles are linked",()=>{
   assert.equal(known.size,ids.length,"Duplicate element id");
-  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs","./src/mission-demo-ui.mjs","./src/offline-ui.mjs",
-    "./assets/app.css","./assets/research.css","./assets/mission-mental.css","./assets/cardiovascular.css","./assets/mission-demo.css"]){
+  for(const source of ["./src/app.mjs","./src/research-ui.mjs","./src/mission-mental-ui.mjs","./src/cardiovascular-ui.mjs","./src/mission-demo-ui.mjs","./src/offline-ui.mjs","./src/cabin-ui.mjs",
+    "./assets/app.css","./assets/research.css","./assets/mission-mental.css","./assets/cardiovascular.css","./assets/mission-demo.css","./assets/cabin.css"]){
     assert.ok(html.includes(source),source+" missing in page");
     assert.ok(existsSync(resolve(base,source)),"Missing linked file "+source);
   }
@@ -75,4 +75,28 @@ test("offline status is explicit and worker registration is local to this app",(
   const module=readFileSync(resolve(base,"src/offline-ui.mjs"),"utf8");
   assert.match(module,/serviceWorker\.register\("\.\/sw\.js"/);
   assert.match(module,/NASA reference links still need internet/);
+});
+
+test("cabin and crew context panel is adjacent to guided story with visible NASA reference",()=>{
+  for(const id of ["cabin","cabinDay","cabinMode","cabinCo2","cabinO2",
+    "cabinPressure","cabinTemp","cabinHumidity","cabinConclusion","cabinContext",
+    "cabinSymptoms","cabinAssociation","cabinNext","cabinTrend","cabinForm",
+    "cabinRestore","cabinFeedback"]){
+    assert.ok(known.has(id),id+" should exist");
+  }
+  assert.ok(html.indexOf('id="flightStory"')<html.indexOf('id="cabin"'));
+  assert.ok(html.indexOf('id="cabin"')<html.indexOf('id="monitor"'));
+  assert.match(html,/3 mmHg \(1-hour average\)/);
+  assert.match(html,/not proof of cause/i);
+  assert.match(html,/NASA-STD-3001/);
+  const model=readFileSync(resolve(base,"src/cabin.mjs"),"utf8");
+  const ui=readFileSync(resolve(base,"src/cabin-ui.mjs"),"utf8");
+  assert.match(model,/clinicalDiagnosis:false,causalConclusion:false/);
+  assert.match(ui,/orbitm:demo-scene/);
+  assert.match(ui,/orbitm:demo-end/);
+  assert.match(ui,/orbitm:demo-cancelled/);
+  const worker=readFileSync(resolve(base,"sw.js"),"utf8");
+  assert.ok(worker.includes('"./assets/cabin.css"'));
+  assert.ok(worker.includes('"./src/cabin.mjs"'));
+  assert.ok(worker.includes('"./src/cabin-ui.mjs"'));
 });
