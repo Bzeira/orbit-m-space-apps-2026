@@ -23,6 +23,13 @@ test("only verified sample combinations can be compared",()=>{
   assert.throws(()=>checkSample({kind:"air",organism:"bacteria",location:"Cabin",value:-1}));
   assert.throws(()=>checkSample({kind:"air",organism:"bacteria",location:"Cabin",value:""}));
 });
+test("water coliform status is separate from bacterial colony count",()=>{
+  const inputs={kind:"water",organism:"bacteria",location:"Outlet",value:25};
+  assert.equal(checkSample({...inputs,coliform:"detected"}).comparison,"COLIFORM DETECTED");
+  assert.equal(checkSample({...inputs,coliform:"not_detected"}).comparison,"AT OR BELOW REFERENCE");
+  assert.equal(checkSample({...inputs,coliform:"not_tested"}).comparison,"INCOMPLETE WATER CHECK");
+  assert.throws(()=>checkSample({...inputs,coliform:"clear"}));
+});
 test("synthetic sample fixtures are valid and labelled",()=>{
   const rows=makeDemoSamples();
   assert.equal(rows.length,3);
