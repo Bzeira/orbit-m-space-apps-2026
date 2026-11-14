@@ -58,3 +58,16 @@ Project code only logs **fictional** EVA reports and environmental sample counts
 See [RESEARCH_FEATURES.md](RESEARCH_FEATURES.md) for the feature-by-feature evidence map and unimplemented claims.
 
 **AI disclosure update:** ChatGPT (OpenAI), Nov 14 2026: drafted the EVA/habitat prototype HTML, CSS, validation logic, JS interactions, source annotations, unit tests and implementation documentation. Members must verify before submitting; no NASA endorsement is implied.
+
+
+## November 14: NASA 2020 EVA Roadmap and 2026 DCS symptom screen
+
+The team supplied NASA/TP-20205007604, *Crew Health and Performance Extravehicular Activity Roadmap: 2020*. We reviewed §3.7.2 and §3.7.3 (suited exposure reporting, injury debriefing) and §3.8 (decompression mitigation research). These passages support collecting exposure and symptom context but do NOT provide validated individual DCS diagnosis or risk percentages.
+- Primary source: https://www.nasa.gov/wp-content/uploads/2017/02/tp-20205007604.pdf
+
+The newer primary NASA OCHMO-TB-037, *Decompression Sickness Risk Mitigation*, **Rev D, October 5 2026, p. 3**, supplies the symptom categories (Type I: itching, musculoskeletal pain, mild rash; Type II: neurological, inner ear, cardiopulmonary complaints and cutis marmorata). These are the only DCS clinical symptom categories represented in the DCS interface:
+- Primary source: https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-037-decompression-sickness.pdf
+
+**What is team-authored:** The yes/no/unknown pressure history question, rules mapping the selected symptoms to review/urgent/not-assessed labels, user-interface wording, examples and tests were designed for this hackathon. They are **not clinically validated NASA screening criteria**. There is no individual DCS probability, diagnosis, or treatment advice. Data remain fictional and DCS-form values are not persisted.
+
+**AI disclosure:** ChatGPT (OpenAI) drafted the symptom-review engine, UI, unit tests, and this documentation on Nov 14, 2026. Human clinical review and accurate official disclosure are still required.
