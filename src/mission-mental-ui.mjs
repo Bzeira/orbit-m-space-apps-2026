@@ -72,6 +72,7 @@ el("missionForm").addEventListener("submit",ev=>{
     checks=checks.filter(r=>r.day<=mission.durationDays);
     save(STORE_CONFIG,mission);save(STORE_CHECKS,checks);
     syncMissionInputs();renderPlan();renderSchedule();renderHistory();
+    document.dispatchEvent(new CustomEvent("orbitm:mission-config-changed",{detail:mission}));
     el("missionFeedback").textContent="Synthetic mission settings saved in this browser only.";
   }catch(e){el("missionFeedback").textContent=e.message;}
 });
