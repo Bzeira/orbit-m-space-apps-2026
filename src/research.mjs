@@ -52,14 +52,23 @@ export function makeDemoSamples(){
   ].map((r,i)=>({...checkSample(r),id:i+1,recorded:"Synthetic mission day "+(i+2),demo:true}));
 }
 export function checkEva(data){
-  const area=String(data?.area||"");
-  if(!REGIONS[area])throw Error("Choose a body area.");
-  const raw=String(data?.severity??"").trim();
-  const severity=Number(raw);
-  if(!raw||!Number.isInteger(severity)||severity<0||severity>10)
-    throw Error("Discomfort must be an integer between 0 and 10.");
+  // Legacy single-location demo observations remain readable for existing
+  // browser storage. New reports use a unique region/severity list.
+  const hasMulti=Array.isArray(data?.painAreas);
+  const rawAreas=hasMulti?data.painAreas:[{area:data?.area,severity:data?.severity}];
+  if(!rawAreas.length||rawAreas.length>Object.keys(REGIONS).length)
+    throw Error("Select at least one discomfort region.");
+  const used=new Set();
+  const painAreas=rawAreas.map(entry=>{
+    const area=String(entry?.area||"");
+    const raw=String(entry?.severity??"").trim(),severity=Number(raw);
+    if(!REGIONS[area]||used.has(area)||!raw||!Number.isInteger(severity)||
+      severity< (hasMulti?1:0)||severity>10)
+      throw Error("Every selected region needs a separate 1–10 discomfort rating.");
+    used.add(area);return {area,severity};
+  });
   const event=String(data?.event||"").trim();
-  if(!event||event.length>50)throw Error("Enter a short synthetic EVA identifier.");
+  if(!event||event.length>50)throw Error("Enter a short synthetic EVA event ID.");
   const kind=String(data?.kind||"");
   if(!["pressure","strain","skin","fatigue","other"].includes(kind))
     throw Error("Choose a symptom description.");
@@ -77,8 +86,9 @@ export function checkEva(data){
     throw Error("Choose suit fit feedback.");
   const note=String(data?.note||"").trim();
   if(note.length>200)throw Error("Demo notes must be under 200 characters.");
-  return {id:0,area,region:REGIONS[area],side,severity,event,kind,onset,suitFit,
-    status,note,recorded:"Synthetic record",demo:true};
+  const primary=painAreas[0];
+  return {id:0,area:primary.area,region:REGIONS[primary.area],severity:primary.severity,
+    painAreas,side,event,kind,onset,suitFit,status,note,recorded:"Synthetic record",demo:true};
 }
 export function makeDemoEva(){
   return [
