@@ -89,3 +89,14 @@ Official NASA context (not a validation of the ORBIT-M questionnaire or schedule
 What is **team-authored**, not NASA-mandated: morning/evening daily scheduling; 1–5 mental self-ratings; 1–10 pain report inputs; urgency-first interface sequence and conditional mild-stage gate; rule-based symptom concern wording. No secure medical storage or actual medical devices are present. The source research only supplies background and medically relevant phenomena.
 
 See [WORKFLOW_UPDATES.md](WORKFLOW_UPDATES.md) for the full change log, limits and manual QA.
+
+
+## Nov 14 2026: Itay Lipsky's blood pressure research incorporated
+Itay supplied the Hebrew team document "לחץ דם בחלל(1).docx", covering PP, estimated MAP, exercise, astronaut cardiovascular changes, EVA and return to gravity. ChatGPT (OpenAI) authored the program module, user interface, tests and science audit, with human review still required.
+Official/scientific sources:
+- American Heart Association, BP components and the usual MAP approximation: https://pmc.ncbi.nlm.nih.gov/articles/PMC11409525/
+- NASA, Cardiovascular Health in Microgravity: https://www.nasa.gov/humans-in-space/cardiovascular-health-in-microgravity/
+- NASA HRR cardiovascular adaptations risk: https://humanresearchroadmap.nasa.gov/risks/risk.aspx?i=179
+- Peer-reviewed spaceflight exercise-capacity research: https://pubmed.ncbi.nlm.nih.gov/24970852/
+
+Only a manually-entered, fictional, local-storage BP tracker has been added. The invented 20 mmHg change marker and synthetic preflight median are **NOT validated NASA alert thresholds or population norms**. The standard formula MAP ≈ DBP + PP/3 is a resting-heart-rate estimate, not direct perfusion measurement. The specific document claim to use PP/2 during EVA, to predict a universal PP rise and decline, and to prescribe exercise from PP/MAP were not adopted without sufficient verification. See CARDIOVASCULAR_RESEARCH.md.
