@@ -45,8 +45,8 @@ self.addEventListener("fetch",event=>{
     try{
       const response=await fetch(request);
       if(response.ok&&response.type!=="opaque"){
-        // Network first while online; the cache supports a later offline load.
-        await cache.put(request,response.clone());
+        // Storage quota errors must never block an otherwise successful online load.
+        try{await cache.put(request,response.clone());}catch(_){}
       }
       return response;
     }catch(_){
