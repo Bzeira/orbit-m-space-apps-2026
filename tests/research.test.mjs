@@ -56,3 +56,18 @@ test("EVA demo includes changed and resolved follow-ups",()=>{
   assert.ok(rows.some(x=>x.status==="resolved"));
   assert.ok(rows.some(x=>x.status==="improving"));
 });
+
+test("multi-region EVA reports preserve separate 1–10 pain ratings",()=>{
+  const base={area:"hand",side:"right",severity:3,event:"EVA-014",kind:"pressure",onset:"during",suitFit:"contact",status:"ongoing",note:""};
+  const result=checkEva({...base,painAreas:[{area:"hand",severity:8},{area:"shoulder",severity:2}]});
+  assert.deepEqual(result.painAreas,[{area:"hand",severity:8},{area:"shoulder",severity:2}]);
+  assert.equal(result.area,"hand");
+  assert.throws(()=>checkEva({...base,painAreas:[{area:"hand",severity:3},{area:"hand",severity:4}]}));
+  assert.throws(()=>checkEva({...base,painAreas:[{area:"knee",severity:0}]}));
+  assert.throws(()=>checkEva({...base,painAreas:[]}));
+});
+test("old single-region demo history remains supported",()=>{
+  const old=checkEva({area:"shoulder",side:"left",severity:0,event:"EVA-003",kind:"strain",onset:"after",suitFit:"normal",status:"resolved",note:""});
+  assert.equal(old.painAreas.length,1);
+  assert.equal(old.painAreas[0].severity,0);
+});
