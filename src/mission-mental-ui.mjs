@@ -88,7 +88,7 @@ el("mentalForm").addEventListener("submit",ev=>{
     feedback.textContent=(saved?"Fictional check-in recorded. ":"Recorded in this tab only; storage unavailable. ")+
       reason.title+". No actual psychological-support request was sent.";
     document.dispatchEvent(new CustomEvent("orbitm:scheduled-checkin",{
-      detail:{heartRate:row.heartRate,sleepHours:row.sleepHours,mood:row.mood,temperature:row.temperature}
+      detail:{heartRate:row.heartRate,sleepHours:row.sleepHours,mood:row.mood,temperature:row.temperature,missionDay:row.day,slot:row.slot}
     }));
   }catch(e){feedback.textContent=e.message;}
 });
