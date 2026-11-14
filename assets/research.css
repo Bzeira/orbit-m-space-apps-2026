@@ -65,3 +65,26 @@
 .roadmap-grid h3{font-size:14px;margin:0 0 8px}
 .roadmap-grid p{font-size:12px;color:#a6c3cb;line-height:1.7}
 @media(max-width:720px){.roadmap-grid{grid-template-columns:1fr}}
+
+/* Post-EVA DCS concern screen. All outputs are non-diagnostic. */
+.dcs-panel{margin:18px 0 28px}
+.dcs-panel .mini-title{align-items:center}
+.dcs-demo-buttons{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:16px 0 20px}
+.dcs-form{display:grid;grid-template-columns:1fr;gap:18px;margin:0}
+.dcs-pressure{display:flex;flex-direction:column;gap:9px;font-size:13px;color:#d3e8e7}
+.dcs-pressure select{background:#071c27;border:1px solid #32606b;color:var(--text);border-radius:9px;padding:12px;max-width:500px}
+.dcs-symptoms{border:1px solid #31535f;border-radius:13px;padding:17px 18px;margin:0;min-width:0}
+.dcs-symptoms legend{font-size:13px;font-weight:700;color:#bde9e0;padding:0 8px}
+.dcs-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 15px}
+.dcs-checks label{display:flex;align-items:flex-start;flex-direction:row;gap:9px;padding:9px 10px;border:1px solid #234b57;border-radius:9px;color:#d9e9e7;font-size:12px;line-height:1.4;background:#092632;cursor:pointer}
+.dcs-checks input{width:17px;height:17px;flex-shrink:0;accent-color:#6ae5d1;margin:0}
+.dcs-submit{justify-self:start;min-width:210px;padding:12px 15px}
+.dcs-result{margin:20px 0 10px;padding:20px;border:1px solid #375a65;background:#102f3d;border-radius:13px}
+.dcs-result strong{display:block;font-size:19px;line-height:1.35;color:#c6ece5;margin-bottom:7px}
+.dcs-result p{color:#c1d9dc;font-size:13px;line-height:1.7;margin:7px 0}
+.dcs-result .dcs-source{font-size:11px}
+.dcs-result.is-urgent{border-color:#df927e;background:#402b2c}
+.dcs-result.is-urgent strong{color:#ffd2c8}
+.dcs-result.is-review{border-color:#b89a59;background:#3a301e}
+.dcs-result.is-review strong{color:#ffe1a5}
+@media(max-width:680px){.dcs-checks{grid-template-columns:1fr}.dcs-result{padding:16px}.dcs-submit{width:100%}}
