@@ -16,3 +16,7 @@ footer{max-width:1240px;margin:auto;padding:30px;display:flex;gap:20px;justify-c
 @media(max-width:850px){.hero{grid-template-columns:1fr}.hero-orbit{display:none}.overview,.two-cols{grid-template-columns:1fr}.section-title{align-items:flex-start;flex-direction:column}.evidence-grid{grid-template-columns:1fr 1fr}.topbar{align-items:flex-start;flex-direction:column}}
 @media(max-width:560px){main{padding:0 16px}.topbar{padding:20px 16px}nav{gap:16px}.hero{min-height:290px;padding:35px 0 20px}.safety{margin-bottom:25px}.measure-grid,.evidence-grid{grid-template-columns:1fr}h1{letter-spacing:-1px}.panel{padding:19px}.big-status{font-size:29px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* Scientific follow-up panel: prompt only, never medical advice */
+.follow-up{margin-top:18px;padding:17px 19px;background:#112d3a;border:1px solid #335666;border-radius:12px}
+.follow-up[hidden]{display:none}
+.follow-question{font-size:13px;color:#cce6e6;margin:10px 0;line-height:1.6}
