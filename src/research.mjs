@@ -33,15 +33,22 @@ export function checkSample(data) {
   const item=ISS_INFLIGHT_LIMITS[key];
   if(!item)throw Error("No verified numeric ISS in-flight reference for this combination.");
   const value=Number(raw);
-  const sample={id:0,kind,organism,location,value,unit:item.unit,source:MICRO_SOURCE};
-  return {...sample,reference:item.limit,comparison:value>item.limit?"ABOVE REFERENCE":"AT OR BELOW REFERENCE",
+  const coliform=kind==="water"?String(data?.coliform||"not_tested"):"not_applicable";
+  if(kind==="water"&&!["not_tested","not_detected","detected"].includes(coliform))
+    throw Error("Choose a valid coliform testing status.");
+  let comparison=value>item.limit?"ABOVE REFERENCE":"AT OR BELOW REFERENCE";
+  if(kind==="water"&&coliform==="detected")comparison="COLIFORM DETECTED";
+  else if(kind==="water"&&coliform==="not_tested"&&comparison!=="ABOVE REFERENCE")
+    comparison="INCOMPLETE WATER CHECK";
+  const sample={id:0,kind,organism,location,value,coliform,unit:item.unit,source:MICRO_SOURCE};
+  return {...sample,reference:item.limit,comparison,
     description:"Illustrative numeric comparison with a NASA ISS in-flight acceptability reference, NOT an assessment of health or prescribed action."};
 }
 export function makeDemoSamples(){
   return [
     {kind:"air",organism:"bacteria",location:"Habitat module A",value:620},
     {kind:"surface",organism:"fungi",location:"Galley panel",value:135},
-    {kind:"water",organism:"bacteria",location:"Water outlet",value:30}
+    {kind:"water",organism:"bacteria",location:"Water outlet",value:30,coliform:"not_detected"}
   ].map((r,i)=>({...checkSample(r),id:i+1,recorded:"Synthetic mission day "+(i+2),demo:true}));
 }
 export function checkEva(data){
