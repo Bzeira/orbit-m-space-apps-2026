@@ -193,20 +193,14 @@
       <div class="research-layout">
         <div class="panel body-card">
           <div class="panel-subtitle">01 — SELECT BODY REGION</div>
-          <p class="subtle">Select any combination of regions. Each selected area gets its own 1–10 discomfort score.</p>
-          <div class="bodymap" aria-label="Body-area selection diagram">
-            <div class="body-silhouette" aria-hidden="true">
-              <span class="body-head"></span><span class="body-neck"></span><span class="body-torso"></span>
-              <span class="body-arm left"></span><span class="body-arm right"></span>
-              <span class="body-leg left"></span><span class="body-leg right"></span>
+          <p class="subtle">Move your mouse over a body part to highlight it, then click to select. Use Front / Back to change view. Select multiple areas and score each 1–10.</p>
+          <div class="bodymap interactive-bodymap" aria-label="Interactive body-area selection diagram">
+            <div class="bodymap-toolbar" role="group" aria-label="Choose body view">
+              <button type="button" data-body-view="front" aria-pressed="true">Front</button>
+              <button type="button" data-body-view="back" aria-pressed="false">Back</button>
             </div>
-            <button type="button" data-body="shoulder" class="body-pin pin-shoulder" aria-label="Toggle shoulders">Shoulder</button>
-            <button type="button" data-body="hand" class="body-pin pin-hand" aria-label="Toggle hands and fingers">Hands</button>
-            <button type="button" data-body="torso" class="body-pin pin-torso" aria-label="Select torso">Torso</button>
-            <button type="button" data-body="back" class="body-pin pin-back" aria-label="Select back">Back</button>
-            <button type="button" data-body="hip" class="body-pin pin-hip" aria-label="Select hips">Hips</button>
-            <button type="button" data-body="knee" class="body-pin pin-knee" aria-label="Select knees">Knees</button>
-            <button type="button" data-body="foot" class="body-pin pin-foot" aria-label="Select feet and ankles">Feet</button>
+            <svg id="evaBodySvg" class="eva-body-svg" viewBox="0 0 300 400" role="group" aria-label="Select an area directly on the body silhouette"></svg>
+            <div id="evaMapHint" class="bodymap-hint" role="status">Hover over a body area, or tap it to select. Select several areas if needed.</div>
           </div>
           <p class="footnote">Stylized interface, not anatomical imaging. Demo data are fictional and must not be used for a real medical record.</p>
         </div>
