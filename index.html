@@ -7,11 +7,12 @@
   <meta name="description" content="ORBIT-M: offline-first, explainable astronaut health-monitoring concept for NASA Space Apps 2026. Synthetic demonstration data.">
   <title>ORBIT-M | Crew Health Companion</title>
   <link rel="stylesheet" href="./assets/app.css">
+  <link rel="stylesheet" href="./assets/research.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
-    <nav><a href="#mission">Mission</a><a href="#monitor">Monitor</a><a href="#evidence">Evidence</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
+    <nav><a href="#mission">Mission</a><a href="#monitor">Monitor</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#evidence">Evidence</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
   </header>
   <main>
     <section id="mission" class="hero">
@@ -57,8 +58,100 @@
       <article><span class="num">02</span><h3>Altered gravity</h3><p>Long-duration flight can change cardiovascular and musculoskeletal fitness. The prototype monitors resting pulse trends, not bone density or clinical cardiovascular risk.</p><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">NASA risks ↗</a></article>
       <article><span class="num">03</span><h3>Distance from Earth</h3><p>Communication delays make clear, independent self-observation useful. The software works locally; clinical decisions remain subject to approved crew procedures.</p><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">NASA hazards ↗</a></article>
     </div></section>
+
+    <section id="eva" class="research-section" aria-labelledby="evaTitle">
+      <div class="section-title"><div>
+        <p class="eyebrow">05 / EXTRAVEHICULAR ACTIVITY</p>
+        <h2 id="evaTitle">Post-EVA health check</h2>
+        <p class="subtle">From Maya &amp; Ofir's research: capture suit-contact discomfort and follow-up history after an EVA.</p>
+      </div><span class="research-pill">SYNTHETIC RECORDS ONLY</span></div>
+      <p class="research-context">NASA documents injuries and performance impacts associated with EVA equipment and operations. This self-report form is an ORBIT-M prototype design, <strong>not an official NASA medical questionnaire</strong> or a decompression-sickness diagnostic tool. <a href="https://ntrs.nasa.gov/citations/20220004017" target="_blank" rel="noopener">NASA EVA evidence ↗</a></p>
+      <div class="research-layout">
+        <div class="panel body-card">
+          <div class="panel-subtitle">01 — SELECT BODY REGION</div>
+          <p class="subtle">Select the region in the diagram or using the list in the form.</p>
+          <div class="bodymap" aria-label="Body-area selection diagram">
+            <div class="body-silhouette" aria-hidden="true">
+              <span class="body-head"></span><span class="body-neck"></span><span class="body-torso"></span>
+              <span class="body-arm left"></span><span class="body-arm right"></span>
+              <span class="body-leg left"></span><span class="body-leg right"></span>
+            </div>
+            <button type="button" data-body="shoulder" class="body-pin pin-shoulder" aria-label="Select shoulders">Shoulder</button>
+            <button type="button" data-body="hand" class="body-pin pin-hand" aria-label="Select hands and fingers">Hands</button>
+            <button type="button" data-body="torso" class="body-pin pin-torso" aria-label="Select torso">Torso</button>
+            <button type="button" data-body="back" class="body-pin pin-back" aria-label="Select back">Back</button>
+            <button type="button" data-body="hip" class="body-pin pin-hip" aria-label="Select hips">Hips</button>
+            <button type="button" data-body="knee" class="body-pin pin-knee" aria-label="Select knees">Knees</button>
+            <button type="button" data-body="foot" class="body-pin pin-foot" aria-label="Select feet and ankles">Feet</button>
+          </div>
+          <p class="footnote">Stylized interface, not anatomical imaging. Demo data are fictional and must not be used for a real medical record.</p>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">02 — SYNTHETIC CHECK-IN</p>
+          <h3>Record discomfort after EVA</h3>
+          <form id="evaForm" class="research-form">
+            <label>EVA identifier <input name="event" maxlength="50" value="EVA-004" placeholder="EVA-004" required></label>
+            <label>Body region <select name="area" id="evaArea" required>
+              <option value="hand">Hands &amp; fingers</option><option value="shoulder">Shoulders</option><option value="torso">Torso / chest</option><option value="back">Spine &amp; back</option><option value="hip">Hips</option><option value="knee">Knees</option><option value="foot">Feet &amp; ankles</option>
+            </select></label>
+            <label>Side <select name="side"><option value="right">Right</option><option value="left">Left</option><option value="both">Both</option><option value="central">Central / not applicable</option></select></label>
+            <label>Discomfort 0–10 <input name="severity" type="number" min="0" max="10" step="1" value="4" required></label>
+            <label>What was noticed? <select name="kind"><option value="pressure">Suit pressure / friction</option><option value="strain">Muscle or joint strain</option><option value="skin">Skin irritation / blister</option><option value="fatigue">Subjective fatigue</option><option value="other">Other discomfort</option></select></label>
+            <label>Onset <select name="onset"><option value="during">During EVA</option><option value="after">Immediately after</option><option value="later">Later follow-up</option></select></label>
+            <label>Suit fit feedback <select name="suitFit"><option value="normal">No issue reported</option><option value="contact">Pressure / contact point</option><option value="restricted">Restricted movement</option><option value="unsure">Not sure</option></select></label>
+            <label>Follow-up status <select name="status"><option value="ongoing">Ongoing</option><option value="improving">Improving</option><option value="resolved">Resolved</option></select></label>
+            <label class="full">Short fictional note (optional) <textarea name="note" maxlength="200" rows="2" placeholder="Example: glove pressure after a sample collection task"></textarea></label>
+            <button type="submit" class="primary full">Add synthetic post-EVA check</button>
+            <p class="form-note full" id="evaFeedback" role="status"></p>
+          </form>
+        </div>
+      </div>
+      <div class="panel research-history">
+        <div class="section-title mini-title"><div><p class="panel-subtitle">03 — SYMPTOM FOLLOW-UP</p><h3>Recovery timeline</h3></div>
+          <button type="button" class="secondary-action" id="evaReset">Reset example records</button></div>
+        <div id="evaTimeline" aria-live="polite"></div>
+        <p class="footnote">A severity score is a self-report, not an EVA fitness decision. Suspected serious symptoms require authorized mission medical protocols, not this prototype. NASA also tracks suit-exposure injuries: <a href="https://ntrs.nasa.gov/citations/20230015608" target="_blank" rel="noopener">EVA incidence research ↗</a></p>
+      </div>
+    </section>
+    <section id="habitat" class="research-section" aria-labelledby="habitatTitle">
+      <div class="section-title"><div>
+        <p class="eyebrow">06 / HABITAT MICROBIOLOGY</p><h2 id="habitatTitle">Environmental sample monitor</h2>
+        <p class="subtle">Compare fictional air, surface and water colony counts with the correct NASA ISS in-flight reference values.</p>
+      </div><span class="research-pill">NASA-REFERENCED DEMO</span></div>
+      <p class="research-context">This module tracks <strong>microbes in the habitat</strong>, not an astronaut's gut microbiome or immune system. NASA's <a href="https://www.nasa.gov/wp-content/uploads/2025/05/ochmo-tb-046-microbiology-rev-a.pdf" target="_blank" rel="noopener">OCHMO-TB-046, Rev A (2025), p. 10 ↗</a> provides the ISS in-flight figures below. Comparisons are for educational demonstration only, not universal spacecraft limits or instructions to disinfect or treat anyone.</p>
+      <div class="research-layout habitat-layout">
+        <div class="panel">
+          <p class="panel-subtitle">01 — REFERENCE TABLE</p><h3>ISS in-flight acceptability references</h3>
+          <div class="table-scroll"><table class="research-table">
+            <thead><tr><th>Sample</th><th>Bacteria</th><th>Fungi</th></tr></thead>
+            <tbody><tr><th>Air</th><td>1,000 CFU/m³</td><td>100 CFU/m³</td></tr>
+            <tr><th>Surface</th><td>10,000 CFU/100 cm²</td><td>100 CFU/100 cm²</td></tr>
+            <tr><th>Water</th><td>50 CFU/mL<br><small>No detectable coliforms</small></td><td>Not specified</td></tr></tbody>
+          </table></div>
+          <p class="footnote">NASA's table is specific to ISS in-flight testing. Preflight references use different criteria and must not be mixed. These figures are not human medical thresholds.</p>
+        </div>
+        <div class="panel">
+          <p class="panel-subtitle">02 — LAB-STYLE DATA ENTRY</p><h3>Add a fictional sample</h3>
+          <form id="sampleForm" class="research-form">
+            <label>Sample type <select name="kind" id="sampleKind"><option value="air">Air</option><option value="surface">Surface</option><option value="water">Water</option></select></label>
+            <label>Microorganism group <select name="organism" id="sampleOrganism"><option value="bacteria">Bacteria</option><option value="fungi">Fungi</option></select></label>
+            <label>Sampling location <input name="location" value="Habitat module A" maxlength="80" required></label>
+            <label>Colony count <input name="value" type="number" min="0" max="100000000" step="1" value="620" required></label>
+            <p id="sampleUnitHint" class="sample-unit full">Reference: 1,000 CFU/m³ (ISS inflight, bacteria)</p>
+            <button type="submit" class="primary full">Add synthetic sample</button>
+            <p class="form-note full" id="sampleFeedback" role="status"></p>
+          </form>
+        </div>
+      </div>
+      <div class="panel research-history">
+        <div class="section-title mini-title"><div><p class="panel-subtitle">03 — ENVIRONMENTAL TRENDS</p><h3>Sampling log</h3></div><button type="button" class="secondary-action" id="sampleReset">Reset example samples</button></div>
+        <div id="sampleLog" aria-live="polite"></div>
+        <p class="footnote">Values above a cited ISS reference warrant professional interpretation. Results are sensitive to sampling methods, location and mission context. Crew illness alone is not a verified instruction to automatically repeat sampling. <a href="https://www.nasa.gov/reference/jsc-microbiology/" target="_blank" rel="noopener">NASA JSC Microbiology Laboratory ↗</a></p>
+      </div>
+    </section>
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
   <script type="module" src="./src/app.mjs"></script>
+  <script type="module" src="./src/research-ui.mjs"></script>
 </body>
 </html>
