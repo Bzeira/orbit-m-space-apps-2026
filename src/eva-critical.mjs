@@ -138,31 +138,30 @@ export function preEvaReferenceChart(key,raw){
   if(!rule)return "";
   const result=preEvaInspect(raw);
   const value=result.data[key];
-  const extra=Math.max((rule.max-rule.min)*0.4,1);
-  const low=Math.min(rule.min-extra,value===null?Infinity:value-extra*.4);
-  const high=Math.max(rule.max+extra,value===null?-Infinity:value+extra*.4);
-  const x=n=>72+(n-low)*468/(high-low);
-  const lower=x(rule.min),upper=x(rule.max);
-  const out=value!==null&&(value<rule.min||value>rule.max);
-  const color=out?"#ff7c87":"#92e2a8";
-  const pct=v=>Number(v).toFixed(1);
-  const dot=value===null
-    ?'<text x="306" y="118" fill="#d8cfde" font-size="16" text-anchor="middle">Enter a reading to place the marker</text>'
-    :'<line x1="'+pct(x(value))+'" x2="'+pct(x(value))+'" y1="69" y2="158" stroke="'+color+'" stroke-width="2.5" stroke-dasharray="4 4"/>'
-      +'<circle cx="'+pct(x(value))+'" cy="111" r="10" fill="'+color+'" stroke="#1c1d31" stroke-width="3"/>'
-      +'<text x="'+pct(x(value))+'" y="65" fill="'+color+'" font-size="15" font-weight="700" text-anchor="middle">'+preEvaFormat(value)+'</text>';
+  // The two ends of the line are the supplied inclusive range boundaries.
+  // Out-of-range values are shown beyond the line, like a lab reference plot.
+  // Clamp extreme values to the visible plot width without misreporting the number.
+  const lineStart=115,lineEnd=495,lineY=116;
+  const span=rule.max-rule.min;
+  const scaled=value===null?null:lineStart+(value-rule.min)*(lineEnd-lineStart)/span;
+  const markerX=scaled===null?null:Math.max(54,Math.min(556,scaled));
+  const outside=value!==null&&(value<rule.min||value>rule.max);
+  const markerColor=outside?"#bc3b46":"#34804c";
+  const fmt=x=>Number(x).toFixed(1);
+  const marker=value===null
+    ?'<text x="305" y="81" text-anchor="middle" fill="#786775" font-size="16">Enter a reading to place the marker</text>'
+    :'<text x="'+fmt(markerX)+'" y="78" text-anchor="middle" fill="'+markerColor+'" font-weight="700" font-size="32">'+preEvaFormat(value)+'</text>'
+     +'<circle data-value-marker="true" cx="'+fmt(markerX)+'" cy="'+lineY+'" r="11" fill="'+markerColor+'" stroke="#fcfaff" stroke-width="3"/>';
   const aria=rule.label+": reference band "+rule.min+" to "+rule.max+" "+rule.unit+
     (value===null?"; no reading entered":"; entered value "+preEvaFormat(value)+" "+rule.unit);
-  return '<svg class="eva-chart eva-reference-chart" viewBox="0 0 610 230" role="img" aria-label="'+aria+'">'
-    +'<text x="72" y="29" fill="#e9e1ee" font-size="15">PRE-EVA REFERENCE RANGE</text>'
-    +'<line x1="72" x2="540" y1="111" y2="111" stroke="#63708b" stroke-width="10" stroke-linecap="round"/>'
-    +'<rect x="'+pct(lower)+'" y="90" width="'+pct(upper-lower)+'" height="42" rx="8" fill="#579e82" opacity=".38"/>'
-    +'<line x1="'+pct(lower)+'" x2="'+pct(lower)+'" y1="85" y2="141" stroke="#91e8b8" stroke-width="2"/>'
-    +'<line x1="'+pct(upper)+'" x2="'+pct(upper)+'" y1="85" y2="141" stroke="#91e8b8" stroke-width="2"/>'
-    +dot
-    +'<text x="'+pct(lower)+'" y="163" font-size="13" text-anchor="middle" fill="#bce8d2">'+rule.min+'</text>'
-    +'<text x="'+pct(upper)+'" y="163" font-size="13" text-anchor="middle" fill="#bce8d2">'+rule.max+'</text>'
-    +'<text x="72" y="203" fill="#c7bece" font-size="12">Shaded: team-defined reference band ('+rule.unit+')</text>'
-    +'<text x="540" y="203" text-anchor="end" fill="#c7bece" font-size="12">● Entered value</text>'
+  return '<svg class="eva-chart eva-reference-chart" viewBox="0 0 610 218" role="img" aria-label="'+aria+'">'
+    +'<text x="48" y="30" fill="#786775" font-size="12" letter-spacing="1.2">PRE-EVA REFERENCE RANGE</text>'
+    +'<line data-reference-line="true" x1="'+lineStart+'" x2="'+lineEnd+'" y1="'+lineY+'" y2="'+lineY+'" stroke="#765e92" stroke-width="5" stroke-linecap="round"/>'
+    +'<line x1="'+lineStart+'" x2="'+lineStart+'" y1="130" y2="144" stroke="#63566b" stroke-width="2"/>'
+    +'<line x1="'+lineEnd+'" x2="'+lineEnd+'" y1="130" y2="144" stroke="#63566b" stroke-width="2"/>'
+    +marker
+    +'<text x="'+lineStart+'" y="178" text-anchor="middle" fill="#463a4b" font-size="23">'+rule.min+'</text>'
+    +'<text x="'+lineEnd+'" y="178" text-anchor="middle" fill="#463a4b" font-size="23">'+rule.max+'</text>'
+    +'<text x="305" y="179" text-anchor="middle" fill="#765e92" font-size="22">'+rule.unit+'</text>'
     +'</svg>';
 }
