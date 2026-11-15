@@ -30,16 +30,22 @@ A small, local-first, dependency-free browser application that:
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, a clinically validated triage tool, actual medical advice, private psychological messaging or secure medical storage.
 
 ### Interactive EVA entry flow (synthetic UI)
-The GitHub Pages landing page now offers a five-screen EVA interface inspired by the team's Canva mockups:
-1. Welcome → select "welcome" or "Start assessment".
-2. Astronaut ID → enter a fictional ID from 1 through 10.
-3. Astronaut parameters → inspect seven synthetic categories, open individual trend graphs, toggle Normal/Abnormal, and enter mission length and purpose.
-4. Assess Readiness → green approval-themed screen when every category is Normal, otherwise a red warning screen.
-5. Warning details → "CLICK HERE TO SEE DATA" lists abnormal categories and opens their reports.
+The GitHub Pages landing page offers an interactive EVA walkthrough inspired by the team's Canva mockups:
 
-The existing Crew Health Companion is preserved. Use **Full crew dashboard** or append **?dashboard=1** to bypass the intro. A navigation link reopens the EVA flow. The new UI has scoped CSS and does not override original dashboard fonts and elements.
+1. **Welcome**: click the title or the Start button.
+2. **Astronaut ID**: enter a fictional ID from 1 through 10.
+3. **Astronaut profile**: inspect seven synthetic status categories, open detailed fictional graphs, toggle Normal/Abnormal, and enter mission length and purpose.
+4. **Immediate pre-EVA vital signs**: enter heart rate, SpO₂, systolic and diastolic blood pressure, body temperature, and the number of breaths counted during a 30- or 60-second interval. A live range panel computes pulse pressure, estimated mean arterial pressure and breaths per minute.
+5. **Complete Readiness Assessment**: green approval-themed demo only when all profile categories and all seven comparable immediate vital readings are within the team-supplied ranges, otherwise the red warning-themed screen.
+6. **Warning details**: "CLICK HERE TO SEE DATA" lists both abnormal profile categories and out-of-range immediate vital values; individual rows open their detail report or return to the input form.
 
-**Science and design limit:** all astronaut records, parameter status values, profile reference bands and graphs are wholly fictional. Green/red screens are demonstration outcomes, not actual EVA authorization, NASA standards or medical clearance. Visual design interprets screenshots because the original Canva fonts and source artwork were not committed to the repo.
+**User-specified reference bands, inclusive:** heart rate 60–100 bpm; oxygen saturation 95–100%; systolic 90–120 mmHg; diastolic 60–80 mmHg; PP 40–60 mmHg; estimated MAP 70–100 mmHg; respiratory rate 12–20 breaths/min. No body-temperature threshold was provided, so the app records temperature but does **not** use it as a passing or failing criterion.
+
+The calculations use **PP = SBP − DBP**, **estimated MAP = DBP + PP/3** (a resting approximation, not a direct measurement) and **breaths/minute = observed breaths × 60 / observation seconds**. The American Heart Association's [2017 blood-pressure guidance](https://professional.heart.org/-/media/PHD-Files-2/Science-News/2/2017/2017_AHA_ACC_Hypertenson_Clinical_Guidelines_ucm_497372.pdf?sc_lang=en) provides the PP/MAP definitions and notes the MAP approximation assumes normal heart rate. [Mayo Clinic's respiratory rate guidance](https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/how-to-measure-respiratory-rate/art-20482580) recommends a full-minute count for best results. A 30-second count is only a shorter demonstration option, and respiratory rate by itself cannot confirm pulmonary or psychological fitness.
+
+The existing Crew Health Companion is preserved. Use **Full crew dashboard** or append **?dashboard=1** to bypass the intro. A navigation link reopens the EVA flow. The new interface has scoped CSS and leaves the original research dashboard's fonts and elements unchanged. Pre-EVA inputs are held in browser memory during the demo and are not intentionally sent to a server or persisted to localStorage.
+
+**Science and design limit:** all astronaut records, statuses, profile values, reference bands, graphs and decisions are a demonstration. The new numerical bands are team-supplied, **not NASA-validated EVA clearance standards**. Neither green nor red outcomes constitute authorization for a real EVA. Visual styling interprets supplied screenshots because the original Canva fonts and artwork were not committed to the repository.
 
 ### Run it locally
 No external packages are needed to run the UI.
