@@ -255,3 +255,8 @@
   #orbitEvaFlow .eva-review-issue-label{width:100%}
   #orbitEvaFlow .eva-review-issue-measure{margin-left:0;text-align:left}
 }
+
+/* Temperature input validation uses the existing ORBIT-M status palette. */
+#orbitEvaFlow .eva-critical-field input[aria-invalid="true"]{border:2px solid #bc3b46;background:#fff4f4}
+#orbitEvaFlow .eva-critical-error.eva-critical-wide{font-size:12px;line-height:1.45;margin:0;min-height:0}
+#orbitEvaFlow .eva-critical-actions .eva-assess:disabled{opacity:.56;cursor:not-allowed}
