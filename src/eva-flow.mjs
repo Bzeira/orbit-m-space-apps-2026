@@ -1,4 +1,4 @@
-import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat} from "./eva-critical.mjs";
+import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs";
 /* ORBIT-M astronaut EVA UI. Synthetic interactive demonstration only. */
 const METRICS=[
 ["sleep","sleep score",86,58,"70–100","/100"],
@@ -44,10 +44,28 @@ function modal(){
    const vitalFlags=state.decision?.vitalFlags||[];
    body='<h2 id="evaModalHeading">Parameters outside demo range</h2><p class="eva-modal-desc">Astronaut '+state.id+' · '+(profiles.length+vitalFlags.length)+' flagged findings. Select a category to investigate.</p>'
     +(profiles.length?'<h3>Astronaut profile</h3>'+profiles.map(m=>'<button type="button" class="eva-flag-item" data-action="metric" data-id="'+m[0]+'"><span>'+m[1]+'</span><strong style="color:#c43f4b">Abnormal ↗</strong></button>').join(""):"")
-    +(vitalFlags.length?'<h3>Immediate pre-EVA vital signs</h3>'+vitalFlags.map(row=>'<button type="button" class="eva-flag-item" data-action="critical"><span>'+row.label+' <small>('+row.min+'–'+row.max+' '+row.unit+')</small></span><strong style="color:#c43f4b">'+preEvaFormat(row.value)+' '+row.unit+' ↗</strong></button>').join(""):"");
+    +(vitalFlags.length?'<h3>Immediate pre-EVA vital signs</h3>'+vitalFlags.map(row=>'<button type="button" class="eva-flag-item" data-action="criticalMetric" data-id="'+row.key+'"><span>'+row.label+' <small>('+row.min+'–'+row.max+' '+row.unit+')</small></span><strong style="color:#c43f4b">'+preEvaFormat(row.value)+' '+row.unit+' ↗</strong></button>').join(""):"");
+ }
+ else if(state.modal.startsWith("critical:")){
+   const key=state.modal.slice("critical:".length);
+   const rule=preEvaRanges.find(item=>item.key===key);
+   if(!rule)return "";
+   const checked=preEvaInspect(state.critical);
+   const value=checked.data[key];
+   const status=value===null?"Awaiting input":value<rule.min||value>rule.max?"Outside range":"Within range";
+   const style=value===null?"pending":status==="Outside range"?"bad":"ok";
+   body='<h2 id="evaModalHeading">'+rule.label+'</h2>'
+     +'<p class="eva-modal-status '+style+'">'+status+' · PRE-EVA CHECK</p>'
+     +preEvaReferenceChart(key,state.critical)
+     +'<p class="eva-modal-desc"><strong>Entered reading:</strong> '+preEvaFormat(value)+' '+rule.unit+'</p>'
+     +'<p class="eva-modal-desc"><strong>Reference band:</strong> '+rule.min+'–'+rule.max+' '+rule.unit+' (inclusive)</p>'
+     +'<p class="eva-modal-desc">The shaded band shows the project range; the dot shows the value entered in the current form. There is no recorded historical series.</p>'
+     +(key==="pp"||key==="map"?'<p class="eva-modal-desc">'+(key==="pp"?"PP = systolic − diastolic.":"Estimated MAP = diastolic + PP / 3 (resting approximation).")+'</p>':"")
+     +(key==="respRate"?'<p class="eva-modal-desc">Rate = counted breaths × 60 ÷ observation interval in seconds.</p>':"")
+     +(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View flagged findings</button>':"");
  }
  else{const m=metric(state.modal);if(!m)return "";const bad=state.flags[m[0]];body='<h2 id="evaModalHeading">'+m[1]+'</h2><p class="eva-modal-status '+(bad?"bad":"ok")+'">'+(bad?"Abnormal":"Normal")+' · DEMO STATUS</p>'+graph(m)+'<p class="eva-modal-desc"><strong>Illustrative profile band:</strong> '+m[4]+' '+m[5]+'</p><p class="eva-modal-desc">Fictional screening signal displayed for interface demonstration, not a validated EVA limit or medical observation.</p>'+(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View all abnormal parameters</button>':'');}
- return '<div class="eva-modal-backdrop" data-action="close-backdrop"><div class="eva-modal" role="dialog" aria-modal="true" aria-labelledby="evaModalHeading"><button type="button" class="eva-close" data-action="close" aria-label="Close report">×</button>'+body+'<p class="eva-modal-note">All charts and baseline bands are invented for this prototype; no real astronaut measurements, clinical approval or NASA-specific thresholds are represented.</p></div></div>';
+ return '<div class="eva-modal-backdrop" data-action="close-backdrop"><div class="eva-modal" role="dialog" aria-modal="true" aria-labelledby="evaModalHeading"><button type="button" class="eva-close" data-action="close" aria-label="Close report">×</button>'+body+'<p class="eva-modal-note">'+(state.modal.startsWith("critical:")?"These reference ranges are team-supplied, not NASA-approved EVA thresholds. Only the current entry is plotted; no past readings are simulated. This interface cannot authorize EVA.":"All profile trend charts and their baseline bands are fictional demo data, not real astronaut measurements or NASA-approved medical limits.")+'</p></div></div>';
 }
 function render(){
  const body=state.screen==="welcome"?welcome():state.screen==="identify"?identify():state.screen==="dashboard"?dashboard():state.screen==="critical"?preEvaMarkup(state,esc):results();
@@ -63,6 +81,13 @@ root.addEventListener("click",event=>{
  if(action==="open-dashboard"){storeInputs();root.hidden=true;document.body.style.overflow="";history.replaceState(null,"",location.pathname+"?dashboard=1#monitor");document.getElementById("monitor")?.scrollIntoView();return;}
  if(action==="dashboard"){if(state.screen==="critical")state.critical=preEvaGetInputs(root,state.critical);go("dashboard");return;}
  if(action==="critical"){go("critical");return;}
+ if(action==="criticalMetric"){
+   const key=btn.dataset.id;
+   if(!preEvaRanges.some(rule=>rule.key===key))return;
+   if(state.screen==="critical")state.critical=preEvaGetInputs(root,state.critical);
+   state.modal="critical:"+key;
+   render();return;
+ }
  if(action==="close"||action==="close-backdrop"){state.modal="";render();return;}
  if(action==="flags"){state.modal="flags";render();return;}
  if(action==="metric"){storeInputs();state.modal=btn.dataset.id;render();return;}
