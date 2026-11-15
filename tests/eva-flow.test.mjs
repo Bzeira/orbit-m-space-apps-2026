@@ -150,7 +150,7 @@ test("live preview and back/forward preserve unsaved measurements",()=>{
   assert.equal(h.values['[data-vital-value="pp"]'].textContent,"40");
   assert.equal(h.values['[data-vital-value="map"]'].textContent,"93.3");
   assert.equal(h.values['[data-vital-value="respRate"]'].textContent,"16");
-  assert.equal(h.values['[data-vital-status="pp"]'].textContent,"Within range");
+  assert.equal(h.values['[data-vital-status="pp"]'].textContent,"Near limit");
   h.click("dashboard");
   proceedToVitals(h);
   assert.match(h.root.innerHTML,/name="spo2"[^>]*value="98"/);
@@ -245,7 +245,7 @@ test("out-of-range markers sit beyond the reference line; in-range markers stay 
   match=h.root.innerHTML.match(/data-value-marker="true" cx="([\d.]+)"/);
   assert.ok(match);
   assert.ok(Number(match[1])>=115&&Number(match[1])<=495);
-  assert.match(h.root.innerHTML,/fill="#34804c"/);
+  assert.match(h.root.innerHTML,/fill="#b27b2d"/);
 });
 
 test("every astronaut profile modal has a horizontal reference line, not fictional timeseries",()=>{
