@@ -162,6 +162,55 @@ test("fixing the profile, combined with acceptable immediate readings, changes d
   h.submit("evaVitalsForm");
   assert.match(h.root.innerHTML,/EVA mission<br>approved/);
 });
+
+test("all seven immediate pre-EVA summary rows open an accurate reference chart",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:78,spo2:98,systolic:120,diastolic:80,breaths:8,interval:30});
+  const cases=[
+    ["heartRate","60","100","78"],
+    ["spo2","95","100","98"],
+    ["systolic","90","120","120"],
+    ["diastolic","60","80","80"],
+    ["pp","40","60","40"],
+    ["map","70","100","93.3"],
+    ["respRate","12","20","16"]
+  ];
+  for(const [key,min,max,value] of cases){
+    assert.match(h.root.innerHTML,new RegExp('data-action="criticalMetric" data-id="'+key+'"'));
+    h.click("criticalMetric",key);
+    assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
+    assert.match(h.root.innerHTML,/Entered reading:/);
+    assert.ok(h.root.innerHTML.includes("reference band "+min+" to "+max),key+" correct band");
+    assert.ok(h.root.innerHTML.includes("entered value "+value),key+" current entered value");
+    assert.doesNotMatch(h.root.innerHTML,/12 fictional observations/,"Do not invent a time series.");
+    h.click("close");
+  }
+  assert.doesNotMatch(h.root.innerHTML,/data-action="criticalMetric" data-id="temperature"/,
+    "Temperature has no user-supplied reference band.");
+});
+test("a vital flagged on red decision opens its graph, not just the data entry page",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{spo2:92,systolic:105,diastolic:80});
+  h.submit("evaVitalsForm");
+  h.click("flags");
+  assert.match(h.root.innerHTML,/data-action="criticalMetric" data-id="spo2"/);
+  assert.match(h.root.innerHTML,/data-action="criticalMetric" data-id="pp"/);
+  h.click("criticalMetric","spo2");
+  assert.match(h.root.innerHTML,/Oxygen saturation/);
+  assert.match(h.root.innerHTML,/Outside range/);
+  assert.match(h.root.innerHTML,/entered value 92/);
+  h.click("flags");
+  assert.match(h.root.innerHTML,/Parameters outside demo range/);
+});
+test("unentered vital displays its reference interval without fictional observations",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  h.click("criticalMetric","heartRate");
+  assert.match(h.root.innerHTML,/Awaiting input/);
+  assert.match(h.root.innerHTML,/Enter a reading to place the marker/);
+  assert.match(h.root.innerHTML,/60–100 bpm/);
+  assert.doesNotMatch(h.root.innerHTML,/12 fictional observations/);
+});
+
 test("offline shell includes new logic and original dashboard remains accessible",()=>{
   const worker=readFileSync(resolve(base,"sw.js"),"utf8");
   assert.match(worker,/src\/eva-flow\.mjs/);
