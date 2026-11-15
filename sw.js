@@ -3,13 +3,13 @@
  * repository scope. NASA research links are NOT cached or intercepted.
  * Successful first online installation is required for later offline opening.
  */
-const CACHE_NAME="orbit-m-static-2026-11-15-eva-v1";
+const CACHE_NAME="orbit-m-static-2026-11-15-pre-eva-v2";
 const APP_FILES=[
   "./","./index.html",
   "./assets/app.css","./assets/eva-flow.css","./assets/bodymap.css",
   "./assets/cardiovascular.css","./assets/mission-demo.css","./assets/cabin.css",
   "./assets/mission-mental.css","./assets/research.css",
-  "./src/app.mjs","./src/eva-flow.mjs","./src/bodymap.mjs","./src/cabin.mjs","./src/cabin-ui.mjs",
+  "./src/app.mjs","./src/eva-critical.mjs","./src/eva-flow.mjs","./src/bodymap.mjs","./src/cabin.mjs","./src/cabin-ui.mjs",
   "./src/cardiovascular-ui.mjs","./src/cardiovascular.mjs",
   "./src/dcs-screen.mjs","./src/engine.mjs",
   "./src/mission-demo-ui.mjs","./src/mission-demo.mjs",
