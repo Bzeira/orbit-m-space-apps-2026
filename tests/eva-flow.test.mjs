@@ -151,7 +151,7 @@ test("live preview and back/forward preserve unsaved measurements",()=>{
   assert.equal(h.values['[data-vital-value="pp"]'].textContent,"40");
   assert.equal(h.values['[data-vital-value="map"]'].textContent,"93.3");
   assert.equal(h.values['[data-vital-value="respRate"]'].textContent,"16");
-  assert.equal(h.values['[data-vital-status="pp"]'].textContent,"Near limit");
+  assert.equal(h.values['[data-vital-status="pp"]'].textContent,"Needs inspection");
   h.click("dashboard");
   proceedToVitals(h);
   assert.match(h.root.innerHTML,/name="spo2"[^>]*value="98"/);
