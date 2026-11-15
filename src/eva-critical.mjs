@@ -39,9 +39,25 @@ export function preEvaInspect(raw){
   data.map=data.pp===null?null:data.diastolic+data.pp/3;
   // Count respiratory cycles over the observed interval, then normalize per minute.
   data.respRate=data.breaths!==null&&[30,60].includes(interval)?data.breaths*60/interval:null;
-  const rows=preEvaRanges.map(rule=>({...rule,value:data[rule.key],
-    outOfRange:data[rule.key]!==null&&(data[rule.key]<rule.min||data[rule.key]>rule.max)}));
-  return {data,rows,issues:rows.filter(x=>x.outOfRange),errors,valid:errors.length===0};
+  // Near-limit is an illustrative UI tier, NOT an EVA medical or NASA threshold.
+  // It means a reading is still inside its reference band but within the
+  // outer 10% of that band's width at either end.
+  const rows=preEvaRanges.map(rule=>{
+    const value=data[rule.key];
+    const outOfRange=value!==null&&(value<rule.min||value>rule.max);
+    const lowerDistance=value===null?null:value-rule.min;
+    const upperDistance=value===null?null:rule.max-value;
+    const nearestSide=lowerDistance!==null&&lowerDistance<=upperDistance?"lower":"upper";
+    const margin=(rule.max-rule.min)*0.10;
+    const nearLimit=value!==null&&!outOfRange&&
+      Math.min(lowerDistance,upperDistance)<=margin+1e-9;
+    return {...rule,value,outOfRange,nearLimit,nearestSide,
+      nearestLimit:nearestSide==="lower"?rule.min:rule.max,
+      distance:nearLimit?Math.min(lowerDistance,upperDistance):null,
+      reviewMargin:margin};
+  });
+  return {data,rows,issues:rows.filter(x=>x.outOfRange),
+    reviewFlags:rows.filter(x=>x.nearLimit),errors,valid:errors.length===0};
 }
 export function preEvaGetInputs(root,previous){
   const updated={...previous};
@@ -118,8 +134,8 @@ export function preEvaRefresh(root,raw){
     if(valueNode)valueNode.textContent=preEvaFormat(row.value);
     const statusNode=root.querySelector('[data-vital-status="'+row.key+'"]');
     if(statusNode){
-      statusNode.textContent=row.value===null?"Awaiting input":row.outOfRange?"Outside range":"Within range";
-      statusNode.className="eva-live-state "+(row.value===null?"pending":row.outOfRange?"bad":"ok");
+      statusNode.textContent=row.value===null?"Awaiting input":row.outOfRange?"Outside range":row.nearLimit?"Near limit":"Within range";
+      statusNode.className="eva-live-state "+(row.value===null?"pending":row.outOfRange?"bad":row.nearLimit?"caution":"ok");
     }
   }
   const temp=root.querySelector('[data-vital-value="temperature"]');
@@ -145,8 +161,10 @@ export function preEvaReferenceChart(key,raw){
   const span=rule.max-rule.min;
   const scaled=value===null?null:lineStart+(value-rule.min)*(lineEnd-lineStart)/span;
   const markerX=scaled===null?null:Math.max(54,Math.min(556,scaled));
-  const outside=value!==null&&(value<rule.min||value>rule.max);
-  const markerColor=outside?"#bc3b46":"#34804c";
+  const current=result.rows.find(row=>row.key===key);
+  const outside=current?.outOfRange||false;
+  const nearLimit=current?.nearLimit||false;
+  const markerColor=outside?"#bc3b46":nearLimit?"#b27b2d":"#34804c";
   const fmt=x=>Number(x).toFixed(1);
   const marker=value===null
     ?'<text x="305" y="81" text-anchor="middle" fill="#786775" font-size="16">Enter a reading to place the marker</text>'

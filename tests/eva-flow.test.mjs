@@ -48,7 +48,7 @@ function proceedToVitals(h,days=12,purpose="Equipment inspection"){
 }
 function enterVitals(h,overrides={}){
   const defaults={
-    heartRate:78,spo2:98,systolic:120,diastolic:80,
+    heartRate:78,spo2:98,systolic:115,diastolic:72,
     temperature:36.7,breaths:8,interval:30
   };
   for(const [key,value] of Object.entries({...defaults,...overrides}))h.updateVital(key,value);
@@ -146,7 +146,7 @@ test("live preview and back/forward preserve unsaved measurements",()=>{
   h.values['[data-vital-value="map"]']={textContent:""};
   h.values['[data-vital-value="respRate"]']={textContent:""};
   h.values['[data-vital-status="pp"]']={textContent:"",className:""};
-  enterVitals(h);
+  enterVitals(h,{systolic:120,diastolic:80});
   assert.equal(h.values['[data-vital-value="pp"]'].textContent,"40");
   assert.equal(h.values['[data-vital-value="map"]'].textContent,"93.3");
   assert.equal(h.values['[data-vital-value="respRate"]'].textContent,"16");
@@ -258,6 +258,61 @@ test("every astronaut profile modal has a horizontal reference line, not fiction
     assert.doesNotMatch(h.root.innerHTML,/12 fictional observations|SYNTHETIC PARAMETER HISTORY/);
   }
 });
+test("a single in-range near-limit reading routes to further inspection",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:62});
+  const inspected=h.api.preEvaInspect({
+    heartRate:"62",spo2:"98",systolic:"115",diastolic:"72",
+    temperature:"36.7",breaths:"8",interval:"30"
+  });
+  assert.equal(inspected.valid,true);
+  assert.equal(inspected.issues.length,0);
+  assert.equal(inspected.reviewFlags.length,1);
+  assert.equal(inspected.reviewFlags[0].key,"heartRate");
+  h.submit("evaVitalsForm");
+  assert.match(h.root.innerHTML,/NEEDS FURTHER<br>INSPECTION/);
+  assert.match(h.root.innerHTML,/CLICK TO CHECK FURTHER INFO/);
+  h.click("review");
+  assert.match(h.root.innerHTML,/Further inspection needed/);
+  assert.match(h.root.innerHTML,/62 bpm/);
+  assert.match(h.root.innerHTML,/60–100 bpm/);
+  assert.doesNotMatch(h.root.innerHTML,/Oxygen saturation.*Near lower limit/s);
+  h.click("criticalMetric","heartRate");
+  assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
+  assert.match(h.root.innerHTML,/Near limit/);
+  assert.match(h.root.innerHTML,/Back to near-limit readings/);
+  h.click("review");
+  assert.match(h.root.innerHTML,/Further inspection needed/);
+});
+test("two in-range values near limits are listed with actual values",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:62,spo2:95.3});
+  h.submit("evaVitalsForm");
+  assert.match(h.root.innerHTML,/2 in-range measurements/);
+  h.click("review");
+  assert.match(h.root.innerHTML,/62 bpm/);
+  assert.match(h.root.innerHTML,/95.3 %/);
+  assert.match(h.root.innerHTML,/near a boundary|Near lower limit|Near upper limit/i);
+});
+test("red priority when a reading is out of range; green only when no near limits",()=>{
+  const green=harness();beginAstronaut(green,1);proceedToVitals(green);
+  enterVitals(green);
+  green.submit("evaVitalsForm");
+  assert.match(green.root.innerHTML,/EVA mission<br>approved/);
+  const red=harness();beginAstronaut(red,1);proceedToVitals(red);
+  enterVitals(red,{heartRate:62,spo2:92});
+  red.submit("evaVitalsForm");
+  assert.match(red.root.innerHTML,/EVA NOT AUTHORIZED/);
+  assert.doesNotMatch(red.root.innerHTML,/NEEDS FURTHER<br>INSPECTION/);
+});
+test("no ambiguous clearance when three or more values are near reference boundaries",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:62,spo2:95.3,systolic:118});
+  h.submit("evaVitalsForm");
+  assert.match(h.root.innerHTML,/NEEDS FURTHER<br>INSPECTION/);
+  assert.doesNotMatch(h.root.innerHTML,/EVA mission<br>approved/);
+});
+
 test("old dashboard query no longer exposes previous website",()=>{
   const h=harness("?dashboard=1");
   assert.match(h.root.innerHTML,/welcome/);

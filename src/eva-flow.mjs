@@ -1,4 +1,4 @@
-import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs?v=20261115-eva-clean-v5";
+import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs?v=20261115-eva-review-v6";
 /* ORBIT-M astronaut EVA UI. Synthetic interactive demonstration only. */
 const METRICS=[
 ["sleep","sleep score",86,58,"70–100","/100"],
@@ -24,8 +24,22 @@ function dashboard(){
  return '<section class="eva-dashboard"><div class="eva-card"><h1 tabindex="-1">Astronaut ID</h1><div class="eva-mission-id">ASTRONAUT '+state.id+'</div><div class="eva-avatar">'+avatar()+'</div><p class="eva-card-note">Select a parameter for its synthetic reference range.</p><button type="button" class="eva-text-button" data-action="identify">Change astronaut ID</button></div><div class="eva-card"><div class="eva-scenario"><span>SIMULATED HEALTH PARAMETERS</span><button type="button" class="eva-text-button" data-action="random">Randomize demo statuses</button></div><div class="eva-list">'+rows+'</div><form id="evaMissionForm" class="eva-fields"><label>mission length<input id="evaMissionLength" name="length" type="number" inputmode="numeric" min="1" max="1095" step="1" placeholder="Enter mission length (days)" value="'+esc(state.missionLength)+'" required></label><label>purpose<input id="evaMissionPurpose" name="purpose" type="text" maxlength="120" placeholder="Enter mission purpose" value="'+esc(state.missionPurpose)+'" required></label><button class="eva-assess" type="submit">Assess Readiness</button><p class="eva-error" id="evaAssessmentFeedback" role="alert"></p></form><p class="eva-card-note">Use arrows to change Normal / Abnormal. Fictional training scenario; not operational medical clearance.</p></div></section>';
 }
 function results(){
- if(!state.decision.denied)return '<section class="eva-result eva-approve"><small>astronaut “'+state.id+'”</small><h1 tabindex="-1">EVA mission<br>approved</h1><div class="eva-rule"></div><p>you can suit up– good luck on your mission:)</p><div class="eva-safety-note">SIMULATED APPROVAL ONLY. Actual EVA authorization requires qualified review and established mission procedures.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
- return '<section class="eva-result eva-warning"><div class="eva-warning-head"><div class="eva-warning-icon" aria-hidden="true">!</div><h1 tabindex="-1">WARNING</h1></div><div class="eva-alert-band">EVA NOT AUTHORIZED</div><button class="eva-see-data" type="button" data-action="flags">CLICK HERE TO SEE DATA</button><div class="eva-stripes"></div><div class="eva-safety-note">'+state.decision.count+' flagged findings in profile and immediate vital measurements. This is not a medical decision.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
+  const decision=state.decision;
+  if(decision.status==="approved"){
+    return '<section class="eva-result eva-approve"><small>astronaut “'+state.id+'”</small><h1 tabindex="-1">EVA mission<br>approved</h1><div class="eva-rule"></div><p>you can suit up– good luck on your mission:)</p><div class="eva-safety-note">SIMULATED APPROVAL ONLY. Actual EVA authorization requires qualified review and established mission procedures.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
+  }
+  if(decision.status==="review"){
+    return '<section class="eva-result eva-review" aria-label="Simulated EVA further inspection">'
+      +'<div class="eva-review-stars" aria-hidden="true">✦ <span>✧</span> ✦</div>'
+      +'<p class="eva-review-eyebrow">ORBIT-M / PRE-EVA CHECKPOINT</p>'
+      +'<h1 tabindex="-1">NEEDS FURTHER<br>INSPECTION</h1>'
+      +'<p class="eva-review-text">'+decision.reviewFlags.length+' in-range measurement'+(decision.reviewFlags.length===1?" is":"s are")+' close to a reference limit.</p>'
+      +'<button type="button" class="eva-review-action" data-action="review">CLICK TO CHECK FURTHER INFO <span aria-hidden="true">↗</span></button>'
+      +'<p class="eva-review-caveat">Demonstration only. No medical clearance is provided. Near-limit means within the outer 10% of a team-supplied reference interval, not a medically validated alert.</p>'
+      +'<div class="eva-result-actions"><button type="button" data-action="critical">Back to measurements</button><button type="button" data-action="identify">New astronaut</button></div>'
+      +'</section>';
+  }
+  return '<section class="eva-result eva-warning"><div class="eva-warning-head"><div class="eva-warning-icon" aria-hidden="true">!</div><h1 tabindex="-1">WARNING</h1></div><div class="eva-alert-band">EVA NOT AUTHORIZED</div><button class="eva-see-data" type="button" data-action="flags">CLICK HERE TO SEE DATA</button><div class="eva-stripes"></div><div class="eva-safety-note">'+decision.count+' flagged findings in profile and immediate vital measurements. This is not a medical decision.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
 }
 /* One demo value against one declared profile range. No invented time-series history. */
 function graph(m){
@@ -59,14 +73,27 @@ function modal(){
     +(profiles.length?'<h3>Astronaut profile</h3>'+profiles.map(m=>'<button type="button" class="eva-flag-item" data-action="metric" data-id="'+m[0]+'"><span>'+m[1]+'</span><strong style="color:#c43f4b">Abnormal ↗</strong></button>').join(""):"")
     +(vitalFlags.length?'<h3>Immediate pre-EVA vital signs</h3>'+vitalFlags.map(row=>'<button type="button" class="eva-flag-item" data-action="criticalMetric" data-id="'+row.key+'"><span>'+row.label+' <small>('+row.min+'–'+row.max+' '+row.unit+')</small></span><strong style="color:#c43f4b">'+preEvaFormat(row.value)+' '+row.unit+' ↗</strong></button>').join(""):"");
  }
+ else if(state.modal==="review"){
+   const flagged=state.decision?.reviewFlags||[];
+   body='<h2 id="evaModalHeading">Further inspection needed</h2>'
+     +'<p class="eva-modal-desc">These readings are inside the provided reference ranges but close to a boundary. Review each reading before proceeding.</p>'
+     +'<div class="eva-review-list">'
+     +flagged.map(row=>'<button type="button" class="eva-review-issue" data-action="criticalMetric" data-id="'+row.key+'">'
+       +'<span class="eva-review-issue-label">'+row.label+'<small>Reference '+row.min+'–'+row.max+' '+row.unit+'</small></span>'
+       +'<span class="eva-review-issue-measure"><strong>'+preEvaFormat(row.value)+' '+row.unit+'</strong><small>Near '+row.nearestSide+' limit ('+preEvaFormat(row.nearestLimit)+' '+row.unit+')</small></span>'
+       +'<span class="eva-review-issue-open" aria-hidden="true">↗</span>'
+       +'</button>').join("")
+     +'</div><p class="eva-modal-desc">Select any reading to open its range chart. The near-limit category is an illustrative 10% buffer inside the provided range, not a clinical standard.</p>';
+ }
  else if(state.modal.startsWith("critical:")){
    const key=state.modal.slice("critical:".length);
    const rule=preEvaRanges.find(item=>item.key===key);
    if(!rule)return "";
    const checked=preEvaInspect(state.critical);
    const value=checked.data[key];
-   const status=value===null?"Awaiting input":value<rule.min||value>rule.max?"Outside range":"Within range";
-   const style=value===null?"pending":status==="Outside range"?"bad":"ok";
+   const checkedRow=checked.rows.find(row=>row.key===key);
+   const status=value===null?"Awaiting input":checkedRow.outOfRange?"Outside range":checkedRow.nearLimit?"Near limit":"Within range";
+   const style=value===null?"pending":checkedRow.outOfRange?"bad":checkedRow.nearLimit?"caution":"ok";
    body='<h2 id="evaModalHeading">'+rule.label+'</h2>'
      +'<p class="eva-modal-status '+style+'">'+status+' · PRE-EVA CHECK</p>'
      +preEvaReferenceChart(key,state.critical)
@@ -75,10 +102,10 @@ function modal(){
      +'<p class="eva-modal-desc">The horizontal line marks the project reference range. The dot marks your current reading (red when outside the range). No historical measurements are inferred.</p>'
      +(key==="pp"||key==="map"?'<p class="eva-modal-desc">'+(key==="pp"?"PP = systolic − diastolic.":"Estimated MAP = diastolic + PP / 3 (resting approximation).")+'</p>':"")
      +(key==="respRate"?'<p class="eva-modal-desc">Rate = counted breaths × 60 ÷ observation interval in seconds.</p>':"")
-     +(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View flagged findings</button>':"");
+     +(state.decision?.status==="review"?'<button type="button" class="eva-text-button" data-action="review">Back to near-limit readings</button>':state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View flagged findings</button>':"");
  }
  else{const m=metric(state.modal);if(!m)return "";const bad=state.flags[m[0]];body='<h2 id="evaModalHeading">'+m[1]+'</h2><p class="eva-modal-status '+(bad?"bad":"ok")+'">'+(bad?"Abnormal":"Normal")+' · DEMO STATUS</p>'+graph(m)+'<p class="eva-modal-desc"><strong>Illustrative profile band:</strong> '+m[4]+' '+m[5]+'</p><p class="eva-modal-desc">The dot shows a fictional value selected for the current Normal / Abnormal demo state, not a historical or actual astronaut measurement.</p>'+(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View all abnormal parameters</button>':'');}
- return '<div class="eva-modal-backdrop" data-action="close-backdrop"><div class="eva-modal" role="dialog" aria-modal="true" aria-labelledby="evaModalHeading"><button type="button" class="eva-close" data-action="close" aria-label="Close report">×</button>'+body+'<p class="eva-modal-note">'+(state.modal.startsWith("critical:")?"These reference ranges are team-supplied, not NASA-approved EVA thresholds. Only the current entry is plotted; no past readings are simulated. This interface cannot authorize EVA.":"Profile charts display one fictional value against an illustrative range. They are not real astronaut measurements or NASA-approved medical limits.")+'</p></div></div>';
+ return '<div class="eva-modal-backdrop" data-action="close-backdrop"><div class="eva-modal" role="dialog" aria-modal="true" aria-labelledby="evaModalHeading"><button type="button" class="eva-close" data-action="close" aria-label="Close report">×</button>'+body+'<p class="eva-modal-note">'+(state.modal==="review"?"All highlighted measurements are inside the team's illustrative ranges. An alert near a boundary is not a medical diagnosis and cannot authorize or prevent EVA.":state.modal.startsWith("critical:")?"These reference ranges are team-supplied, not NASA-approved EVA thresholds. Only the current entry is plotted; no past readings are simulated. This interface cannot authorize EVA.":"Profile charts display one fictional value against an illustrative range. They are not real astronaut measurements or NASA-approved medical limits.")+'</p></div></div>';
 }
 function render(){
  const body=state.screen==="welcome"?welcome():state.screen==="identify"?identify():state.screen==="dashboard"?dashboard():state.screen==="critical"?preEvaMarkup(state,esc):results();
@@ -102,6 +129,7 @@ root.addEventListener("click",event=>{
  }
  if(action==="close"||action==="close-backdrop"){state.modal="";render();return;}
  if(action==="flags"){state.modal="flags";render();return;}
+ if(action==="review"){state.modal="review";render();return;}
  if(action==="metric"){storeInputs();state.modal=btn.dataset.id;render();return;}
  if(action==="toggle"){storeInputs();state.flags[btn.dataset.id]=!state.flags[btn.dataset.id];render();return;}
  if(action==="random"){storeInputs();for(const m of METRICS)state.flags[m[0]]=Math.random()<.32;render();}
@@ -136,10 +164,13 @@ root.addEventListener("submit",event=>{
    }
    const profileFlags=abnormal().map(m=>m[0]);
    const vitalFlags=result.issues.map(row=>({...row}));
+   const reviewFlags=result.reviewFlags.map(row=>({...row}));
+   // Out-of-range or abnormal profile statuses take priority over near-limit findings.
+   const denied=profileFlags.length+vitalFlags.length>0;
+   const status=denied?"denied":reviewFlags.length?"review":"approved";
    state.decision={
-     denied:profileFlags.length+vitalFlags.length>0,
-     count:profileFlags.length+vitalFlags.length,
-     profileFlags,vitalFlags,data:{...result.data}
+     status,denied,count:denied?profileFlags.length+vitalFlags.length:reviewFlags.length,
+     profileFlags,vitalFlags,reviewFlags,data:{...result.data}
    };
    go("result");
    return;
