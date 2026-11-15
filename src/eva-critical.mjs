@@ -59,9 +59,15 @@ function inputField(name,label,unit,placeholder,step,min,max,raw,esc){
    +'placeholder="'+placeholder+'" value="'+esc(raw[name])+'" required></label>';
 }
 function displayRow(key,label,band){
-  return '<div class="eva-live-row"><div><span>'+label+'</span><small>'+band+'</small></div>'
+  const isChartable=preEvaRanges.some(rule=>rule.key===key);
+  const start=isChartable
+    ?'<button type="button" class="eva-live-row eva-live-row-btn" data-action="criticalMetric" data-id="'+key+'" aria-label="Open reference chart for '+label+'">'
+    :'<div class="eva-live-row">';
+  return start
+    +'<div><span>'+label+'</span><small>'+band+'</small></div>'
     +'<div class="eva-live-result"><strong data-vital-value="'+key+'">—</strong>'
-    +'<span data-vital-status="'+key+'" class="eva-live-state pending">Awaiting input</span></div></div>';
+    +'<span data-vital-status="'+key+'" class="eva-live-state pending">Awaiting input</span></div>'
+    +(isChartable?'</button>':'</div>');
 }
 export function preEvaMarkup(state,esc){
   const raw=state.critical;
@@ -121,4 +127,42 @@ export function preEvaRefresh(root,raw){
   const tempStatus=root.querySelector('[data-vital-status="temperature"]');
   if(tempStatus){tempStatus.textContent=result.data.temperature===null?"Awaiting input":"Recorded · No range specified";tempStatus.className="eva-live-state pending";}
   return result;
+}
+
+
+/* Chart a real entered reading against the team's provided reference band.
+ * Historical readings are unavailable, so do not generate fake time-series data.
+ */
+export function preEvaReferenceChart(key,raw){
+  const rule=preEvaRanges.find(item=>item.key===key);
+  if(!rule)return "";
+  const result=preEvaInspect(raw);
+  const value=result.data[key];
+  const extra=Math.max((rule.max-rule.min)*0.4,1);
+  const low=Math.min(rule.min-extra,value===null?Infinity:value-extra*.4);
+  const high=Math.max(rule.max+extra,value===null?-Infinity:value+extra*.4);
+  const x=n=>72+(n-low)*468/(high-low);
+  const lower=x(rule.min),upper=x(rule.max);
+  const out=value!==null&&(value<rule.min||value>rule.max);
+  const color=out?"#ff7c87":"#92e2a8";
+  const pct=v=>Number(v).toFixed(1);
+  const dot=value===null
+    ?'<text x="306" y="118" fill="#d8cfde" font-size="16" text-anchor="middle">Enter a reading to place the marker</text>'
+    :'<line x1="'+pct(x(value))+'" x2="'+pct(x(value))+'" y1="69" y2="158" stroke="'+color+'" stroke-width="2.5" stroke-dasharray="4 4"/>'
+      +'<circle cx="'+pct(x(value))+'" cy="111" r="10" fill="'+color+'" stroke="#1c1d31" stroke-width="3"/>'
+      +'<text x="'+pct(x(value))+'" y="65" fill="'+color+'" font-size="15" font-weight="700" text-anchor="middle">'+preEvaFormat(value)+'</text>';
+  const aria=rule.label+": reference band "+rule.min+" to "+rule.max+" "+rule.unit+
+    (value===null?"; no reading entered":"; entered value "+preEvaFormat(value)+" "+rule.unit);
+  return '<svg class="eva-chart eva-reference-chart" viewBox="0 0 610 230" role="img" aria-label="'+aria+'">'
+    +'<text x="72" y="29" fill="#e9e1ee" font-size="15">PRE-EVA REFERENCE RANGE</text>'
+    +'<line x1="72" x2="540" y1="111" y2="111" stroke="#63708b" stroke-width="10" stroke-linecap="round"/>'
+    +'<rect x="'+pct(lower)+'" y="90" width="'+pct(upper-lower)+'" height="42" rx="8" fill="#579e82" opacity=".38"/>'
+    +'<line x1="'+pct(lower)+'" x2="'+pct(lower)+'" y1="85" y2="141" stroke="#91e8b8" stroke-width="2"/>'
+    +'<line x1="'+pct(upper)+'" x2="'+pct(upper)+'" y1="85" y2="141" stroke="#91e8b8" stroke-width="2"/>'
+    +dot
+    +'<text x="'+pct(lower)+'" y="163" font-size="13" text-anchor="middle" fill="#bce8d2">'+rule.min+'</text>'
+    +'<text x="'+pct(upper)+'" y="163" font-size="13" text-anchor="middle" fill="#bce8d2">'+rule.max+'</text>'
+    +'<text x="72" y="203" fill="#c7bece" font-size="12">Shaded: team-defined reference band ('+rule.unit+')</text>'
+    +'<text x="540" y="203" text-anchor="end" fill="#c7bece" font-size="12">● Entered value</text>'
+    +'</svg>';
 }
