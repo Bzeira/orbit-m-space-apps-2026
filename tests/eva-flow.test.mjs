@@ -302,11 +302,21 @@ test("intermediate review uses pixel-art park reference without altering other o
   assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
 });
 
+test("pixel review graphics exist and are scoped to the intermediate screen",()=>{
+  const scene=readFileSync(resolve(base,"assets/eva-review-scene.svg"),"utf8");
+  const title=readFileSync(resolve(base,"assets/eva-review-title.svg"),"utf8");
+  assert.match(scene,/<svg[^>]+viewBox="0 0 960 540"/);
+  assert.match(scene,/<linearGradient id="sky"/);
+  assert.match(scene,/fill="#8165de"/);
+  assert.match(title,/<svg[^>]+viewBox="0 0 540 128"/);
+  assert.match(style,/eva-review-scene\.svg/);
+  assert.doesNotMatch(page,/eva-review-scene/,"Only the review route should display the scene");
+});
 test("two in-range values near limits are listed with actual values",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
   enterVitals(h,{heartRate:62,spo2:95.3});
   h.submit("evaVitalsForm");
-  assert.match(h.root.innerHTML,/2 in-range measurements/);
+  assert.match(h.root.innerHTML,/2 measurements close to a reference boundary/);
   h.click("review");
   assert.match(h.root.innerHTML,/62 bpm/);
   assert.match(h.root.innerHTML,/95.3 %/);
