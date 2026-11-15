@@ -1,3 +1,4 @@
+import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat} from "./eva-critical.mjs";
 /* ORBIT-M astronaut EVA UI. Synthetic interactive demonstration only. */
 const METRICS=[
 ["sleep","sleep score",86,58,"70–100","/100"],
@@ -9,7 +10,7 @@ const METRICS=[
 ["vision","vision",89,47,"70–100","index"]];
 const FAILURES={1:[],2:["bpm","temperature"],3:["sleep","fitness"],4:["vision"],5:[],6:["ent"],7:["anatomy","bpm"],8:[],9:["fitness"],10:["temperature","vision"]};
 const root=document.createElement("div");root.id="orbitEvaFlow";root.setAttribute("aria-label","Simulated ORBIT-M EVA assessment");document.body.append(root);
-const state={screen:"welcome",id:0,flags:{},missionLength:"",missionPurpose:"",modal:"",decision:null,feedback:""};
+const state={screen:"welcome",id:0,flags:{},missionLength:"",missionPurpose:"",critical:preEvaEmpty(),modal:"",decision:null,feedback:""};
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const metric=id=>METRICS.find(m=>m[0]===id);
 const abnormal=()=>METRICS.filter(m=>state.flags[m[0]]);
@@ -24,7 +25,7 @@ function dashboard(){
 }
 function results(){
  if(!state.decision.denied)return '<section class="eva-result eva-approve"><small>astronaut “'+state.id+'”</small><h1 tabindex="-1">EVA mission<br>approved</h1><div class="eva-rule"></div><p>you can suit up– good luck on your mission:)</p><div class="eva-safety-note">SIMULATED APPROVAL ONLY. Actual EVA authorization requires qualified review and established mission procedures.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
- return '<section class="eva-result eva-warning"><div class="eva-warning-head"><div class="eva-warning-icon" aria-hidden="true">!</div><h1 tabindex="-1">WARNING</h1></div><div class="eva-alert-band">EVA NOT AUTHORIZED</div><button class="eva-see-data" type="button" data-action="flags">CLICK HERE TO SEE DATA</button><div class="eva-stripes"></div><div class="eva-safety-note">'+state.decision.count+' abnormal fictional parameter categories. This is not a medical decision.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
+ return '<section class="eva-result eva-warning"><div class="eva-warning-head"><div class="eva-warning-icon" aria-hidden="true">!</div><h1 tabindex="-1">WARNING</h1></div><div class="eva-alert-band">EVA NOT AUTHORIZED</div><button class="eva-see-data" type="button" data-action="flags">CLICK HERE TO SEE DATA</button><div class="eva-stripes"></div><div class="eva-safety-note">'+state.decision.count+' flagged findings in profile and immediate vital measurements. This is not a medical decision.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
 }
 function graph(m){
  const bad=state.flags[m[0]],center=bad?m[3]:m[2],amp=m[0]==="temperature"?.18:m[0]==="bpm"?5:4;
@@ -38,13 +39,20 @@ function graph(m){
 function modal(){
  if(!state.modal)return "";
  let body;
- if(state.modal==="flags"){body='<h2 id="evaModalHeading">Parameters outside demo range</h2><p class="eva-modal-desc">Astronaut '+state.id+' · '+abnormal().length+' fictional abnormal categories. Select one for details.</p>'+abnormal().map(m=>'<button type="button" class="eva-flag-item" data-action="metric" data-id="'+m[0]+'"><span>'+m[1]+'</span><strong style="color:#c43f4b">Abnormal ↗</strong></button>').join("");}
+ if(state.modal==="flags"){
+   const profiles=(state.decision?.profileFlags||abnormal().map(m=>m[0])).map(metric).filter(Boolean);
+   const vitalFlags=state.decision?.vitalFlags||[];
+   body='<h2 id="evaModalHeading">Parameters outside demo range</h2><p class="eva-modal-desc">Astronaut '+state.id+' · '+(profiles.length+vitalFlags.length)+' flagged findings. Select a category to investigate.</p>'
+    +(profiles.length?'<h3>Astronaut profile</h3>'+profiles.map(m=>'<button type="button" class="eva-flag-item" data-action="metric" data-id="'+m[0]+'"><span>'+m[1]+'</span><strong style="color:#c43f4b">Abnormal ↗</strong></button>').join(""):"")
+    +(vitalFlags.length?'<h3>Immediate pre-EVA vital signs</h3>'+vitalFlags.map(row=>'<button type="button" class="eva-flag-item" data-action="critical"><span>'+row.label+' <small>('+row.min+'–'+row.max+' '+row.unit+')</small></span><strong style="color:#c43f4b">'+preEvaFormat(row.value)+' '+row.unit+' ↗</strong></button>').join(""):"");
+ }
  else{const m=metric(state.modal);if(!m)return "";const bad=state.flags[m[0]];body='<h2 id="evaModalHeading">'+m[1]+'</h2><p class="eva-modal-status '+(bad?"bad":"ok")+'">'+(bad?"Abnormal":"Normal")+' · DEMO STATUS</p>'+graph(m)+'<p class="eva-modal-desc"><strong>Illustrative profile band:</strong> '+m[4]+' '+m[5]+'</p><p class="eva-modal-desc">Fictional screening signal displayed for interface demonstration, not a validated EVA limit or medical observation.</p>'+(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View all abnormal parameters</button>':'');}
  return '<div class="eva-modal-backdrop" data-action="close-backdrop"><div class="eva-modal" role="dialog" aria-modal="true" aria-labelledby="evaModalHeading"><button type="button" class="eva-close" data-action="close" aria-label="Close report">×</button>'+body+'<p class="eva-modal-note">All charts and baseline bands are invented for this prototype; no real astronaut measurements, clinical approval or NASA-specific thresholds are represented.</p></div></div>';
 }
 function render(){
- const body=state.screen==="welcome"?welcome():state.screen==="identify"?identify():state.screen==="dashboard"?dashboard():results();
+ const body=state.screen==="welcome"?welcome():state.screen==="identify"?identify():state.screen==="dashboard"?dashboard():state.screen==="critical"?preEvaMarkup(state,esc):results();
  root.innerHTML='<div class="eva-universe" aria-hidden="true"><div class="eva-sun"></div><div class="eva-horizon"></div></div><header class="eva-top"><div class="eva-brand"><span class="eva-orbit" aria-hidden="true"></span>ORBIT-M</div><div class="eva-top-right"><span class="eva-kicker">EXTRAVEHICULAR ACTIVITY / INTERACTIVE DEMO</span><button class="eva-link" type="button" data-action="open-dashboard">Full crew dashboard ↗</button></div></header><main class="eva-stage">'+body+'</main>'+modal();
+ if(state.screen==="critical")preEvaRefresh(root,state.critical);
  if(state.modal)root.querySelector(".eva-close")?.focus();
 }
 root.addEventListener("click",event=>{
@@ -53,25 +61,56 @@ root.addEventListener("click",event=>{
  if(action==="close-backdrop"&&event.target!==btn)return;
  if(action==="start"||action==="identify"){go("identify");return;}
  if(action==="open-dashboard"){storeInputs();root.hidden=true;document.body.style.overflow="";history.replaceState(null,"",location.pathname+"?dashboard=1#monitor");document.getElementById("monitor")?.scrollIntoView();return;}
- if(action==="dashboard"){go("dashboard");return;}
+ if(action==="dashboard"){if(state.screen==="critical")state.critical=preEvaGetInputs(root,state.critical);go("dashboard");return;}
+ if(action==="critical"){go("critical");return;}
  if(action==="close"||action==="close-backdrop"){state.modal="";render();return;}
  if(action==="flags"){state.modal="flags";render();return;}
  if(action==="metric"){storeInputs();state.modal=btn.dataset.id;render();return;}
  if(action==="toggle"){storeInputs();state.flags[btn.dataset.id]=!state.flags[btn.dataset.id];render();return;}
  if(action==="random"){storeInputs();for(const m of METRICS)state.flags[m[0]]=Math.random()<.32;render();}
 });
+root.addEventListener("input",event=>{
+ if(event.target.closest?.("#evaVitalsForm")){
+   state.critical=preEvaGetInputs(root,state.critical);
+   preEvaRefresh(root,state.critical);
+ }
+});
+root.addEventListener("change",event=>{
+ if(event.target.closest?.("#evaVitalsForm")){
+   state.critical=preEvaGetInputs(root,state.critical);
+   preEvaRefresh(root,state.critical);
+ }
+});
 root.addEventListener("submit",event=>{
  if(event.target.id==="evaIdForm"){
    event.preventDefault();const n=Number(root.querySelector("#evaIdNumber").value);
    if(!Number.isInteger(n)||n<1||n>10){root.querySelector("#evaIdError").textContent="Enter a whole number from 1 to 10.";return;}
    state.id=n;state.flags=Object.fromEntries(METRICS.map(m=>[m[0],FAILURES[n].includes(m[0])]));
-   state.missionLength="";state.missionPurpose="";state.decision=null;go("dashboard");return;
+   state.missionLength="";state.missionPurpose="";state.critical=preEvaEmpty();state.decision=null;go("dashboard");return;
+ }
+ if(event.target.id==="evaVitalsForm"){
+   event.preventDefault();
+   state.critical=preEvaGetInputs(root,state.critical);
+   const result=preEvaInspect(state.critical);
+   if(!result.valid){
+     const feedback=root.querySelector("#evaVitalsFeedback");
+     if(feedback)feedback.textContent=result.errors.join(" ");
+     return;
+   }
+   const profileFlags=abnormal().map(m=>m[0]);
+   const vitalFlags=result.issues.map(row=>({...row}));
+   state.decision={
+     denied:profileFlags.length+vitalFlags.length>0,
+     count:profileFlags.length+vitalFlags.length,
+     profileFlags,vitalFlags,data:{...result.data}
+   };
+   go("result");
+   return;
  }
  if(event.target.id==="evaMissionForm"){
    event.preventDefault();storeInputs();const days=Number(state.missionLength);
    if(!Number.isInteger(days)||days<1||days>1095||!state.missionPurpose.trim()){root.querySelector("#evaAssessmentFeedback").textContent="Enter a valid mission length and purpose.";return;}
-   state.decision={denied:abnormal().length>0,count:abnormal().length};
-   go("result");
+   go("critical");
  }
 });
 root.addEventListener("keydown",event=>{if(event.key==="Escape"&&state.modal){state.modal="";render();}});
