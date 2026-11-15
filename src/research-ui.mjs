@@ -175,7 +175,6 @@ el("sampleReset").addEventListener("click",()=>{
   el("sampleFeedback").textContent="Example sample log restored.";
   renderSample();
 });
-setArea("hand");
 syncOrganisms();
 renderEva();
 renderSample();

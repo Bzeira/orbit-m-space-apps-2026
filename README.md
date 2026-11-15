@@ -10,6 +10,8 @@
 Long-duration spaceflight can affect physical and behavioral health. Astronauts need an easy way to **record daily indicators, understand when their own pattern changes, and decide when to request an appropriate check-in**—even without live access to Earth.
 
 ## The prototype
+A new [astronaut presentation flow](docs/ASTRONAUT_FLOW.md) opens first: the team's Welcome design → ID **1–10** → astronaut parameters and individual trend reports → green/red EVA demonstration result. IDs **1, 5 and 8** start Normal; ID **2** demonstrates abnormal bpm and body temperature. The original research tools remain under **Research workspace**. All presentation values and ranges are synthetic DEMO fixtures, and green is not medical clearance.
+
 A small, local-first, dependency-free browser application that:
 1. Shows pulse, sleep, mood and temperature for a **fully synthetic** crew member.
 2. **Guided 60-second judge demo:** four fictional mission days, longitudinal trend and decisions that reuse the existing engine. Starting or ending the walkthrough preserves the user's previous dashboard entries.
@@ -31,15 +33,15 @@ This is **not** real astronaut telemetry, a diagnosis, validated risk score, tre
 
 ### Interactive EVA entry flow (synthetic UI)
 The GitHub Pages landing page now offers a five-screen EVA interface inspired by the team's Canva mockups:
-1. Welcome → select "welcome" or "Start assessment".
+1. Welcome → click the original Welcome design or activate it with the keyboard.
 2. Astronaut ID → enter a fictional ID from 1 through 10.
 3. Astronaut parameters → inspect seven synthetic categories, open individual trend graphs, toggle Normal/Abnormal, and enter mission length and purpose.
 4. Assess Readiness → green approval-themed screen when every category is Normal, otherwise a red warning screen.
 5. Warning details → "CLICK HERE TO SEE DATA" lists abnormal categories and opens their reports.
 
-The existing Crew Health Companion is preserved. Use **Full crew dashboard** or append **?dashboard=1** to bypass the intro. A navigation link reopens the EVA flow. The new UI has scoped CSS and does not override original dashboard fonts and elements.
+The existing Crew Health Companion is preserved. Use **Research workspace** or append **?dashboard=1** to bypass the intro. The existing **EVA Assessment** navigation link reopens the Welcome screen. The earlier self-contained flow remains in the repository, with a guard against mounting two entry screens.
 
-**Science and design limit:** all astronaut records, parameter status values, profile reference bands and graphs are wholly fictional. Green/red screens are demonstration outcomes, not actual EVA authorization, NASA standards or medical clearance. Visual design interprets screenshots because the original Canva fonts and source artwork were not committed to the repo.
+**Science and design limit:** all astronaut records, parameter status values, profile reference bands and graphs are wholly fictional. Green/red screens are demonstration outcomes, not actual EVA authorization, NASA standards or medical clearance. Original title lettering, labels, logo and illustrations are preserved as artwork extracted from the team's supplied images. New report text uses the existing system/Arial family, with no external webfont dependency.
 
 ### Run it locally
 No external packages are needed to run the UI.

@@ -75,5 +75,7 @@ root.addEventListener("submit",event=>{
  }
 });
 root.addEventListener("keydown",event=>{if(event.key==="Escape"&&state.modal){state.modal="";render();}});
-window.addEventListener("hashchange",()=>{if(location.hash==="#eva-flow"&&root.hidden){root.hidden=false;document.body.style.overflow="hidden";go("welcome");}});
-if(new URLSearchParams(location.search).get("dashboard")==="1"){root.hidden=true;}else{document.body.style.overflow="hidden";render();}
+// The original-art entry owns navigation when present. Retain this earlier
+// self-contained flow for older hosts without mounting a second fixed overlay.
+window.addEventListener("hashchange",()=>{if(location.hash==="#eva-flow"&&root.hidden&&!document.getElementById("astronautApp")){root.hidden=false;document.body.style.overflow="hidden";go("welcome");}});
+if(document.getElementById("astronautApp")||new URLSearchParams(location.search).get("dashboard")==="1"){root.hidden=true;}else{document.body.style.overflow="hidden";render();}
