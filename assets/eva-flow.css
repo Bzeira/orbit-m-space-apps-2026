@@ -136,3 +136,26 @@
 #orbitEvaFlow .eva-critical-disclaimer{border-top:1px solid #e8dce4;margin:19px 0 0;padding-top:15px;font-size:11px;line-height:1.55;color:#756575}
 @media(max-width:900px){#orbitEvaFlow .eva-critical{grid-template-columns:1fr;max-width:670px}#orbitEvaFlow .eva-critical-review{position:static}}
 @media(max-width:480px){#orbitEvaFlow .eva-critical-fields{grid-template-columns:1fr}#orbitEvaFlow .eva-critical-actions{align-items:stretch}#orbitEvaFlow .eva-critical-back{width:100%}#orbitEvaFlow .eva-critical-review h2{font-size:26px}}
+
+
+/* Clickable reference charts in the pre-EVA summary. No changes to existing fonts or card layout. */
+#orbitEvaFlow .eva-live-row-btn{
+  appearance:none;
+  width:100%;
+  margin:0;
+  border:0;
+  border-bottom:1px solid #e8dce4;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+  border-radius:5px;
+  font:inherit;
+  transition:background-color .12s ease;
+}
+#orbitEvaFlow .eva-live-row-btn:hover{background:#f7edf4}
+#orbitEvaFlow .eva-live-row-btn:hover>div:first-child span{color:#9d4180;text-decoration:underline}
+#orbitEvaFlow .eva-live-row-btn:focus-visible{outline:3px solid #925181;outline-offset:2px}
+#orbitEvaFlow .eva-modal-status.pending{color:#877a91}
+#orbitEvaFlow .eva-reference-chart{background:#1c1d31}
+@media(prefers-reduced-motion:reduce){#orbitEvaFlow .eva-live-row-btn{transition:none}}
