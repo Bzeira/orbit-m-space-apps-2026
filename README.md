@@ -29,6 +29,18 @@ A small, local-first, dependency-free browser application that:
 
 This is **not** real astronaut telemetry, a diagnosis, validated risk score, treatment algorithm, or NASA-endorsed tool. Rule thresholds are team-created demonstration parameters; they must be scientifically reviewed before claims beyond a prototype. The app does not implement radiation dosimeter integration, a clinically validated triage tool, actual medical advice, private psychological messaging or secure medical storage.
 
+### Interactive EVA entry flow (synthetic UI)
+The GitHub Pages landing page now offers a five-screen EVA interface inspired by the team's Canva mockups:
+1. Welcome → select "welcome" or "Start assessment".
+2. Astronaut ID → enter a fictional ID from 1 through 10.
+3. Astronaut parameters → inspect seven synthetic categories, open individual trend graphs, toggle Normal/Abnormal, and enter mission length and purpose.
+4. Assess Readiness → green approval-themed screen when every category is Normal, otherwise a red warning screen.
+5. Warning details → "CLICK HERE TO SEE DATA" lists abnormal categories and opens their reports.
+
+The existing Crew Health Companion is preserved. Use **Full crew dashboard** or append **?dashboard=1** to bypass the intro. A navigation link reopens the EVA flow. The new UI has scoped CSS and does not override original dashboard fonts and elements.
+
+**Science and design limit:** all astronaut records, parameter status values, profile reference bands and graphs are wholly fictional. Green/red screens are demonstration outcomes, not actual EVA authorization, NASA standards or medical clearance. Visual design interprets screenshots because the original Canva fonts and source artwork were not committed to the repo.
+
 ### Run it locally
 No external packages are needed to run the UI.
 
