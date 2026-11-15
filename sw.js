@@ -3,7 +3,7 @@
  * repository scope. NASA research links are NOT cached or intercepted.
  * Successful first online installation is required for later offline opening.
  */
-const CACHE_NAME="orbit-m-static-2026-11-15-chart-v3";
+const CACHE_NAME="orbit-m-static-2026-11-15-chart-lab-v4";
 const APP_FILES=[
   "./","./index.html",
   "./assets/app.css","./assets/eva-flow.css","./assets/bodymap.css",
