@@ -157,5 +157,5 @@
 #orbitEvaFlow .eva-live-row-btn:hover>div:first-child span{color:#9d4180;text-decoration:underline}
 #orbitEvaFlow .eva-live-row-btn:focus-visible{outline:3px solid #925181;outline-offset:2px}
 #orbitEvaFlow .eva-modal-status.pending{color:#877a91}
-#orbitEvaFlow .eva-reference-chart{background:#1c1d31}
+#orbitEvaFlow .eva-reference-chart{background:transparent;border:0;border-radius:0;margin:12px 0 8px}
 @media(prefers-reduced-motion:reduce){#orbitEvaFlow .eva-live-row-btn{transition:none}}
