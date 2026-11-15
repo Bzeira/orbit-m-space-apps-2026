@@ -211,6 +211,41 @@ test("unentered vital displays its reference interval without fictional observat
   assert.doesNotMatch(h.root.innerHTML,/12 fictional observations/);
 });
 
+
+test("lab-style graph uses a single horizontal reference line, boundary ticks and units",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:78,spo2:98,systolic:120,diastolic:80,breaths:8,interval:30});
+  h.click("criticalMetric","heartRate");
+  assert.match(h.root.innerHTML,/data-reference-line="true" x1="115" x2="495" y1="116" y2="116"/);
+  assert.match(h.root.innerHTML,/font-size="23">60<\/text>/);
+  assert.match(h.root.innerHTML,/font-size="23">100<\/text>/);
+  assert.match(h.root.innerHTML,/font-size="22">bpm<\/text>/);
+  assert.match(h.root.innerHTML,/font-size="32">78<\/text>/);
+  assert.match(h.root.innerHTML,/data-value-marker="true" cx="/);
+  assert.doesNotMatch(h.root.innerHTML,/<rect x="[^"]+" y="90" /,
+    "Lab-style graph should be a single reference line, without the old shaded band");
+});
+test("out-of-range markers sit beyond the reference line; in-range markers stay on it",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:105,spo2:92,systolic:120,diastolic:80,breaths:8,interval:30});
+  h.click("criticalMetric","heartRate");
+  let match=h.root.innerHTML.match(/data-value-marker="true" cx="([\d.]+)"/);
+  assert.ok(match);
+  assert.ok(Number(match[1])>495,"105 bpm is to the right of 100 bpm boundary");
+  assert.match(h.root.innerHTML,/fill="#bc3b46"/);
+  h.click("close");
+  h.click("criticalMetric","spo2");
+  match=h.root.innerHTML.match(/data-value-marker="true" cx="([\d.]+)"/);
+  assert.ok(match);
+  assert.ok(Number(match[1])<115,"92% is left of the 95% boundary");
+  h.click("close");
+  h.click("criticalMetric","pp");
+  match=h.root.innerHTML.match(/data-value-marker="true" cx="([\d.]+)"/);
+  assert.ok(match);
+  assert.ok(Number(match[1])>=115&&Number(match[1])<=495);
+  assert.match(h.root.innerHTML,/fill="#34804c"/);
+});
+
 test("offline shell includes new logic and original dashboard remains accessible",()=>{
   const worker=readFileSync(resolve(base,"sw.js"),"utf8");
   assert.match(worker,/src\/eva-flow\.mjs/);
