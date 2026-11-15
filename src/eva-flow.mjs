@@ -1,4 +1,4 @@
-import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs?v=20261115-eva-review-v6";
+import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs?v=20261115-eva-pixel-review-v7";
 /* ORBIT-M astronaut EVA UI. Synthetic interactive demonstration only. */
 const METRICS=[
 ["sleep","sleep score",86,58,"70–100","/100"],
@@ -30,14 +30,16 @@ function results(){
   }
   if(decision.status==="review"){
     return '<section class="eva-result eva-review" aria-label="Simulated EVA further inspection">'
-      +'<div class="eva-review-stars" aria-hidden="true">✦ <span>✧</span> ✦</div>'
-      +'<p class="eva-review-eyebrow">ORBIT-M / PRE-EVA CHECKPOINT</p>'
-      +'<h1 tabindex="-1">NEEDS FURTHER<br>INSPECTION</h1>'
-      +'<p class="eva-review-text">'+decision.reviewFlags.length+' in-range measurement'+(decision.reviewFlags.length===1?" is":"s are")+' close to a reference limit.</p>'
-      +'<button type="button" class="eva-review-action" data-action="review">CLICK TO CHECK FURTHER INFO <span aria-hidden="true">↗</span></button>'
-      +'<p class="eva-review-caveat">Demonstration only. No medical clearance is provided. Near-limit means within the outer 10% of a team-supplied reference interval, not a medically validated alert.</p>'
+      +'<div class="eva-review-scene">'
+      +'<div class="eva-review-center">'
+      +'<h1 class="eva-review-accessible-heading" tabindex="-1">NEEDS FURTHER<br>INSPECTION</h1>'
+      +'<img class="eva-review-title-art" src="./assets/eva-review-title.svg" alt="" aria-hidden="true">'
+      +'<button type="button" class="eva-review-action" data-action="review">CLICK TO CHECK FURTHER INFO'
+      +'<svg class="eva-review-cursor" viewBox="0 0 35 47" aria-hidden="true"><path d="M2 2 L2 37 L10 29 L17 44 L24 41 L17 26 L31 26 Z" fill="#fff" stroke="#211a4c" stroke-width="3" stroke-linejoin="miter"/></svg></button>'
+      +'</div></div>'
+      +'<div class="eva-review-footer"><p><strong>'+decision.reviewFlags.length+' measurement'+(decision.reviewFlags.length===1?"":"s")+' close to a reference boundary.</strong> Review the details before proceeding. This is a simulated check, not an EVA medical authorization.</p>'
       +'<div class="eva-result-actions"><button type="button" data-action="critical">Back to measurements</button><button type="button" data-action="identify">New astronaut</button></div>'
-      +'</section>';
+      +'</div></section>';
   }
   return '<section class="eva-result eva-warning"><div class="eva-warning-head"><div class="eva-warning-icon" aria-hidden="true">!</div><h1 tabindex="-1">WARNING</h1></div><div class="eva-alert-band">EVA NOT AUTHORIZED</div><button class="eva-see-data" type="button" data-action="flags">CLICK HERE TO SEE DATA</button><div class="eva-stripes"></div><div class="eva-safety-note">'+decision.count+' flagged findings in profile and immediate vital measurements. This is not a medical decision.</div><div class="eva-result-actions"><button data-action="dashboard" type="button">Back to parameters</button><button data-action="identify" type="button">New astronaut</button></div></section>';
 }

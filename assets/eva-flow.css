@@ -159,51 +159,81 @@
 @media(prefers-reduced-motion:reduce){#orbitEvaFlow .eva-live-row-btn{transition:none}}
 
 
-/* Intermediate inspection state: synthwave visual language shared with ORBIT-M,
-   plus subtle retro game cues from the design reference (no unrelated pixel city). */
+/* Canva-inspired pixel park scene, scoped ONLY to the intermediate review screen.
+ * The surrounding ORBIT-M stars, logo, existing dialog styles and main pages are untouched.
+ */
 #orbitEvaFlow .eva-review{
-  position:relative;
-  padding:clamp(32px,6.5vw,82px);
-  min-height:570px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
+  display:flex;flex-direction:column;overflow:hidden;
+  border:4px solid #d9b0da;border-radius:16px;
+  background:#19182c;box-shadow:0 25px 90px #080713af;
+  color:#f8edf7;
+}
+#orbitEvaFlow .eva-review-scene{
+  position:relative;flex:none;width:100%;aspect-ratio:16/9;
+  background:#87caf6 url("./eva-review-scene.svg") center center / cover no-repeat;
+  image-rendering:pixelated;
   overflow:hidden;
-  color:#fff8fa;
-  border:2px solid #c68db7;
-  background:
-    radial-gradient(circle at 50% 5%,#f0c28533 0 15%,transparent 47%),
-    linear-gradient(160deg,#211b3d 0%,#39305f 53%,#4b315c 100%);
-  box-shadow:0 25px 90px #080713af,inset 0 0 0 8px #1c183b6b;
 }
-#orbitEvaFlow .eva-review:before{
-  content:"";position:absolute;inset:auto 0 0;height:98px;pointer-events:none;
-  background:repeating-linear-gradient(90deg,#bb7aab55 0 2px,transparent 2px 45px),
-    repeating-linear-gradient(0deg,#b56aaf44 0 2px,transparent 2px 25px);
-  opacity:.5;transform:perspective(180px) rotateX(30deg);transform-origin:bottom;
+#orbitEvaFlow .eva-review-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:15.6%;pointer-events:none;
 }
-#orbitEvaFlow .eva-review-stars{font-size:38px;color:#f4c47c;letter-spacing:34px;text-shadow:0 0 12px #f5bb65bb;line-height:1.3}
-#orbitEvaFlow .eva-review-stars span{color:#e2a6c8}
-#orbitEvaFlow .eva-review-eyebrow{font-weight:800;letter-spacing:.18em;font-size:11px;color:#e2bbdb;margin:18px 0 10px}
-#orbitEvaFlow .eva-review h1{
-  font:900 clamp(40px,6.5vw,82px)/1.1 Arial,Helvetica,sans-serif;
-  letter-spacing:-.045em;color:#fff6fb;margin:16px 0 14px;
-  text-shadow:4px 5px 0 #171328;
+#orbitEvaFlow .eva-review-accessible-heading{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0;
 }
-#orbitEvaFlow .eva-review-text{font-size:clamp(17px,2.2vw,24px);max-width:620px;color:#f5dcea;line-height:1.5;margin:0 0 29px}
+#orbitEvaFlow .eva-review-title-art{
+  width:56%;max-width:570px;height:auto;display:block;
+  image-rendering:pixelated;filter:drop-shadow(0 2px 0 #383269);
+}
 #orbitEvaFlow .eva-review-action{
-  position:relative;border-radius:13px;padding:18px 27px;
-  background:linear-gradient(#fff7fb,#f4e9f6);
-  border:3px solid #f7cd7d;box-shadow:5px 6px 0 #17172d;
-  color:#37233e;font-size:clamp(14px,2vw,19px);font-weight:900;letter-spacing:.02em;
+  pointer-events:auto;
+  margin-top:3%;position:relative;
+  min-width:31%;min-height:57px;
+  padding:15px 35px 15px 27px;
+  background:#fffaf9;color:#30245d;
+  border:4px solid #332a6a;border-top-color:#fff2b9;border-left-color:#f8d569;
+  box-shadow:5px 6px 0 #201b56, inset 0 0 0 2px #ffffff;
+  border-radius:11px;
+  font:700 clamp(11px,1.35vw,16px)/1.2 "Courier New",monospace;
+  text-transform:lowercase;white-space:nowrap;
+  cursor:pointer;
 }
-#orbitEvaFlow .eva-review-action:hover{background:#ffeeca;transform:translateY(-2px)}
-#orbitEvaFlow .eva-review-action span{color:#88548f;margin-left:10px}
-#orbitEvaFlow .eva-review-caveat{max-width:630px;font-size:12px;line-height:1.65;color:#ead6ea;margin:31px 0 5px}
-#orbitEvaFlow .eva-review .eva-result-actions{position:relative;justify-content:center}
-#orbitEvaFlow .eva-review .eva-result-actions button{background:#272140a6;border-color:#c48fb3}
+#orbitEvaFlow .eva-review-action:hover{background:#fff1cb;transform:translateY(-2px)}
+#orbitEvaFlow .eva-review-action:active{transform:translateY(2px);box-shadow:2px 2px 0 #201b56}
+#orbitEvaFlow .eva-review-cursor{
+  position:absolute;right:-32px;bottom:-18px;width:43px;height:54px;
+  filter:drop-shadow(2px 2px 0 #f0e0f6);pointer-events:none;
+}
+#orbitEvaFlow .eva-review-footer{
+  display:flex;gap:18px;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;padding:17px 24px;background:#221c39;
+  border-top:2px solid #8464a6;
+}
+#orbitEvaFlow .eva-review-footer p{
+  margin:0;flex:1 1 270px;max-width:670px;
+  color:#e8d9eb;font-size:12px;line-height:1.55;
+}
+#orbitEvaFlow .eva-review-footer strong{color:#f3dfaf}
+#orbitEvaFlow .eva-review-footer .eva-result-actions{
+  display:flex;margin:0;justify-content:flex-end;gap:10px;
+}
+#orbitEvaFlow .eva-review-footer .eva-result-actions button{
+  background:#342a4d;border:1px solid #ac85c4;
+  color:#f6e5fa;padding:10px 14px;font-size:12px;border-radius:7px;
+}
+#orbitEvaFlow .eva-review-footer .eva-result-actions button:hover{background:#49375c}
+@media(max-width:680px){
+  #orbitEvaFlow .eva-review{border-width:2px}
+  #orbitEvaFlow .eva-review-scene{aspect-ratio:auto;min-height:470px;background-size:auto 100%}
+  #orbitEvaFlow .eva-review-center{padding-top:145px}
+  #orbitEvaFlow .eva-review-title-art{width:93%}
+  #orbitEvaFlow .eva-review-action{margin-top:20px;min-width:0;padding:12px 23px;min-height:51px;font-size:12px}
+  #orbitEvaFlow .eva-review-cursor{width:30px;right:-23px;bottom:-12px}
+  #orbitEvaFlow .eva-review-footer{padding:14px}
+  #orbitEvaFlow .eva-review-footer .eva-result-actions{justify-content:flex-start}
+}
 #orbitEvaFlow .eva-live-state.caution,#orbitEvaFlow .eva-modal-status.caution{color:#b27b2d}
 #orbitEvaFlow .eva-review-list{display:grid;gap:10px;margin:22px 0}
 #orbitEvaFlow .eva-review-issue{

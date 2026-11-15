@@ -284,6 +284,24 @@ test("a single in-range near-limit reading routes to further inspection",()=>{
   h.click("review");
   assert.match(h.root.innerHTML,/Further inspection needed/);
 });
+test("intermediate review uses pixel-art park reference without altering other outcomes",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  enterVitals(h,{heartRate:62});
+  h.submit("evaVitalsForm");
+  assert.match(h.root.innerHTML,/eva-review-scene/);
+  assert.match(h.root.innerHTML,/eva-review-title\.svg/);
+  assert.match(h.root.innerHTML,/eva-review-cursor/);
+  assert.match(h.root.innerHTML,/CLICK TO CHECK FURTHER INFO/);
+  assert.match(h.root.innerHTML,/data-action="review"/);
+  assert.match(style,/eva-review-scene\.svg/);
+  assert.match(style,/image-rendering:pixelated/);
+  h.click("review");
+  assert.match(h.root.innerHTML,/62 bpm/);
+  assert.match(h.root.innerHTML,/Near lower limit/);
+  h.click("criticalMetric","heartRate");
+  assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
+});
+
 test("two in-range values near limits are listed with actual values",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
   enterVitals(h,{heartRate:62,spo2:95.3});
