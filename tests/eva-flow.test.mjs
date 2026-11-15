@@ -120,14 +120,15 @@ test("boundary ranges, PP, MAP and short-interval respiratory conversion",()=>{
   assert.equal(r.data.pp,40);
   assert.ok(Math.abs(r.data.map-93.3333333333)<1e-6);
   assert.equal(r.data.respRate,12);
-  assert.equal(r.issues.length,0,"Temperature not flagged because no range provided.");
+  assert.equal(r.issues.filter(row=>row.key!=="temperature").length,0);
+  assert.equal(r.issues.find(row=>row.key==="temperature").value,38.7);
   const next=h.api.preEvaInspect({
     heartRate:"100",spo2:"100",systolic:"120",diastolic:"60",
     temperature:"39",breaths:"20",interval:"60"
   });
   assert.equal(next.data.pp,60);
   assert.equal(next.data.respRate,20);
-  assert.equal(next.issues.length,0);
+  assert.equal(next.issues.find(row=>row.key==="temperature").value,39);
 });
 test("missing and contradictory pressure inputs block evaluation without generating approval",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
@@ -165,7 +166,7 @@ test("fixing the profile, combined with acceptable immediate readings, changes d
   assert.match(h.root.innerHTML,/EVA mission<br>approved/);
 });
 
-test("all seven immediate pre-EVA summary rows open an accurate reference chart",()=>{
+test("all eight immediate pre-EVA summary rows open an accurate reference chart",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
   enterVitals(h,{heartRate:78,spo2:98,systolic:120,diastolic:80,breaths:8,interval:30});
   const cases=[
@@ -175,7 +176,8 @@ test("all seven immediate pre-EVA summary rows open an accurate reference chart"
     ["diastolic","60","80","80"],
     ["pp","40","60","40"],
     ["map","70","100","93.3"],
-    ["respRate","12","20","16"]
+    ["respRate","12","20","16"],
+    ["temperature","36","37.5","36.7"]
   ];
   for(const [key,min,max,value] of cases){
     assert.match(h.root.innerHTML,new RegExp('data-action="criticalMetric" data-id="'+key+'"'));
@@ -187,8 +189,8 @@ test("all seven immediate pre-EVA summary rows open an accurate reference chart"
     assert.doesNotMatch(h.root.innerHTML,/12 fictional observations/,"Do not invent a time series.");
     h.click("close");
   }
-  assert.doesNotMatch(h.root.innerHTML,/data-action="criticalMetric" data-id="temperature"/,
-    "Temperature has no user-supplied reference band.");
+  assert.match(h.root.innerHTML,/data-action="criticalMetric" data-id="temperature"/,
+    "Temperature is now interactive and has an illustrative reference band.");
 });
 test("a vital flagged on red decision opens its graph, not just the data entry page",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
@@ -279,7 +281,7 @@ test("a single in-range near-limit reading routes to further inspection",()=>{
   assert.doesNotMatch(h.root.innerHTML,/Oxygen saturation.*Near lower limit/s);
   h.click("criticalMetric","heartRate");
   assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
-  assert.match(h.root.innerHTML,/Near limit/);
+  assert.match(h.root.innerHTML,/Needs inspection/);
   assert.match(h.root.innerHTML,/Back to near-limit readings/);
   h.click("review");
   assert.match(h.root.innerHTML,/Further inspection needed/);
@@ -316,7 +318,7 @@ test("two in-range values near limits are listed with actual values",()=>{
   const h=harness();beginAstronaut(h,1);proceedToVitals(h);
   enterVitals(h,{heartRate:62,spo2:95.3});
   h.submit("evaVitalsForm");
-  assert.match(h.root.innerHTML,/2 measurements close to a reference boundary/);
+  assert.match(h.root.innerHTML,/2 measurements needing further inspection/);
   h.click("review");
   assert.match(h.root.innerHTML,/62 bpm/);
   assert.match(h.root.innerHTML,/95.3 %/);
@@ -339,6 +341,70 @@ test("no ambiguous clearance when three or more values are near reference bounda
   h.submit("evaVitalsForm");
   assert.match(h.root.innerHTML,/NEEDS FURTHER<br>INSPECTION/);
   assert.doesNotMatch(h.root.innerHTML,/EVA mission<br>approved/);
+});
+
+test("temperature validation and classification cover both boundaries and urgent-looking readings",()=>{
+  const h=harness();
+  const base={heartRate:"78",spo2:"98",systolic:"115",diastolic:"72",
+    temperature:"37",breaths:"8",interval:"30"};
+  for(const [value,tier] of [
+    ["29.9","invalid"],["30","bad"],["34.9","bad"],
+    ["35","review"],["35.9","review"],["36","ok"],
+    ["36.7","ok"],["37.5","ok"],["37.6","review"],
+    ["37.9","review"],["38","bad"],["41","bad"],["41.1","invalid"],["42","invalid"]
+  ]){
+    const result=h.api.preEvaInspect({...base,temperature:value});
+    const row=result.rows.find(x=>x.key==="temperature");
+    assert.equal(result.valid,tier!=="invalid",value+" validation");
+    assert.equal(row.invalid,tier==="invalid",value+" input range");
+    assert.equal(row.outOfRange,tier==="bad",value+" flagged");
+    assert.equal(row.nearLimit,tier==="review",value+" inspection");
+    assert.equal(!row.invalid&&!row.outOfRange&&!row.nearLimit,tier==="ok",value+" normal");
+  }
+});
+test("temperature range check updates live, prevents submission of out-of-bounds readings, and opens a chart",()=>{
+  const h=harness();beginAstronaut(h,1);proceedToVitals(h);
+  assert.match(h.root.innerHTML,/name="temperature"[^>]*min="30" max="41"/);
+  assert.match(h.root.innerHTML,/data-action="criticalMetric" data-id="temperature"/);
+  h.values["#evaVitalsFeedback"]={textContent:""};
+  h.values["#evaTemperatureError"]={textContent:""};
+  h.values['[data-vital-status="temperature"]']={textContent:"",className:""};
+  const submitButton={disabled:false};
+  h.values['#evaVitalsForm button[type="submit"]']=submitButton;
+  enterVitals(h,{temperature:41.1});
+  assert.equal(submitButton.disabled,true);
+  assert.match(h.values["#evaTemperatureError"].textContent,/30°C and 41°C/);
+  assert.equal(h.values['[data-vital-status="temperature"]'].textContent,"Invalid entry");
+  h.submit("evaVitalsForm");
+  assert.match(h.values["#evaVitalsFeedback"].textContent,/30°C and 41°C/);
+  assert.match(h.root.innerHTML,/Pre-EVA Vital Signs/);
+  enterVitals(h,{temperature:37.8});
+  assert.equal(submitButton.disabled,false);
+  assert.equal(h.values["#evaTemperatureError"].textContent,"");
+  assert.equal(h.values['[data-vital-status="temperature"]'].textContent,"Needs inspection");
+  h.click("criticalMetric","temperature");
+  assert.match(h.root.innerHTML,/Body temperature/);
+  assert.match(h.root.innerHTML,/Reference band:<\/strong> 36–37.5 °C/);
+  h.click("close");
+  h.submit("evaVitalsForm");
+  assert.match(h.root.innerHTML,/NEEDS FURTHER<br>INSPECTION/);
+  h.click("review");
+  assert.match(h.root.innerHTML,/37.8 °C/);
+  h.click("criticalMetric","temperature");
+  assert.match(h.root.innerHTML,/PRE-EVA REFERENCE RANGE/);
+});
+test("red result lists abnormal temperature and normal temperature does not trigger a warning",()=>{
+  const red=harness();beginAstronaut(red,1);proceedToVitals(red);
+  enterVitals(red,{temperature:38});
+  red.submit("evaVitalsForm");
+  assert.match(red.root.innerHTML,/EVA NOT AUTHORIZED/);
+  red.click("flags");
+  assert.match(red.root.innerHTML,/Body temperature/);
+  assert.match(red.root.innerHTML,/38 °C/);
+  const green=harness();beginAstronaut(green,1);proceedToVitals(green);
+  enterVitals(green,{temperature:37});
+  green.submit("evaVitalsForm");
+  assert.match(green.root.innerHTML,/EVA mission<br>approved/);
 });
 
 test("old dashboard query no longer exposes previous website",()=>{
