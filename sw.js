@@ -1,24 +1,7 @@
-/* ORBIT-M: local-first static app shell, no medical data ever cached here.
- * This caches only same-origin static resources inside the app's GitHub Pages
- * repository scope. NASA research links are NOT cached or intercepted.
- * Successful first online installation is required for later offline opening.
- */
-const CACHE_NAME="orbit-m-static-2026-11-15-chart-lab-v4";
-const APP_FILES=[
-  "./","./index.html",
-  "./assets/app.css","./assets/eva-flow.css","./assets/bodymap.css",
-  "./assets/cardiovascular.css","./assets/mission-demo.css","./assets/cabin.css",
-  "./assets/mission-mental.css","./assets/research.css",
-  "./src/app.mjs","./src/eva-critical.mjs","./src/eva-flow.mjs","./src/bodymap.mjs","./src/cabin.mjs","./src/cabin-ui.mjs",
-  "./src/cardiovascular-ui.mjs","./src/cardiovascular.mjs",
-  "./src/dcs-screen.mjs","./src/engine.mjs",
-  "./src/mission-demo-ui.mjs","./src/mission-demo.mjs",
-  "./src/mission-mental-ui.mjs","./src/mission-mental.mjs",
-  "./src/research-ui.mjs","./src/research.mjs",
-  "./src/offline-ui.mjs"
-];
-const scopeUrl=()=>new URL(self.registration.scope);
-const appUrl=path=>new URL(path,self.registration.scope).href;
+/* ORBIT-M EVA-only offline shell. No legacy Crew Health Companion assets. */
+const CACHE_NAME="orbit-m-eva-only-v1";
+const APP_FILES=["./","./index.html","./assets/eva-flow.css","./src/eva-flow.mjs","./src/eva-critical.mjs"];
+const appUrl=p=>new URL(p,self.registration.scope).href;
 self.addEventListener("install",event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(CACHE_NAME);
@@ -29,30 +12,30 @@ self.addEventListener("install",event=>{
 self.addEventListener("activate",event=>{
   event.waitUntil((async()=>{
     for(const name of await caches.keys()){
-      if(name.startsWith("orbit-m-static-")&&name!==CACHE_NAME)await caches.delete(name);
+      if((name.startsWith("orbit-m-static-")||name.startsWith("orbit-m-eva-"))&&name!==CACHE_NAME){
+        await caches.delete(name);
+      }
     }
     await self.clients.claim();
   })());
 });
 self.addEventListener("fetch",event=>{
-  const request=event.request;
-  if(request.method!=="GET")return;
-  const target=new URL(request.url);
-  const scope=scopeUrl();
-  if(target.origin!==scope.origin||!target.pathname.startsWith(scope.pathname))return;
+  const req=event.request;
+  if(req.method!=="GET")return;
+  const url=new URL(req.url),scope=new URL(self.registration.scope);
+  if(url.origin!==scope.origin||!url.pathname.startsWith(scope.pathname))return;
   event.respondWith((async()=>{
     const cache=await caches.open(CACHE_NAME);
     try{
-      const response=await fetch(request);
+      const response=await fetch(req);
       if(response.ok&&response.type!=="opaque"){
-        // Storage quota errors must never block an otherwise successful online load.
-        try{await cache.put(request,response.clone());}catch(_){}
+        try{await cache.put(req,response.clone());}catch(_){}
       }
       return response;
     }catch(_){
-      const cached=await cache.match(request,{ignoreSearch:true});
-      if(cached)return cached;
-      if(request.mode==="navigate"){
+      const fromCache=await cache.match(req,{ignoreSearch:true});
+      if(fromCache)return fromCache;
+      if(req.mode==="navigate"){
         const shell=await cache.match(appUrl("./index.html"));
         if(shell)return shell;
       }

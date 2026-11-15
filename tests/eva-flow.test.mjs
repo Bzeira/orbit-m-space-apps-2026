@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFileSync} from "node:fs";
+import {readFileSync,existsSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {dirname,resolve} from "node:path";
 import {runInNewContext} from "node:vm";
@@ -54,11 +54,12 @@ function enterVitals(h,overrides={}){
   for(const [key,value] of Object.entries({...defaults,...overrides}))h.updateVital(key,value);
   h.simulateInput();
 }
-test("new screen matches EVA aesthetic while preserving original research dashboard",()=>{
+test("EVA-only site preserves styling but excludes the retired full dashboard",()=>{
   assert.match(page,/src\/eva-flow\.mjs/);
   assert.match(page,/assets\/eva-flow\.css/);
-  assert.match(page,/id="monitor"/);
-  assert.match(page,/src\/cardiovascular-ui\.mjs/);
+  assert.doesNotMatch(page,/id="monitor"/);
+  assert.doesNotMatch(page,/src\/cardiovascular-ui\.mjs/);
+  assert.doesNotMatch(page,/Notice the change|Full crew dashboard|Guided demo/);
   assert.match(style,/#orbitEvaFlow \.eva-critical/);
   assert.doesNotMatch(style,/(^|\n)body\s*\{/);
   assert.match(criticalModule,/30 seconds/);
@@ -76,7 +77,8 @@ test("astronaut identification, profile report, vital entry and simulated green 
   h.values["#evaIdNumber"].value="1";
   h.submit("evaIdForm");
   h.click("metric","sleep");
-  assert.match(h.root.innerHTML,/SYNTHETIC PARAMETER HISTORY/);
+  assert.match(h.root.innerHTML,/PROFILE REFERENCE RANGE/);
+  assert.doesNotMatch(h.root.innerHTML,/12 fictional observations/);
   h.click("close");
   proceedToVitals(h);
   enterVitals(h);
@@ -246,11 +248,32 @@ test("out-of-range markers sit beyond the reference line; in-range markers stay 
   assert.match(h.root.innerHTML,/fill="#34804c"/);
 });
 
-test("offline shell includes new logic and original dashboard remains accessible",()=>{
+test("every astronaut profile modal has a horizontal reference line, not fictional timeseries",()=>{
+  for(const [id,expected] of [["sleep","70 to 100"],["bpm","60 to 100"],["anatomy","70 to 100"],["fitness","70 to 100"],["ent","70 to 100"],["temperature","36 to 37.5"],["vision","70 to 100"]]){
+    const h=harness();beginAstronaut(h,1);
+    h.click("metric",id);
+    assert.match(h.root.innerHTML,/PROFILE REFERENCE RANGE/);
+    assert.match(h.root.innerHTML,/data-reference-line="true"/);
+    assert.match(h.root.innerHTML,/data-value-marker="true"/);
+    assert.doesNotMatch(h.root.innerHTML,/12 fictional observations|SYNTHETIC PARAMETER HISTORY/);
+  }
+});
+test("old dashboard query no longer exposes previous website",()=>{
+  const h=harness("?dashboard=1");
+  assert.match(h.root.innerHTML,/welcome/);
+  assert.doesNotMatch(page,/Notice the change|Know what to check|id="flightStory"/);
+});
+test("offline shell caches only EVA files and retired dashboard bypass does not work",()=>{
   const worker=readFileSync(resolve(base,"sw.js"),"utf8");
   assert.match(worker,/src\/eva-flow\.mjs/);
   assert.match(worker,/src\/eva-critical\.mjs/);
   assert.match(worker,/assets\/eva-flow\.css/);
   const h=harness("?dashboard=1");
-  assert.equal(h.root.hidden,true);
+  assert.equal(h.root.hidden,false);
+  assert.match(h.root.innerHTML,/welcome/);
+  assert.doesNotMatch(fullScript,/open-dashboard|SYNTHETIC PARAMETER HISTORY/);
+  assert.doesNotMatch(worker,/src\/app\.mjs|assets\/app\.css|src\/research\.mjs/);
+  for(const file of ["src/app.mjs","src/engine.mjs","assets/app.css","tests/engine.test.mjs"]){
+    assert.equal(existsSync(resolve(base,file)),false,file+" should be deleted");
+  }
 });
