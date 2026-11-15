@@ -1,4 +1,4 @@
-import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs";
+import {preEvaEmpty,preEvaInspect,preEvaMarkup,preEvaGetInputs,preEvaRefresh,preEvaFormat,preEvaRanges,preEvaReferenceChart} from "./eva-critical.mjs?v=20261115-eva-clean-v5";
 /* ORBIT-M astronaut EVA UI. Synthetic interactive demonstration only. */
 const METRICS=[
 ["sleep","sleep score",86,58,"70–100","/100"],

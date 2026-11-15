@@ -8,7 +8,7 @@ const base=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const fullScript=readFileSync(resolve(base,"src/eva-flow.mjs"),"utf8");
 const criticalModule=readFileSync(resolve(base,"src/eva-critical.mjs"),"utf8");
 const script=criticalModule.replace(/\bexport\s+/g,"")+"\n"+
-  fullScript.replace(/^import [^\n]+ from "\.\/eva-critical\.mjs";\n/,"");
+  fullScript.replace(/^import [^\n]+ from "\.\/eva-critical\.mjs(?:\?[^"]+)?";\n/,"");
 const style=readFileSync(resolve(base,"assets/eva-flow.css"),"utf8");
 const page=readFileSync(resolve(base,"index.html"),"utf8");
 function harness(search=""){
@@ -263,17 +263,23 @@ test("old dashboard query no longer exposes previous website",()=>{
   assert.match(h.root.innerHTML,/welcome/);
   assert.doesNotMatch(page,/Notice the change|Know what to check|id="flightStory"/);
 });
-test("offline shell caches only EVA files and retired dashboard bypass does not work",()=>{
+test("retire old service workers, version assets, and permanently remove full crew button",()=>{
   const worker=readFileSync(resolve(base,"sw.js"),"utf8");
-  assert.match(worker,/src\/eva-flow\.mjs/);
-  assert.match(worker,/src\/eva-critical\.mjs/);
-  assert.match(worker,/assets\/eva-flow\.css/);
+  assert.match(worker,/self\.registration\.unregister\(\)/);
+  assert.match(worker,/caches\.delete/);
+  assert.doesNotMatch(worker,/cache\.addAll|event\.respondWith/);
+  assert.match(page,/navigator\.serviceWorker\.getRegistrations\(\)/);
+  assert.match(page,/reg\.unregister\(\)/);
+  assert.match(page,/caches\.delete\(name\)/);
+  assert.match(page,/src\/eva-flow\.mjs\?v=/);
+  assert.match(page,/assets\/eva-flow\.css\?v=/);
+  assert.match(fullScript,/eva-critical\.mjs\?v=/);
+  assert.doesNotMatch(page+fullScript+style,/Full crew dashboard|open-dashboard|eva-link/);
+  assert.doesNotMatch(fullScript,/SYNTHETIC PARAMETER HISTORY|12 fictional observations/);
   const h=harness("?dashboard=1");
   assert.equal(h.root.hidden,false);
   assert.match(h.root.innerHTML,/welcome/);
-  assert.doesNotMatch(fullScript,/open-dashboard|SYNTHETIC PARAMETER HISTORY/);
-  assert.doesNotMatch(worker,/src\/app\.mjs|assets\/app\.css|src\/research\.mjs/);
   for(const file of ["src/app.mjs","src/engine.mjs","assets/app.css","tests/engine.test.mjs"]){
-    assert.equal(existsSync(resolve(base,file)),false,file+" should be deleted");
+    assert.equal(existsSync(resolve(base,file)),false,file+" should remain deleted");
   }
 });
