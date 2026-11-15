@@ -58,6 +58,9 @@ test("all same-origin CSS/JS app modules required for offline replay are precach
   const required=["index.html","assets/app.css","assets/mission-demo.css",
     "assets/bodymap.css","assets/cardiovascular.css","src/mission-demo.mjs",
     "src/mission-demo-ui.mjs","src/app.mjs","src/engine.mjs","src/offline-ui.mjs"];
+  required.push("assets/astronaut.css","assets/astronaut/welcome.jpeg",
+    "assets/astronaut/stars.jpeg","assets/astronaut/original-elements.png",
+    "src/astronaut.mjs","src/astronaut-ui.mjs","src/astronaut-art.mjs");
   for(const path of required){
     assert.ok(existsSync(resolve(root,path)),"Missing offline app asset "+path);
     assert.ok(h.stored.has(new URL("./"+path,shellScope).href),"Not precached "+path);

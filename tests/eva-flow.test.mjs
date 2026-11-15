@@ -8,7 +8,7 @@ const base=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const script=readFileSync(resolve(base,"src/eva-flow.mjs"),"utf8");
 const style=readFileSync(resolve(base,"assets/eva-flow.css"),"utf8");
 const page=readFileSync(resolve(base,"index.html"),"utf8");
-function harness(search=""){
+function harness(search="",hasOriginalArtEntry=false){
   const handlers={};const values={};
   const root={hidden:false,scrollTop:0,innerHTML:"",
     setAttribute(){},addEventListener(name,fn){handlers[name]=fn;},
@@ -17,7 +17,7 @@ function harness(search=""){
       return values[q]||null;
     }};
   const body={style:{},append(node){assert.equal(node,root);}};
-  const context={document:{body,createElement(){return root;},getElementById(){return null;}},
+  const context={document:{body,createElement(){return root;},getElementById(id){return hasOriginalArtEntry&&id==="astronautApp"?{}:null;}},
     window:{addEventListener(){}},location:{search,pathname:"/index.html",hash:""},
     URLSearchParams,history:{replaceState(){}},console,Math};
   runInNewContext(script,context,{filename:"eva-flow.mjs"});
@@ -83,4 +83,10 @@ test("cached shell includes new flow and safe bypass remains possible",()=>{
   assert.match(worker,/assets\/eva-flow\.css/);
   const h=harness("?dashboard=1");
   assert.equal(h.root.hidden,true);
+});
+test("original-art entry prevents a second overlay or a body scroll lock",()=>{
+  const h=harness("",true);
+  assert.equal(h.root.hidden,true);
+  assert.equal(h.context.document.body.style.overflow,undefined);
+  assert.equal(h.root.innerHTML,"");
 });

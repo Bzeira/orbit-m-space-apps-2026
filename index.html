@@ -14,8 +14,14 @@
   <link rel="stylesheet" href="./assets/bodymap.css">
   <link rel="stylesheet" href="./assets/mission-mental.css">
   <link rel="stylesheet" href="./assets/cardiovascular.css">
+  <link rel="stylesheet" href="./assets/astronaut.css">
 </head>
 <body>
+  <div id="astronautApp" class="am-app">
+    <div class="am-welcome-fallback"><a href="#id" aria-label="Welcome. Enter the EVA assessment program"><img src="./assets/astronaut/welcome.jpeg" alt="Welcome to the EVA assessment program" width="1600" height="918"></a><p>Loading the astronaut demonstration…</p></div>
+  </div>
+  <div id="researchWorkspace" hidden>
+  <div class="am-research-return"><a href="#welcome">← Return to the EVA assessment</a></div>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">◎</span><span>ORBIT<span class="brand-accent">–M</span></span></div>
     <nav><a href="#eva-flow">EVA Assessment</a><a href="#mission">Mission</a><a href="#flightStory">Guided demo</a><a href="#cabin">Cabin × Crew</a><a href="#monitor">Vitals</a><a href="#cardio">Blood pressure</a><a href="#mental">Mental health</a><a href="#eva">Post-EVA</a><a href="#habitat">Habitat</a><a href="#references">References</a><a href="https://github.com/Bzeira/orbit-m-space-apps-2026" target="_blank" rel="noopener">Source ↗</a></nav>
@@ -486,6 +492,9 @@
     </section>
   </main>
   <footer><strong>ORBIT–M</strong><span>Team of five · Haifa, Israel · NASA Space Apps Challenge 2026</span><a href="https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/" target="_blank" rel="noopener">Official challenge ↗</a><span>Independent team project · Not affiliated with or endorsed by NASA</span></footer>
+  </div>
+  <noscript><p>This interactive ID demonstration requires JavaScript. No astronaut records or medical services are connected.</p></noscript>
+  <script type="module" src="./src/astronaut-ui.mjs"></script>
   <script type="module" src="./src/eva-flow.mjs"></script>
   <script type="module" src="./src/app.mjs"></script>
   <script type="module" src="./src/mission-demo-ui.mjs"></script>

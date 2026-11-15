@@ -19,6 +19,10 @@ jobs:
           node-version: '22'
       - name: Check browser module syntax
         run: |
+          node --check src/astronaut.mjs
+          node --check src/astronaut-ui.mjs
+          node --check src/astronaut-art.mjs
+          node --check src/eva-flow.mjs
           node --check src/app.mjs
           node --check src/research-ui.mjs
           node --check src/bodymap.mjs
