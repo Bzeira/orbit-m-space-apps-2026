@@ -59,7 +59,7 @@ function modal(){
      +preEvaReferenceChart(key,state.critical)
      +'<p class="eva-modal-desc"><strong>Entered reading:</strong> '+preEvaFormat(value)+' '+rule.unit+'</p>'
      +'<p class="eva-modal-desc"><strong>Reference band:</strong> '+rule.min+'–'+rule.max+' '+rule.unit+' (inclusive)</p>'
-     +'<p class="eva-modal-desc">The shaded band shows the project range; the dot shows the value entered in the current form. There is no recorded historical series.</p>'
+     +'<p class="eva-modal-desc">The horizontal line marks the project reference range. The dot marks your current reading (red when outside the range). No historical measurements are inferred.</p>'
      +(key==="pp"||key==="map"?'<p class="eva-modal-desc">'+(key==="pp"?"PP = systolic − diastolic.":"Estimated MAP = diastolic + PP / 3 (resting approximation).")+'</p>':"")
      +(key==="respRate"?'<p class="eva-modal-desc">Rate = counted breaths × 60 ÷ observation interval in seconds.</p>':"")
      +(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View flagged findings</button>':"");
