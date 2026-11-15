@@ -37,7 +37,7 @@ function results(){
       +'<button type="button" class="eva-review-action" data-action="review">CLICK TO CHECK FURTHER INFO'
       +'<svg class="eva-review-cursor" viewBox="0 0 35 47" aria-hidden="true"><path d="M2 2 L2 37 L10 29 L17 44 L24 41 L17 26 L31 26 Z" fill="#fff" stroke="#211a4c" stroke-width="3" stroke-linejoin="miter"/></svg></button>'
       +'</div></div>'
-      +'<div class="eva-review-footer"><p><strong>'+decision.reviewFlags.length+' measurement'+(decision.reviewFlags.length===1?"":"s")+' close to a reference boundary.</strong> Review the details before proceeding. This is a simulated check, not an EVA medical authorization.</p>'
+      +'<div class="eva-review-footer"><p><strong>'+decision.reviewFlags.length+' measurement'+(decision.reviewFlags.length===1?"":"s")+' needing further inspection.</strong> Review the details before proceeding. This is a simulated check, not an EVA medical authorization.</p>'
       +'<div class="eva-result-actions"><button type="button" data-action="critical">Back to measurements</button><button type="button" data-action="identify">New astronaut</button></div>'
       +'</div></section>';
   }
@@ -78,14 +78,14 @@ function modal(){
  else if(state.modal==="review"){
    const flagged=state.decision?.reviewFlags||[];
    body='<h2 id="evaModalHeading">Further inspection needed</h2>'
-     +'<p class="eva-modal-desc">These readings are inside the provided reference ranges but close to a boundary. Review each reading before proceeding.</p>'
+     +'<p class="eva-modal-desc">These readings need review: values may be near a reference boundary or the temperature may be just outside its ordinary demo interval. Review each measurement before proceeding.</p>'
      +'<div class="eva-review-list">'
      +flagged.map(row=>'<button type="button" class="eva-review-issue" data-action="criticalMetric" data-id="'+row.key+'">'
        +'<span class="eva-review-issue-label">'+row.label+'<small>Reference '+row.min+'–'+row.max+' '+row.unit+'</small></span>'
        +'<span class="eva-review-issue-measure"><strong>'+preEvaFormat(row.value)+' '+row.unit+'</strong><small>Near '+row.nearestSide+' limit ('+preEvaFormat(row.nearestLimit)+' '+row.unit+')</small></span>'
        +'<span class="eva-review-issue-open" aria-hidden="true">↗</span>'
        +'</button>').join("")
-     +'</div><p class="eva-modal-desc">Select any reading to open its range chart. The near-limit category is an illustrative 10% buffer inside the provided range, not a clinical standard.</p>';
+     +'</div><p class="eva-modal-desc">Select any reading to open its chart. The original metrics use a 10% inner-band demo buffer; temperature uses the separate 35/36/37.5/38°C rules. Neither is a clinical EVA standard.</p>';
  }
  else if(state.modal.startsWith("critical:")){
    const key=state.modal.slice("critical:".length);
@@ -94,16 +94,17 @@ function modal(){
    const checked=preEvaInspect(state.critical);
    const value=checked.data[key];
    const checkedRow=checked.rows.find(row=>row.key===key);
-   const status=value===null?"Awaiting input":checkedRow.outOfRange?"Outside range":checkedRow.nearLimit?"Near limit":"Within range";
-   const style=value===null?"pending":checkedRow.outOfRange?"bad":checkedRow.nearLimit?"caution":"ok";
+   const status=value===null?"Awaiting input":checkedRow.invalid?"Invalid entry":checkedRow.outOfRange?"Outside range":checkedRow.nearLimit?"Needs inspection":"Within range";
+   const style=value===null?"pending":checkedRow.invalid?"bad":checkedRow.outOfRange?"bad":checkedRow.nearLimit?"caution":"ok";
    body='<h2 id="evaModalHeading">'+rule.label+'</h2>'
      +'<p class="eva-modal-status '+style+'">'+status+' · PRE-EVA CHECK</p>'
      +preEvaReferenceChart(key,state.critical)
      +'<p class="eva-modal-desc"><strong>Entered reading:</strong> '+preEvaFormat(value)+' '+rule.unit+'</p>'
      +'<p class="eva-modal-desc"><strong>Reference band:</strong> '+rule.min+'–'+rule.max+' '+rule.unit+' (inclusive)</p>'
-     +'<p class="eva-modal-desc">The horizontal line marks the project reference range. The dot marks your current reading (red when outside the range). No historical measurements are inferred.</p>'
+     +'<p class="eva-modal-desc">The horizontal line marks the illustrative normal band; the dot shows your current reading. Green means normal, amber needs inspection, red is flagged. No historical data are inferred.</p>'
      +(key==="pp"||key==="map"?'<p class="eva-modal-desc">'+(key==="pp"?"PP = systolic − diastolic.":"Estimated MAP = diastolic + PP / 3 (resting approximation).")+'</p>':"")
      +(key==="respRate"?'<p class="eva-modal-desc">Rate = counted breaths × 60 ÷ observation interval in seconds.</p>':"")
+     +(key==="temperature"?'<p class="eva-modal-desc">Temperature demo tiers: 36–37.5°C normal, 35–below 36°C or above 37.5–below 38°C needs inspection; below 35°C or at least 38°C flagged. Allowed input: 30–41°C.</p>':"")
      +(state.decision?.status==="review"?'<button type="button" class="eva-text-button" data-action="review">Back to near-limit readings</button>':state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View flagged findings</button>':"");
  }
  else{const m=metric(state.modal);if(!m)return "";const bad=state.flags[m[0]];body='<h2 id="evaModalHeading">'+m[1]+'</h2><p class="eva-modal-status '+(bad?"bad":"ok")+'">'+(bad?"Abnormal":"Normal")+' · DEMO STATUS</p>'+graph(m)+'<p class="eva-modal-desc"><strong>Illustrative profile band:</strong> '+m[4]+' '+m[5]+'</p><p class="eva-modal-desc">The dot shows a fictional value selected for the current Normal / Abnormal demo state, not a historical or actual astronaut measurement.</p>'+(state.decision?.denied?'<button type="button" class="eva-text-button" data-action="flags">View all abnormal parameters</button>':'');}
